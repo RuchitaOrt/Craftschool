@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:craft_school/screens/onboarding_screen.dart';
@@ -12,9 +11,9 @@ class SplashScreen extends StatefulWidget {
   static const String route = "/";
 
   const SplashScreen({super.key});
- 
+
   @override
- _SplashScreenState createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -25,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
- Utility().loadAPIConfig(context);
+    Utility().loadAPIConfig(context);
     _controller = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -38,16 +37,18 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-     Timer(
-            Duration(seconds: 5),
-            () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => OnboardingScreen())));
-   }
+    Timer(
+        Duration(seconds: 5),
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => OnboardingScreen())));
+  }
+
   @override
   void dispose() {
-    _controller.dispose();  // Dispose the AnimationController first!
-    super.dispose();  // Call super.dispose() after disposing of the controller.
+    _controller.dispose();
+    super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
