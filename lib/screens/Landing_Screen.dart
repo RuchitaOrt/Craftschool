@@ -1,8 +1,10 @@
 
 import 'package:craft_school/main.dart';
+import 'package:craft_school/providers/CategoryListProvider.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
 import 'package:craft_school/screens/MasterScreen.dart';
 import 'package:craft_school/screens/courseDetailScreen.dart';
+import 'package:craft_school/utils/SPManager.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
@@ -12,20 +14,57 @@ import 'package:craft_school/widgets/FloatingActionButton.dart';
 import 'package:craft_school/widgets/MasterImagesCarousel.dart';
 import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
-import 'package:craft_school/widgets/or_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   static const String route = "/landingScreen";
   const LandingScreen({super.key});
-  
 
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+   String? token="";
+  @override
+  void initState() {
+    super.initState();
+gettoken();
+    // Ensure data is fetched after the widget is built
+   
+  }
+gettoken()
+async {
+  token=await SPManager().getAuthToken();
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Only call the API if it's not already loading
+      final provider = Provider.of<LandingScreenProvider>(context, listen: false);
+      if (!provider.isLoading) {
+        provider.homeScreenAPI();
+      }
+if(!provider.isCategoryLoading) {
+        provider.getCustomerCategoryList();
+        if(token!="")
+        {
+         print("Token getting");          
+      if (!provider.isCategoryWiseLoading) {
+        provider.getCustomerIdWiseCategoryList("");
+      }
+     
+        }else{
+           final provider = Provider.of<CategoryListProvider>(context, listen: false);
+  if (!provider.isCategoryWiseLoading) {
+        provider.getCategoryWiseList([2]);
+      }
+            
+        }
+}
+      
+    });
+}
   Widget masterClassBlock() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -79,16 +118,12 @@ class LandingScreen extends StatelessWidget {
               width: SizeConfig.blockSizeVertical * 22,
               child: ElevatedButton(
                 onPressed: () {
-                    Navigator.of(routeGlobalKey.currentContext!)
-        .pushNamed(
-      MasterScreen.route,
-    
-    )
-        .then((value) {
-      
-    });
-                }
-                ,
+                  Navigator.of(routeGlobalKey.currentContext!)
+                      .pushNamed(
+                        MasterScreen.route,
+                      )
+                      .then((value) {});
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(SizeConfig.blockSizeVertical * 0.5,
                       SizeConfig.blockSizeVertical * 6),
@@ -199,7 +234,6 @@ class LandingScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget bannerWatchVideo(
       {String? tag,
@@ -450,9 +484,9 @@ class LandingScreen extends StatelessWidget {
                 ),
               ),
             ),
-             SizedBox(
-                    height: SizeConfig.blockSizeVertical * 1,
-                  ),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 1,
+            ),
           ],
         ),
       ),
@@ -873,7 +907,7 @@ class LandingScreen extends StatelessWidget {
   Widget masterOfCraftSchool() {
     return Consumer<LandingScreenProvider>(
       builder: (context, provider, child) {
-        return Padding(
+        return  provider.masters.isNotEmpty? Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -892,18 +926,21 @@ class LandingScreen extends StatelessWidget {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   physics: ScrollPhysics(),
-                  itemCount: provider.imagePaths
+                  itemCount: provider.masters
                       .length, // Use the length of the list from provider
                   itemBuilder: (context, index) {
                     return Container(
                       margin: EdgeInsets.all(8),
                       width: SizeConfig.safeBlockHorizontal * 40,
+                      height: SizeConfig.safeBlockVertical*20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
-                          image: AssetImage(
-                            provider.imagePaths[index],
+                          image: NetworkImage(
+                            provider.masters[index].masterImage,
+                           
                           ),
+                          
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -913,12 +950,12 @@ class LandingScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "Salim Khan",
+                               provider.masters[index].name,
                               style: CraftStyles.tsWhiteNeutral50W60016
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              "Script Writer",
+                               provider.masters[index].profession,
                               style: CraftStyles.tsWhiteNeutral300W500
                                   .copyWith(fontSize: 12),
                             ),
@@ -966,7 +1003,7 @@ class LandingScreen extends StatelessWidget {
               )
             ],
           ),
-        );
+        ):Container();
       },
     );
   }
@@ -986,18 +1023,18 @@ class LandingScreen extends StatelessWidget {
             children: [
               Text(
                 textAlign: TextAlign.center,
-                "The Art of Storytelling with \nR. Balki",
+                provider.banner3[0].courseTitle,
                 style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
               ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
               ),
-              SizedBox(
+            provider.banner3[0].topics!.isNotEmpty?  SizedBox(
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   physics: ScrollPhysics(),
-                  itemCount: provider.storyTellingListItems
+                  itemCount: provider.banner3[0].topics!
                       .length, // Use the length of the list from provider
                   itemBuilder: (context, index) {
                     return Container(
@@ -1013,6 +1050,8 @@ class LandingScreen extends StatelessWidget {
                           SizedBox(
                             width: SizeConfig.blockSizeHorizontal * 85,
                             child: Row(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
                                   "${index + 1}",
@@ -1029,8 +1068,7 @@ class LandingScreen extends StatelessWidget {
                                       width:
                                           SizeConfig.blockSizeHorizontal * 75,
                                       child: Text(
-                                        provider.storyTellingListItems[index]
-                                            ['title']!,
+                                        provider.banner3[0].topics![index].title,
                                         style: CraftStyles
                                             .tsWhiteNeutral50W60016
                                             .copyWith(fontSize: 16),
@@ -1043,8 +1081,7 @@ class LandingScreen extends StatelessWidget {
                                       width:
                                           SizeConfig.blockSizeHorizontal * 75,
                                       child: Text(
-                                        provider.storyTellingListItems[index]
-                                            ['subtext']!,
+                                        provider.banner3[0].topics![index].description,
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                         style: CraftStyles.tsWhiteNeutral300W500
@@ -1056,9 +1093,8 @@ class LandingScreen extends StatelessWidget {
                                             SizeConfig.blockSizeVertical * 1),
                                     Row(
                                       children: [
-                                        provider.storyTellingListItems[index]
-                                                    ['icon'] ==
-                                                ""
+                                        provider.banner3[0].topics![index].freeVideo ==
+                                                "Yes"
                                             ? Container(
                                                 decoration: BoxDecoration(
                                                   color:
@@ -1077,17 +1113,16 @@ class LandingScreen extends StatelessWidget {
                                                 ),
                                               )
                                             : SvgPicture.asset(
-                                                provider.storyTellingListItems[
-                                                    index]['icon']!),
+                                                 CraftImagePath.lock!),
                                         SizedBox(
                                             width:
                                                 SizeConfig.blockSizeHorizontal *
                                                     2),
                                         Text(
-                                          "04:36",
+                                          provider.banner3[0].topics![index].videoDuration,
                                           style: CraftStyles
                                               .tsWhiteNeutral50W60016
-                                              .copyWith(fontSize: 18),
+                                              .copyWith(fontSize: 14),
                                         ),
                                       ],
                                     )
@@ -1101,7 +1136,7 @@ class LandingScreen extends StatelessWidget {
                     );
                   },
                 ),
-              ),
+              ):Container(),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
               ),
@@ -1128,7 +1163,6 @@ class LandingScreen extends StatelessWidget {
       );
     });
   }
-
 
   Widget flimMakingJourney() {
     return Consumer<LandingScreenProvider>(
@@ -1213,7 +1247,7 @@ class LandingScreen extends StatelessWidget {
   Widget browseCourse() {
     return Consumer<LandingScreenProvider>(
       builder: (context, provider, child) {
-        return Padding(
+        return provider.courses.isNotEmpty? Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -1232,7 +1266,7 @@ class LandingScreen extends StatelessWidget {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   physics: ScrollPhysics(),
-                  itemCount: provider.imagePaths
+                  itemCount: provider.courses
                       .length, // Use the length of the list from provider
                   itemBuilder: (context, index) {
                     return Column(
@@ -1243,34 +1277,44 @@ class LandingScreen extends StatelessWidget {
                           height: SizeConfig.blockSizeVertical * 22,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                provider.imagePaths[index],
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+                            // image: DecorationImage(
+                            //   image: NetworkImage(
+                            //     provider.courses[index].courseBannerMobile,
+                            //   ),
+                            //   fit: BoxFit.cover,
+                            // ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8, top: 8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: CraftColors.secondary100,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      "New !",
-                                      style: CraftStyles.tssecondary800W500,
-                                    ),
-                                  ),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8, top: 8,),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image.network( provider.courses[index].courseBannerMobile,width: SizeConfig.safeBlockHorizontal * 40,
+                              height: SizeConfig.blockSizeVertical * 20, fit: BoxFit.cover,),
+                                 
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                               provider.courses[index].tagName!=null?  Padding(
+                                 padding: const EdgeInsets.only(left: 16,top: 16),
+                                 child: Container(
+                                        decoration: BoxDecoration(
+                                          color: CraftColors.secondary100,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            provider.courses[index].tagName!,
+                                            style: CraftStyles.tssecondary800W500,
+                                          ),
+                                        ),
+                                      ),
+                               ):Container(),
+                            ],
                           ),
                         ),
                         Column(
@@ -1280,7 +1324,7 @@ class LandingScreen extends StatelessWidget {
                             SizedBox(
                               width: SizeConfig.safeBlockHorizontal * 40,
                               child: Text(
-                                "Odit laborum sed optio sit dolore",
+                                provider.courses[index].shortDescription,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: CraftStyles.tsWhiteNeutral50W60016
@@ -1290,10 +1334,23 @@ class LandingScreen extends StatelessWidget {
                             SizedBox(
                               height: SizeConfig.blockSizeVertical * 0.5,
                             ),
-                            Text(
-                              "Aashif Shaikh",
-                              style: CraftStyles.tsWhiteNeutral300W500
-                                  .copyWith(fontSize: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                  CircleAvatar(
+                                        radius:
+                                            15.0, // Circle radius (size of the circle)
+                                        backgroundImage: NetworkImage(provider.courses[index].courseBannerMobile), // Image from local assets
+                                      ),
+                                       SizedBox(
+                              width: SizeConfig.blockSizeHorizontal * 2,
+                            ),
+                                Text(
+                                  provider.courses[index].masterName,
+                                  style: CraftStyles.tsWhiteNeutral300W500
+                                      .copyWith(fontSize: 12),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -1326,7 +1383,7 @@ class LandingScreen extends StatelessWidget {
                           CraftStrings.strBrowseCourse,
                           style: CraftStyles.tsWhiteNeutral50W60016,
                         ),
-                        SizedBox(width: SizeConfig.blockSizeHorizontal*1),
+                        SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
                         SvgPicture.asset(
                           CraftImagePath.arrowRight,
                           height: 24.0,
@@ -1339,21 +1396,28 @@ class LandingScreen extends StatelessWidget {
               )
             ],
           ),
-        );
+        ):Container();
       },
     );
   }
 
-  Widget categoryCourse() {
-    return Consumer<LandingScreenProvider>(
+Widget categoryCourse()  {
+     print("tokenlanding");
+   print(token);
+    return token!=""? Consumer<LandingScreenProvider>(
       builder: (context, provider, child) {
+        if (provider.isLoading) {
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Every skill you need, every course you want",
+                "A dose of inspiration, whenever you need it. ${provider.categoryList.length.toString()}",
                 style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
               ),
               SizedBox(height: SizeConfig.blockSizeVertical * 2),
@@ -1362,14 +1426,17 @@ class LandingScreen extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.generate(provider.chipItems.length, (index) {
-                    return Padding(
+                  children:
+                  //  List.generate(provider.categoryList.length, (index) {
+                  //   return
+                  [
+                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: Wrap(
                         spacing: 8.0, // Space between chips
                         runSpacing: 4.0, // Space between lines
                         children:
-                            List.generate(provider.chipItems.length, (index) {
+                            List.generate(provider.categoryList.length, (index) {
                           return GestureDetector(
                             onTap: () {
                               provider.selectChip(
@@ -1393,7 +1460,7 @@ class LandingScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SvgPicture.asset(
-                                    provider.chipItems[index]['image']!,
+                                    provider.categoryList[index].catIcon,
                                     height: 15.0,
                                     width: 15.0,
                                     color: provider.selectedChipIndex == index
@@ -1402,7 +1469,7 @@ class LandingScreen extends StatelessWidget {
                                   ),
                                   SizedBox(width: 5),
                                   Text(
-                                    provider.chipItems[index]["label"]!,
+                                    provider.categoryList[index].catName,
                                     style: TextStyle(
                                       color: provider.selectedChipIndex == index
                                           ? CraftColors.secondary550
@@ -1415,27 +1482,24 @@ class LandingScreen extends StatelessWidget {
                           );
                         }),
                       ),
-                    );
-                  }),
+                    )]
+                  // }),
                 ),
               ),
 
               SizedBox(height: SizeConfig.blockSizeVertical * 2),
-
-              // Show content below the selected chip
-              SizedBox(
+              provider.categoryWiseList[0].courses.isEmpty?Container():
+ SizedBox(
                 height: SizeConfig.blockSizeVertical * 35,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   physics: ScrollPhysics(),
-                  itemCount: provider.selectedChipIndex != -1
-                      ? provider
-                          .filteredCourses[provider.selectedChipIndex].length
-                      : 0,
+                  itemCount: provider.categoryWiseList[0].courses.length
+                     ,
                   itemBuilder: (context, index) {
                     var course = provider
-                        .filteredCourses[provider.selectedChipIndex][index];
+                        .categoryWiseList[0].courses[index];
                     return Column(
                       children: [
                         Container(
@@ -1445,7 +1509,7 @@ class LandingScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             image: DecorationImage(
-                              image: AssetImage(course.imagePath),
+                              image: AssetImage(course.courseBannerMobile),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -1455,23 +1519,23 @@ class LandingScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                course.tagVisible
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: CraftColors.secondary100,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(
-                                            "New !",
-                                            style:
-                                                CraftStyles.tssecondary800W500,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
+                                // course.tagVisible
+                                //     ? Container(
+                                //         decoration: BoxDecoration(
+                                //           color: CraftColors.secondary100,
+                                //           borderRadius:
+                                //               BorderRadius.circular(8),
+                                //         ),
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.all(4.0),
+                                //           child: Text(
+                                //             "New !",
+                                //             style:
+                                //                 CraftStyles.tssecondary800W500,
+                                //           ),
+                                //         ),
+                                //       )
+                                //     : Container(),
                               ],
                             ),
                           ),
@@ -1482,7 +1546,7 @@ class LandingScreen extends StatelessWidget {
                             SizedBox(
                               width: SizeConfig.safeBlockHorizontal * 40,
                               child: Text(
-                                course.title,
+                                course.name,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: CraftStyles.tsWhiteNeutral50W60016
@@ -1492,7 +1556,7 @@ class LandingScreen extends StatelessWidget {
                             SizedBox(
                                 height: SizeConfig.blockSizeVertical * 0.5),
                             Text(
-                              course.author,
+                              course.instructor,
                               style: CraftStyles.tsWhiteNeutral300W500
                                   .copyWith(fontSize: 12),
                             ),
@@ -1503,907 +1567,327 @@ class LandingScreen extends StatelessWidget {
                   },
                 ),
               ),
-
-              Center(
-                child: SizedBox(
-                  width: SizeConfig.blockSizeHorizontal * 44,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(SizeConfig.blockSizeVertical * 44,
-                          SizeConfig.blockSizeVertical * 5),
-                      backgroundColor: CraftColors.neutralBlue800,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 5,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Add some spacing between icon and text
-                        Text(
-                          CraftStrings.strBrowseCourse,
-                          style: CraftStyles.tsWhiteNeutral50W60016,
-                        ),
-                        SizedBox(width: SizeConfig.blockSizeHorizontal*1),
-                        SvgPicture.asset(
-                          CraftImagePath.arrowRight,
-                          height: 24.0,
-                          width: 24.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+            
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget blogsWidget() {
-    return Consumer<LandingScreenProvider>(
+    ):Consumer<CategoryListProvider>(
       builder: (context, provider, child) {
+        if (provider.isLoading) {
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Blogs",
-                      style: CraftStyles.tsWhiteNeutral50W700
-                          .copyWith(fontSize: 18),
-                    ),
-                    Center(
-                      child: SizedBox(
-                        width: SizeConfig.blockSizeHorizontal * 30,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(SizeConfig.blockSizeVertical * 30,
-                                SizeConfig.blockSizeVertical * 5),
-                            backgroundColor: CraftColors.neutralBlue800,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 5,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Add some spacing between icon and text
-                              Text(
-                                CraftStrings.strViewAll,
-                                style: CraftStyles.tsWhiteNeutral50W60016,
-                              ),
-                              SizedBox(width: 8),
-                              SvgPicture.asset(
-                                CraftImagePath.arrowRight,
-                                height: 20.0,
-                                width: 20.0,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+              Text(
+                "A dose of inspiration, whenever you need it. ${provider.categoryList.length.toString()}",
+                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
               ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
+              SizedBox(height: SizeConfig.blockSizeVertical * 2),
+
+              // Add the chip list for selection
               SingleChildScrollView(
-                scrollDirection: Axis.vertical, // Allow vertical scrolling
-                child: Column(
-                  children: List.generate(provider.blogsItem.length, (index) {
-                    bool isExpanded = provider.blogsItem[index]['isExpanded'];
-
-                    return Container(
-                      margin: EdgeInsets.all(8),
-                      width: SizeConfig.safeBlockHorizontal * 90,
-                      decoration: BoxDecoration(
-                        color: CraftColors.neutralBlue800,
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Row for Image and Text initially (Side by Side)
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Image block (Click to expand)
-                                GestureDetector(
-                                  onTap: () {
-                                    // Toggle the expanded state via the provider
-                                    provider.toggleExpansion(index);
-                                  },
-                                  child: AnimatedContainer(
-                                    duration: Duration(milliseconds: 100),
-                                    width: isExpanded
-                                        ? SizeConfig.safeBlockHorizontal *
-                                            80 // Expand width when expanded
-                                        : SizeConfig.blockSizeHorizontal *
-                                            29, // Original width when collapsed
-                                    height: isExpanded
-                                        ? SizeConfig.blockSizeVertical *
-                                            24 // Larger height when expanded
-                                        : SizeConfig.blockSizeVertical *
-                                            16, // Original height when collapsed
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            provider.blogsItem[index]['image']),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children:
+                  //  List.generate(provider.categoryList.length, (index) {
+                  //   return
+                  [
+                     Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Wrap(
+                        spacing: 8.0, // Space between chips
+                        runSpacing: 4.0, // Space between lines
+                        children:
+                            List.generate(provider.categoryList.length, (index) {
+                          return GestureDetector(
+                            onTap: () {
+                              provider.onChipSelected!(
+                                  provider.categoryList[index].id.toString()); // Update the selected chip
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: CraftColors.neutralBlue800,
+                                border: Border.all(
+                                  color: provider.selectedChips
+                                              .contains(provider.categoryList[index].id.toString())
+                                      ? CraftColors.secondary550
+                                      : CraftColors
+                                          .transparent, // Border only visible when selected
+                                  width: 1.0,
                                 ),
-                                SizedBox(
-                                    width: SizeConfig.blockSizeHorizontal * 1),
-                                // Initially displayed text block (text beside image)
-                                if (!isExpanded) ...[
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // Row with "New!" label and Expand Icon
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      CraftColors.secondary100,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: Text(
-                                                    "New !",
-                                                    style: CraftStyles
-                                                        .tssecondary800W500,
-                                                  ),
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  // Toggle the expanded state via the provider
-                                                  provider
-                                                      .toggleExpansion(index);
-                                                },
-                                                child: SvgPicture.asset(
-                                                  CraftImagePath.expand,
-                                                  color: Colors.white,
-                                                  width: 24,
-                                                  height: 24,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1),
-                                          // Title
-                                          Text(
-                                            provider.blogsItem[index]['title'],
-                                            style: CraftStyles
-                                                .tsWhiteNeutral50W60016
-                                                .copyWith(fontSize: 16),
-                                          ),
-                                          SizedBox(
-                                              height:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1),
-                                          // Subtext (short description)
-                                          Text(
-                                            provider.blogsItem[index]
-                                                ['subtext'],
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: CraftStyles
-                                                .tsWhiteNeutral300W500
-                                                .copyWith(fontSize: 14),
-                                          ),
-                                          // Date and Read Time
-                                          Text(
-                                            "Oct 29,2024 | 5 min read",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: CraftStyles
-                                                .tsWhiteNeutral300W500
-                                                .copyWith(fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                            // Display expanded content only when isExpanded is true
-                            if (isExpanded) ...[
-                              SizedBox(
-                                  height: SizeConfig.blockSizeVertical * 2),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: CraftColors.secondary100,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "New !",
-                                    style: CraftStyles.tssecondary800W500,
-                                  ),
-                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              SizedBox(
-                                  height: SizeConfig.blockSizeVertical * 1),
-                              Text(
-                                provider.blogsItem[index]['title'],
-                                style: CraftStyles.tsWhiteNeutral50W60016
-                                    .copyWith(fontSize: 16),
-                              ),
-                              SizedBox(
-                                  height: SizeConfig.blockSizeVertical * 1),
-                              // Subtext (short description)
-                              Text(
-                                provider.blogsItem[index]['subtext'],
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: CraftStyles.tsWhiteNeutral300W500
-                                    .copyWith(fontSize: 14),
-                              ),
-                              // Date and Read Time
-                              Text(
-                                "Oct 29,2024 | 5 min read",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: CraftStyles.tsWhiteNeutral300W500
-                                    .copyWith(fontSize: 12),
-                              ),
-                              // Read More Button
-                              SizedBox(
-                                  height: SizeConfig.blockSizeVertical * 1),
-                              SizedBox(
-                                width: SizeConfig.blockSizeHorizontal * 90,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(
-                                        SizeConfig.blockSizeVertical * 90,
-                                        SizeConfig.blockSizeVertical * 5),
-                                    backgroundColor: CraftColors.neutralBlue800,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      side: BorderSide(
-                                        color: CraftColors
-                                            .neutralBlue750, // Set the border color
-                                        width: 2, // Set the border width
-                                      ),
-                                    ),
-                                    elevation: 5,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        CraftStrings.strReadMore,
-                                        style: CraftStyles
-                                            .tsWhiteNeutral50W60016
-                                            .copyWith(fontSize: 17),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget realWidget() {
-    return Consumer<LandingScreenProvider>(builder: (context, provider, child) {
-      return Container(
-        margin: EdgeInsets.all(8),
-        width: SizeConfig.safeBlockHorizontal * 85,
-        decoration: BoxDecoration(
-          color: CraftColors.neutralBlue850,
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              // Title
-              Text(
-                textAlign: TextAlign.center,
-                "What our learners say about us",
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Subtitle
-              Text(
-                textAlign: TextAlign.center,
-                "Real stories from students who’ve leveled up their filmmaking journey.",
-                style: CraftStyles.tsWhiteNeutral300W500,
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
-              Container(
-                height: SizeConfig.blockSizeVertical * 40,
-                child: Flexible(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverStaggeredGrid.countBuilder(
-                        crossAxisCount: 2, // Number of columns
-                        itemCount: provider.gridItems.length,
-                        staggeredTileBuilder: (int index) {
-                          return StaggeredTile.fit(1); // Adjust this if needed
-                        },
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            elevation: 1.0,
-                            color: CraftColors.neutralBlue800,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  SizedBox(
-                                    height: SizeConfig.blockSizeVertical * 1,
+                                  SvgPicture.network(
+                                    provider.categoryList[index].icon,
+                                    height: 15.0,
+                                    width: 15.0,
+                                    color: provider.selectedChips
+                                              .contains(provider.categoryList[index].id.toString())
+                                        ? CraftColors.secondary550
+                                        : CraftColors.white,
                                   ),
-                                  RatingBar.builder(
-                                    initialRating: double.parse(
-                                        provider.gridItems[index]
-                                            ['rating']!), // set initial rating
-                                    minRating: 1, // minimum rating
-                                    direction: Axis
-                                        .horizontal, // horizontal or vertical
-                                    allowHalfRating:
-                                        true, // allow half star ratings
-                                    itemCount: 5, // number of stars
-                                    itemSize: 25, // size of each star
-                                    itemPadding: EdgeInsets.symmetric(
-                                        horizontal: 1.0), // space between stars
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) {},
-                                  ),
-                                  SizedBox(
-                                    height: SizeConfig.blockSizeVertical * 1,
-                                  ),
+                                  SizedBox(width: 5),
                                   Text(
-                                    provider.gridItems[index]['description'] ??
-                                        "No Description Available",
-                                    style: CraftStyles.tsNeutral500W500
-                                        .copyWith(fontSize: 18),
-                                  ),
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius:
-                                            15.0, // Circle radius (size of the circle)
-                                        backgroundImage: AssetImage(CraftImagePath
-                                            .image1), // Image from local assets
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            SizeConfig.blockSizeHorizontal * 2,
-                                      ),
-                                      Text(
-                                        provider.gridItems[index]['title'] ??
-                                            "No Title Available",
-                                        style: CraftStyles.tsNeutral500W500,
-                                      ),
-                                    ],
+                                    provider.categoryList[index].categoryName,
+                                    style: TextStyle(
+                                      color: provider.selectedChips
+                                              .contains(provider.categoryList[index].id.toString())
+                                          ? CraftColors.secondary550
+                                          : CraftColors.white,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           );
-                        },
+                        }),
                       ),
-                    ],
-                  ),
+                    )]
+                  // }),
                 ),
               ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
 
-  Widget planPriceCard(String title,String price) {
-    return Container(
-      margin: EdgeInsets.all(6),
-      width: SizeConfig.blockSizeHorizontal * 95,
-      decoration: BoxDecoration(
-        color: CraftColors.neutralBlue750,
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              textAlign: TextAlign.center,
-              title,
-              style: CraftStyles.tswhiteW600.copyWith(fontSize: 20),
-            ),
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 2,
-            ),
-            // Subtitle
-            Text(
-              textAlign: TextAlign.center,
-              price,
-              style:
-                  CraftStyles.tswhiteW600.copyWith(fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              SizedBox(height: SizeConfig.blockSizeVertical * 2),
 
-  Widget informationPlan(String title, String suTitle) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            textAlign: TextAlign.center,
-            title,
-            style: CraftStyles.tsWhiteNeutral300W500,
-          ),
+            //  // Show content below the selected chip
           SizedBox(
-            height: SizeConfig.blockSizeVertical * 2,
-          ),
-          Text(
-            textAlign: TextAlign.center,
-            suTitle,
-            style: CraftStyles.tsWhiteNeutral50W60016,
-          ),
-          Divider(
-            thickness: 0.1,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget simpleTransplantPlanWidget() {
-    return Consumer<LandingScreenProvider>(builder: (context, provider, child) {
-      return Container(
-        margin: EdgeInsets.all(8),
-        width: SizeConfig.safeBlockHorizontal * 85,
-        decoration: BoxDecoration(
-          color: CraftColors.neutralBlue850,
-          borderRadius: BorderRadius.all(Radius.circular(24)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              // Title
-              Text(
-                textAlign: TextAlign.center,
-                "Simple, transparent plans",
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Subtitle
-              Text(
-                textAlign: TextAlign.center,
-                "We believe Untitled should be accessible to all companies, no matter the size.",
-                style: CraftStyles.tsWhiteNeutral300W500,
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
-              Card(
-                elevation: 1.0,
-                color: CraftColors.neutralBlue800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      planPriceCard("Basic","₹ 799/-"),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 2,
-                      ),
-                      informationPlan(
-                          "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.neutralBlue800,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: CraftColors
-                                  .white, // Set the border color
-                              width: 0.2, // Set the border width
+                height: SizeConfig.blockSizeVertical * 35,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  physics: ScrollPhysics(),
+                  itemCount: provider
+                          .categoryWiseList.length
+                     ,
+                  itemBuilder: (context, index) {
+                    var course = provider
+                        .categoryWiseList[index];
+                    return Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(8),
+                          width: SizeConfig.safeBlockHorizontal * 40,
+                          height: SizeConfig.blockSizeVertical * 25,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            image: DecorationImage(
+                              image: AssetImage(course.courseBannerMobile),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, top: 8),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // course.tagVisible
+                                //     ? Container(
+                                //         decoration: BoxDecoration(
+                                //           color: CraftColors.secondary100,
+                                //           borderRadius:
+                                //               BorderRadius.circular(8),
+                                //         ),
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.all(4.0),
+                                //           child: Text(
+                                //             "New !",
+                                //             style:
+                                //                 CraftStyles.tssecondary800W500,
+                                //           ),
+                                //         ),
+                                //       )
+                                //     : Container(),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              width: SizeConfig.safeBlockHorizontal * 40,
+                              child: Text(
+                                course.name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: CraftStyles.tsWhiteNeutral50W60016
+                                    .copyWith(fontSize: 15),
+                              ),
+                            ),
+                            SizedBox(
+                                height: SizeConfig.blockSizeVertical * 0.5),
                             Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
+                              course.instructor,
+                              style: CraftStyles.tsWhiteNeutral300W500
+                                  .copyWith(fontSize: 12),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-                    ],
-                  ),
+                      ],
+                    );
+                  },
                 ),
               ),
-             
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Card(
-                elevation: 1.0,
-                color: CraftColors.neutralBlue800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      planPriceCard("Standard","₹ 4299/-"),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 2,
-                      ),
-                      informationPlan(
-                          "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.primaryBlue500,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                             // Set the border color
-                              width: 0.2, // Set the border width
-                            ),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-                    ],
-                  ),
-                ),
-              ),
-             
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-               Card(
-                elevation: 1.0,
-                color: CraftColors.neutralBlue800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      planPriceCard("Premium","₹ 8799/-"),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 2,
-                      ),
-                      informationPlan(
-                          "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.neutralBlue800,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: CraftColors
-                                  .white, // Set the border color
-                              width: 0.2, // Set the border width
-                            ),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-                    ],
-                  ),
-                ),
-              ),
-             
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
+            //   Center(
+            //     child: SizedBox(
+            //       width: SizeConfig.blockSizeHorizontal * 44,
+            //       child: ElevatedButton(
+            //         onPressed: () {},
+            //         style: ElevatedButton.styleFrom(
+            //           minimumSize: Size(SizeConfig.blockSizeVertical * 44,
+            //               SizeConfig.blockSizeVertical * 5),
+            //           backgroundColor: CraftColors.neutralBlue800,
+            //           padding:
+            //               EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(12),
+            //           ),
+            //           elevation: 5,
+            //         ),
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             // Add some spacing between icon and text
+            //             Text(
+            //               CraftStrings.strBrowseCourse,
+            //               style: CraftStyles.tsWhiteNeutral50W60016,
+            //             ),
+            //             SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
+            //             SvgPicture.asset(
+            //               CraftImagePath.arrowRight,
+            //               height: 24.0,
+            //               width: 24.0,
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   )
             ],
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return
-    
-     ChangeNotifierProvider(
-        create: (_) => LandingScreenProvider(),
-        child: 
-        Consumer<LandingScreenProvider>(
-        builder: (context, provider, _) {
-      return
-     Scaffold(
-   appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: CustomAppBar(
-                isContainerVisible: provider.isContainerVisible,
-                isCategoryVisible: provider.isCategoryVisible,
-                onMenuPressed: () {
-                  provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
-                }, onCategoriesPressed: () {provider.toggleSlidingCategory();  },
-              ),
+    return Consumer<LandingScreenProvider>(
+      builder: (context, provider, _) {
+        // Show loading spinner while fetching data
+        if (provider.isLoading) {
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight),
+            child: CustomAppBar(
+              isContainerVisible: provider.isContainerVisible,
+              isCategoryVisible: provider.isCategoryVisible,
+              onMenuPressed: () {
+                provider.toggleSlidingContainer(); // Trigger toggle when menu is pressed
+              },
+              onCategoriesPressed: () {
+                provider.toggleSlidingCategory();
+              },
             ),
-      backgroundColor: CraftColors.black18,
-      bottomNavigationBar: BottomAppBarWidget(index: 0,),
-      floatingActionButton:FloatingActionButtonWidget(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    
-      body:  Stack(
-          children: [
-            ListView(
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              children: [
-                masterClassBlock(),
-                MasterImagesCarousel(),
-                // masterImages(),
-                annualPlanSignUp(),
-                everyMonthBlock(),
-                GestureDetector(
-                  onTap: ()
-                  {
-                      Navigator.of(
-                                                            routeGlobalKey
-                                                                .currentContext!,
-                                                          ).pushNamed(
-                                                            Coursedetailscreen.route,
-                                                            
-                                                          );
-                  },
-                  child: bannerImages(
-                      tag: "New !",
-                      title:
-                          "The great screenplay makes everybody step up to the bar and deliver.",
-                      subTitle: "Learn from the living legend Salim khan",
-                      textStyle: CraftStyles.tssecondary800W500,
-                      textBackground: CraftColors.secondary100,
-                      image: CraftImagePath.bannerImage),
-                ),
-                masterOfCraftSchool(),
-                browseCourse(),
-                bannerImages(
-                    tag: "Exclusive",
-                    title:
-                        "A Legacy of Storytelling: The Final Teachings of Vikram Ghokle.",
-                    subTitle:
-                        "Recorded with profound insight and grace, this course is the last piece of wisdom Vikram Ghokle left us.",
-                    textStyle: CraftStyles.tsdarkBrownW500,
-                    textBackground: CraftColors.lightOrange,
-                    image: CraftImagePath.image4),
-                categoryCourse(),
-                bannerWatchVideo(
-                    tag: "",
-                    title: "Master the Filmmaking \nProcess with R. Balki",
-                    subTitle:
-                        "Start learning from R. Balki’s exclusive \ncourse – ",
-                    textStyle: CraftStyles.tsdarkBrownW500,
-                    textBackground: CraftColors.lightOrange,
-                    image: CraftImagePath.image9),
-                storyTellingWidget(),
-                joinCommunity(
-                    tag: "",
-                    title: "Join the CraftSchool \nCommunity",
-                    subTitle:
-                        "Connect with filmmakers and industry \nexperts, wherever you are.",
-                    textStyle: CraftStyles.tsdarkBrownW500,
-                    textBackground: CraftColors.lightOrange,
-                    image: CraftImagePath.bannerImage2,
-                    titleText: "Exclusive Community",
-                    subTitleText:
-                        "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"),
-                joinFlimFestival(),
-                flimMakingJourney(),
-             
-               
-              ],
-            ),
-             if (provider.isContainerVisible)
-                  SlidingMenu(isVisible:  provider.isContainerVisible),
-                   if (provider.isCategoryVisible)
-                   SlidingCategory(
-            isExpanded: provider.isCategoryVisible,
-            onToggleExpansion: provider.toggleSlidingCategory,
           ),
-          ],
-        ));
-       
-        })
+          backgroundColor: CraftColors.black18,
+          bottomNavigationBar: BottomAppBarWidget(index: 0),
+          floatingActionButton: FloatingActionButtonWidget(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          body: Stack(
+            children: [
+              ListView(
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                children: [
+                  masterClassBlock(),
+                  MasterImagesCarousel(carousalImages: provider.carousalImages),
+                  annualPlanSignUp(),
+                      everyMonthBlock(),
+                      //banner 1
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(
+                            routeGlobalKey.currentContext!,
+                          ).pushNamed(
+                            Coursedetailscreen.route,
+                          );
+                        },
+                        child:provider.banner1.isNotEmpty? bannerImages(
+                            tag: provider.banner1[0].tag,
+                            title:
+                               provider.banner1[0].courseTitle,
+                            subTitle: provider.banner1[0].courseShortDesc,
+                            textStyle: CraftStyles.tssecondary800W500,
+                            textBackground: CraftColors.secondary100,
+                            image: CraftImagePath.bannerImage):Container(),
+                      ),
+                      masterOfCraftSchool(),
+                      browseCourse(),
+                     provider.banner2.isNotEmpty? bannerImages(
+                          tag: provider.banner2[0].tag,
+                          title:
+                             provider.banner2[0].courseTitle,
+                          subTitle:
+                             provider.banner2[0].courseShortDesc,
+                          textStyle: CraftStyles.tsdarkBrownW500,
+                          textBackground: CraftColors.lightOrange,
+                          image: CraftImagePath.image4):Container(),
+                      categoryCourse(),
+                      // categoryListing(),
+                    provider.banner3.isNotEmpty?  bannerWatchVideo(
+                          tag: provider.banner3[0].tag,
+                          title:
+                             provider.banner3[0].courseTitle,
+                          subTitle:
+                             provider.banner3[0].courseShortDesc,
+                          textStyle: CraftStyles.tsdarkBrownW500,
+                          textBackground: CraftColors.lightOrange,
+                          image: CraftImagePath.image9):Container(),
+                      storyTellingWidget(),
+                      joinCommunity(
+                          tag: "",
+                          title: "Join the CraftSchool \nCommunity",
+                          subTitle:
+                              "Connect with filmmakers and industry \nexperts, wherever you are.",
+                          textStyle: CraftStyles.tsdarkBrownW500,
+                          textBackground: CraftColors.lightOrange,
+                          image: CraftImagePath.bannerImage2,
+                          titleText: "Exclusive Community",
+                          subTitleText:
+                              "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"),
+                      joinFlimFestival(),
+                      flimMakingJourney(),
+                ],
+              ),
+              if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+              if (provider.isCategoryVisible) SlidingCategory(
+                isExpanded: provider.isCategoryVisible,
+                onToggleExpansion: provider.toggleSlidingCategory,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
- 

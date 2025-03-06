@@ -1,4 +1,5 @@
 import 'package:craft_school/providers/CategoryListProvider.dart';
+import 'package:craft_school/providers/LandingScreenProvider.dart';
 import 'package:craft_school/providers/sign_up_provider.dart';
 import 'package:craft_school/routes/routers.dart';
 import 'package:craft_school/screens/splash_screen.dart';
@@ -41,9 +42,11 @@ class _MyAppState extends State<MyApp> {
        providers: [
         ChangeNotifierProvider<SignUpProvider>(
           create: (context) => SignUpProvider(),
-        ), ChangeNotifierProvider<CategoryListProvider>(
+        ), 
+        ChangeNotifierProvider<CategoryListProvider>(
           create: (context) => CategoryListProvider(),
         ),
+        
       ],
       child: MaterialApp(
         title: 'Craft School',

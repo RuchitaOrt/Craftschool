@@ -1,8 +1,10 @@
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/TestimonialProvider.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/widgets/CustomAppBar.dart';
+import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
@@ -19,6 +21,19 @@ class Testimonial extends StatefulWidget {
 }
 
 class _TestimonialScreenState extends State<Testimonial> {
+    @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  Provider.of<PersonalAccountProvider>(context, listen: false).getPlanList();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Only call the API if it's not already loading
+      final provider = Provider.of<TestimonialProvider>(context, listen: false);
+      if (!provider.isLoading) {
+        provider.getTestimonialAPI();
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
  return  ChangeNotifierProvider(
@@ -31,11 +46,11 @@ class _TestimonialScreenState extends State<Testimonial> {
      appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
-                isCategoryVisible: false,
+                isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                 },
-                   onCategoriesPressed: () {  }, isContainerVisible: false,
+                   onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
               ),
             ),
       backgroundColor: CraftColors.black18,
@@ -56,8 +71,11 @@ class _TestimonialScreenState extends State<Testimonial> {
                     ],
                   ),
                 ),
-                if (provider.isContainerVisible)
-                        SlidingMenu(isVisible: provider.isContainerVisible),
+                if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+              if (provider.isCategoryVisible) SlidingCategory(
+                isExpanded: provider.isCategoryVisible,
+                onToggleExpansion: provider.toggleSlidingCategory,
+              ),
               ],
             ),
     );
@@ -65,7 +83,7 @@ class _TestimonialScreenState extends State<Testimonial> {
   }
 
   Widget realWidget() {
-    return Consumer<LandingScreenProvider>(builder: (context, provider, child) {
+    return Consumer<TestimonialProvider>(builder: (context, provider, child) {
       return Container(
         margin: EdgeInsets.all(8),
         width: SizeConfig.safeBlockHorizontal * 85,
@@ -84,7 +102,7 @@ class _TestimonialScreenState extends State<Testimonial> {
                 style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
               ),
               SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
+                height: SizeConfig.blockSizeVertical * 1,
               ),
               // Subtitle
               Text(
@@ -103,7 +121,7 @@ class _TestimonialScreenState extends State<Testimonial> {
                     slivers: [
                       SliverStaggeredGrid.countBuilder(
                         crossAxisCount: 2, // Number of columns
-                        itemCount: provider.gridItems.length,
+                        itemCount: provider.testimonialData.length,
                         staggeredTileBuilder: (int index) {
                           return StaggeredTile.fit(1); // Adjust this if needed
                         },
@@ -126,9 +144,9 @@ class _TestimonialScreenState extends State<Testimonial> {
                                   ),
                                   RatingBar.builder(
                                     initialRating: double.parse(
-                                        provider.gridItems[index]
-                                            ['rating']!), // set initial rating
-                                    minRating: 1, // minimum rating
+                                        provider.testimonialData[index].rating.toString()
+                                            ), // set initial rating
+                                    minRating:0, // minimum rating
                                     direction: Axis
                                         .horizontal, // horizontal or vertical
                                     allowHalfRating:
@@ -147,10 +165,13 @@ class _TestimonialScreenState extends State<Testimonial> {
                                     height: SizeConfig.blockSizeVertical * 1,
                                   ),
                                   Text(
-                                    provider.gridItems[index]['description'] ??
-                                        "No Description Available",
+                                    provider.testimonialData[index].comments ??
+                                    "",
                                     style: CraftStyles.tsNeutral500W500
                                         .copyWith(fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 1,
                                   ),
                                   Row(
                                     children: [
@@ -165,8 +186,8 @@ class _TestimonialScreenState extends State<Testimonial> {
                                             SizeConfig.blockSizeHorizontal * 2,
                                       ),
                                       Text(
-                                        provider.gridItems[index]['title'] ??
-                                            "No Title Available",
+                                        provider.testimonialData[index].userName ??
+                                            "",
                                         style: CraftStyles.tsNeutral500W500,
                                       ),
                                     ],

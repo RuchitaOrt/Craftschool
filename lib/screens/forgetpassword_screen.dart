@@ -1,7 +1,6 @@
 import 'package:craft_school/common_widget/custom_text_field_widget.dart';
 import 'package:craft_school/main.dart';
 import 'package:craft_school/providers/forget_password_provider.dart';
-import 'package:craft_school/screens/create_password_screen.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
@@ -150,7 +149,10 @@ class ForgetpasswordScreen extends StatelessWidget {
 //                                                         (route) => false,
 //                                                       );
 //                     },
-                       onButtonOnTap,
+                   isEmailSectionnVisble?()
+                   {
+                    forgetPasswordProvider.forgetPassword();
+                   }:    onButtonOnTap,
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(SizeConfig.blockSizeVertical * 100, SizeConfig.blockSizeVertical * 5),
                         backgroundColor: CraftColors.primaryBlue550,

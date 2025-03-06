@@ -1,9 +1,14 @@
+
+
+import 'package:craft_school/dto/GetAllPlanResponse.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/personal_account_provider.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/widgets/CustomAppBar.dart';
+import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
 import 'package:craft_school/widgets/or_divider.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +24,20 @@ class PlanPriceCardScreen extends StatefulWidget {
 }
 
 class _PlanPriceCardScreenState extends State<PlanPriceCardScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  Provider.of<PersonalAccountProvider>(context, listen: false).getPlanList();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Only call the API if it's not already loading
+      final provider = Provider.of<PersonalAccountProvider>(context, listen: false);
+      if (!provider.isLoading) {
+        provider.getPlanListAPI();
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
  return  ChangeNotifierProvider(
@@ -31,11 +50,11 @@ class _PlanPriceCardScreenState extends State<PlanPriceCardScreen> {
      appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
-                isCategoryVisible: false,
+                isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                 },
-                   onCategoriesPressed: () {  }, isContainerVisible: false,
+                   onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
               ),
             ),
       backgroundColor: CraftColors.black18,
@@ -58,8 +77,11 @@ class _PlanPriceCardScreenState extends State<PlanPriceCardScreen> {
                     ],
                   ),
                 ),
-                if (provider.isContainerVisible)
-                        SlidingMenu(isVisible: provider.isContainerVisible),
+                if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+              if (provider.isCategoryVisible) SlidingCategory(
+                isExpanded: provider.isCategoryVisible,
+                onToggleExpansion: provider.toggleSlidingCategory,
+              ),
               ],
             ),
     );
@@ -184,269 +206,283 @@ class _PlanPriceCardScreenState extends State<PlanPriceCardScreen> {
   );
 }
 Widget simpleTransplantPlanWidget() {
-    return Consumer<LandingScreenProvider>(builder: (context, provider, child) {
-      return Container(
-        margin: EdgeInsets.all(8),
-        width: SizeConfig.safeBlockHorizontal * 85,
-        decoration: BoxDecoration(
-          color: CraftColors.neutralBlue850,
-          borderRadius: BorderRadius.all(Radius.circular(24)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              // Title
-              Text(
-                textAlign: TextAlign.center,
-                "Simple, transparent plans",
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Subtitle
-              Text(
-                textAlign: TextAlign.center,
-                "We believe Untitled should be accessible to all companies, no matter the size.",
-                style: CraftStyles.tsWhiteNeutral300W500,
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
-              Card(
-                elevation: 1.0,
-                color: CraftColors.neutralBlue800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      planPriceCard("Basic","₹ 799/-",false),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 2,
-                      ),
-                      informationPlan(
-                          "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.neutralBlue800,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: CraftColors
-                                  .white, // Set the border color
-                              width: 0.2, // Set the border width
-                            ),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-                    ],
-                  ),
-                ),
-              ),
-             
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Card(
-                elevation: 1.0,
-                color: CraftColors.neutralBlue800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      planPriceCard("Standard","₹ 4299/-",true),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 2,
-                      ),
-                      informationPlan(
-                          "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.primaryBlue500,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                             // Set the border color
-                              width: 0.2, // Set the border width
-                            ),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-                    ],
-                  ),
-                ),
-              ),
-             
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-               Card(
-                elevation: 1.0,
-                color: CraftColors.neutralBlue800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      planPriceCard("Premium","₹ 8799/-",false),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 2,
-                      ),
-                      informationPlan(
-                          "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.neutralBlue800,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: CraftColors
-                                  .white, // Set the border color
-                              width: 0.2, // Set the border width
-                            ),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-                    ],
-                  ),
-                ),
-              ),
-             
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-            ],
+    return Consumer<PersonalAccountProvider>(
+    builder: (context, provider, _) {
+  if (provider.isLoading) {
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+    return
+        Container(
+    margin: EdgeInsets.all(8),
+    width: SizeConfig.safeBlockHorizontal * 85,
+    decoration: BoxDecoration(
+      color: CraftColors.neutralBlue850,
+      borderRadius: BorderRadius.all(Radius.circular(24)),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          // Title
+          Text(
+            textAlign: TextAlign.center,
+            "Simple, transparent plans",
+            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
           ),
-        ),
-      );
-    });
+          SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+          // Subtitle
+          Text(
+            textAlign: TextAlign.center,
+            "We believe Untitled should be accessible to all companies, no matter the size.",
+            style: CraftStyles.tsWhiteNeutral300W500,
+          ),
+          SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+          // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
+          Card(
+            elevation: 1.0,
+            color: CraftColors.neutralBlue800,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  planPriceCard(provider.plandata[0].planName,"₹ ${provider.plandata[0].cost}/-",false),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
+                  informationPlan(
+                      "Devices you can watch at the same time", provider.plandata[0].simaltaneousDevicesAccessible.toString()),
+                  informationPlan(
+                      "Download devices", provider.plandata[0].downloadDevices.toString()),
+                  informationPlan(
+                      "All courses across 7 categories", provider.plandata[0].courses),
+                  informationPlan(
+                      "Access to sessions by CraftSchool", provider.plandata[0].communityAccess),
+                  informationPlan(
+                      "Supported devicese",provider.plandata[0].supportedDevices),
+                  informationPlan(
+                      "Join exclusive Community", provider.plandata[0].communityAccess),
+                       informationPlan(
+                      "Plan Type", provider.plandata[0].planType),
+                       
+                        SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+          Center(
+            child: SizedBox(
+                  width: SizeConfig.blockSizeHorizontal * 82,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(SizeConfig.blockSizeVertical * 45,
+                          SizeConfig.blockSizeVertical * 5),
+                      backgroundColor:
+                          CraftColors.neutralBlue800,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: CraftColors
+                              .white, // Set the border color
+                          width: 0.2, // Set the border width
+                        ),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          CraftStrings.strSubscribeNow,
+                          style: CraftStyles.tsWhiteNeutral50W60016
+                              .copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          ),
+               SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+                ],
+              ),
+            ),
+          ),
+         
+          SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+          Card(
+            elevation: 1.0,
+            color: CraftColors.neutralBlue800,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  planPriceCard(provider.plandata[1].planName,"₹ ${provider.plandata[1].cost}/-",true),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
+                   informationPlan(
+                      "Devices you can watch at the same time", provider.plandata[1].simaltaneousDevicesAccessible.toString()),
+                  informationPlan(
+                      "Download devices", provider.plandata[1].downloadDevices.toString()),
+                  informationPlan(
+                      "All courses across 7 categories", provider.plandata[1].courses),
+                  informationPlan(
+                      "Access to sessions by CraftSchool", provider.plandata[1].communityAccess),
+                  informationPlan(
+                      "Supported devicese",provider.plandata[1].supportedDevices),
+                  informationPlan(
+                      "Join exclusive Community", provider.plandata[1].communityAccess),
+                       informationPlan(
+                      "Plan Type", provider.plandata[1].planType),
+                        SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+          Center(
+            child: SizedBox(
+                  width: SizeConfig.blockSizeHorizontal * 82,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(SizeConfig.blockSizeVertical * 45,
+                          SizeConfig.blockSizeVertical * 5),
+                      backgroundColor:
+                          CraftColors.primaryBlue500,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                         // Set the border color
+                          width: 0.2, // Set the border width
+                        ),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          CraftStrings.strSubscribeNow,
+                          style: CraftStyles.tsWhiteNeutral50W60016
+                              .copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          ),
+               SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+                ],
+              ),
+            ),
+          ),
+         
+          SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+           Card(
+            elevation: 1.0,
+            color: CraftColors.neutralBlue800,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  planPriceCard(provider.plandata[2].planName,"₹ ${provider.plandata[2].cost}/-",false),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
+                 informationPlan(
+                      "Devices you can watch at the same time", provider.plandata[2].simaltaneousDevicesAccessible.toString()),
+                  informationPlan(
+                      "Download devices", provider.plandata[2].downloadDevices.toString()),
+                  informationPlan(
+                      "All courses across 7 categories", provider.plandata[2].courses),
+                  informationPlan(
+                      "Access to sessions by CraftSchool", provider.plandata[2].communityAccess),
+                  informationPlan(
+                      "Supported devicese",provider.plandata[2].supportedDevices),
+                  informationPlan(
+                      "Join exclusive Community", provider.plandata[2].communityAccess),
+                       informationPlan(
+                      "Plan Type", provider.plandata[2].planType),
+                        SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+          Center(
+            child: SizedBox(
+                  width: SizeConfig.blockSizeHorizontal * 82,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(SizeConfig.blockSizeVertical * 45,
+                          SizeConfig.blockSizeVertical * 5),
+                      backgroundColor:
+                          CraftColors.neutralBlue800,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: CraftColors
+                              .white, // Set the border color
+                          width: 0.2, // Set the border width
+                        ),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          CraftStrings.strSubscribeNow,
+                          style: CraftStyles.tsWhiteNeutral50W60016
+                              .copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          ),
+               SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+                ],
+              ),
+            ),
+          ),
+         
+          SizedBox(
+            height: SizeConfig.blockSizeVertical * 2,
+          ),
+        ],
+      ),
+    ),
+         );
+       });
   }
   Widget informationPlan(String title, String suTitle) {
     return Padding(

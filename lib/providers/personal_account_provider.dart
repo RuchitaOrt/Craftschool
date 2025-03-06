@@ -1,3 +1,8 @@
+import 'package:craft_school/dto/GetAllPlanResponse.dart';
+import 'package:craft_school/main.dart';
+import 'package:craft_school/utils/APIManager.dart';
+import 'package:craft_school/utils/ShowDialog.dart';
+import 'package:craft_school/utils/internetConnection.dart';
 import 'package:flutter/material.dart';
 import 'package:craft_school/utils/regex_helper.dart';
 
@@ -65,4 +70,98 @@ class PersonalAccountProvider with ChangeNotifier {
   bool validateForm() {
     return _formKey.currentState?.validate() ?? false;
   }
+bool _isLoading = false;
+   bool get isLoading => _isLoading;
+
+  // Set loading state
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  
+  List<Datum> _data = [];
+
+  // Getter to retrieve the list of Datum
+  List<Datum> get plandata => _data;
+
+  // Setter to set the list of Datum
+  set plandata(List<Datum> newData) {
+    _data = newData;
+  }
+   Future<void> getPlanListAPI() async {
+    // Set loading to true when the API request starts
+    isLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = "";
+      print(jsonbody);
+
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.getAllPlan,
+        (response) async {
+          GetAllPlanResponse resp = response;
+
+          if (resp.status == true) {
+            // Updating the lists with fetched data
+           plandata=resp.data;
+
+            // Once data is fetched, set isLoading to false
+            isLoading = false;
+          }
+        },
+        (error) {
+          // Handle error case
+          print('ERR msg is $error');
+          ShowDialogs.showToast("Server Not Responding");
+
+          // Set loading to false in case of an error
+          isLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+
+      // Set loading to false when no internet
+      isLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+  //   Future<void> getPlanList() async {
+  //   isLoading = true;
+  //   notifyListeners();
+
+  //   var status1 = await ConnectionDetector.checkInternetConnection();
+
+  //   if (status1) {
+  //     var jsonbody = "";
+  //     await APIManager().apiRequest(
+  //       routeGlobalKey.currentContext!,
+  //       API.getAllPlan,
+  //       (response) {
+  //         GetAllPlanResponse resp = response;
+  //         plandata = resp.data;
+  //         isLoading = false;
+  //         notifyListeners();
+  //       },
+  //       (error) {
+  //         isLoading = false;
+         
+  //         notifyListeners();
+  //         ShowDialogs.showToast("Server Not Responding");
+  //       },
+  //       path: jsonbody,
+  //     );
+  //   } else {
+  //     isLoading = false;
+     
+  //     notifyListeners();
+  //     ShowDialogs.showToast("Please check internet connection");
+  //   }
+  // }
 }

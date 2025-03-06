@@ -1,6 +1,10 @@
 
 
 import 'package:craft_school/dto/ForgetPasswordDTO.dart';
+import 'package:craft_school/providers/GetServiceProvider.dart';
+import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/TestimonialProvider.dart';
+import 'package:craft_school/providers/personal_account_provider.dart';
 import 'package:craft_school/screens/CreatePostScreen.dart';
 import 'package:craft_school/screens/HelpSupport.dart';
 import 'package:craft_school/screens/Landing_Screen.dart';
@@ -25,6 +29,7 @@ import 'package:craft_school/screens/signup_screen.dart';
 import 'package:craft_school/screens/splash_screen.dart';
 import 'package:craft_school/screens/successful_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Routers {
   // Create a static method to configure the router
@@ -50,19 +55,29 @@ class Routers {
         );
          case LandingScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  LandingScreen(),
+          builder: (_) =>  ChangeNotifierProvider(
+          create: (_) => LandingScreenProvider(),
+          child: LandingScreen(),
+        ),
         );
          case BlogsScreen.route:
         return MaterialPageRoute(
           builder: (_) =>  BlogsScreen(),
         );
-         case PlanPriceCardScreen.route:
+        case PlanPriceCardScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  PlanPriceCardScreen(),
+          builder: (_) =>  ChangeNotifierProvider(
+          create: (_) => PersonalAccountProvider(),
+          child: PlanPriceCardScreen(),
+        ),
         );
+        
          case AspiringTrainingScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  AspiringTrainingScreen(),
+          builder: (_) =>  ChangeNotifierProvider(
+          create: (_) => GetServiceProvider(),
+          child: AspiringTrainingScreen(),
+        ),
         );
         case MyCourseScreen.route:
         return MaterialPageRoute(
@@ -112,9 +127,13 @@ class Routers {
         return MaterialPageRoute(
           builder: (_) =>  CreatePostScreen(),
         );
-         case Testimonial.route:
+        
+        case Testimonial.route:
         return MaterialPageRoute(
-          builder: (_) =>  Testimonial(),
+          builder: (_) =>  ChangeNotifierProvider(
+          create: (_) => TestimonialProvider(),
+          child: Testimonial(),
+        ),
         );
          case Coursedetailscreen.route:
         return MaterialPageRoute(

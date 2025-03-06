@@ -2,9 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:craft_school/dto/CategoryListResponse.dart';
+import 'package:craft_school/dto/CategoryWiseResponse.dart';
+import 'package:craft_school/dto/CustomerCategoryListResponse.dart';
+import 'package:craft_school/dto/CustomerIdCategoryWiseResponse.dart';
+import 'package:craft_school/dto/ForgetpasswordResponse.dart';
+import 'package:craft_school/dto/GetAllPlanResponse.dart';
+import 'package:craft_school/dto/GetServicesResponse.dart';
+import 'package:craft_school/dto/LandingScreenResponse.dart';
 import 'package:craft_school/dto/LoginResponse.dart';
 import 'package:craft_school/dto/LogoutResponse.dart';
 import 'package:craft_school/dto/SignUpResponse.dart';
+import 'package:craft_school/dto/TestimonialResponse.dart';
+import 'package:craft_school/dto/UpdatepasswordResponse.dart';
 import 'package:craft_school/utils/AppEror.dart';
 import 'package:craft_school/utils/SPManager.dart';
 import 'package:craft_school/utils/ShowDialog.dart';
@@ -16,6 +25,15 @@ enum API {
   categoryList,
   login,
   logout,
+  forgetPassword,
+  updatePassword,
+  homeScreen,
+  getAllPlan,
+  getCraftschoolServices,
+  testimonials,
+  customerSignupCategoriesList,
+  customercategoryIdsWiseCourses,
+  categoryIdsWiseCourses,
   Landingsliders,
 }
 
@@ -73,6 +91,34 @@ class APIManager {
       case API.logout:
         apiPathString = "/logout";
         break;
+         case API.forgetPassword:
+        apiPathString = "/forgetPassword";
+        break;
+         case API.updatePassword:
+        apiPathString = "/updatePassword";
+        break;
+          case API.homeScreen:
+        apiPathString = "/flutterHomePage";
+        break;
+         case API.getAllPlan:
+        apiPathString = "/getAllPlans";
+        break;
+        case API.getCraftschoolServices:
+        apiPathString = "/getCraftschoolServices";
+        break;
+         case API.testimonials:
+        apiPathString = "/testimonials";
+        break;
+         case API.customerSignupCategoriesList:
+        apiPathString = "/customerSignupCategoriesList";
+        break;
+         case API.customercategoryIdsWiseCourses:
+        apiPathString = "/customercategoryIdsWiseCourses";
+        break;
+        case API.categoryIdsWiseCourses:
+        apiPathString = "/categoryIdsWiseCourses";
+        break;
+        
       default:
         apiPathString = "/Login";
     }
@@ -85,6 +131,10 @@ class APIManager {
     HTTPMethod method;
     switch (api) {
       case API.categoryList:
+        case API.getAllPlan:
+        case API.getCraftschoolServices:
+        case API.testimonials:
+          case API.customerSignupCategoriesList:
         method = HTTPMethod.GET;
         break;
 
@@ -109,6 +159,33 @@ class APIManager {
       case API.logout:
         className = "LogoutResponse";
         break;
+         case API.forgetPassword:
+        className = "ForgetpasswordResponse";
+        break;
+        case API.updatePassword:
+        className = "UpdatepasswordResponse";
+        break;
+         case API.homeScreen:
+        className = "LandingScreenResponse";
+        break;
+         case API.getAllPlan:
+        className = "GetAllPlanResponse";
+        break;
+         case API.getCraftschoolServices:
+        className = "GetServicesResponse";
+        break;
+          case API.testimonials:
+        className = "TestimonialResponse";
+        break;
+         case API.customerSignupCategoriesList:
+        className = "CustomerCategoryListResponse";
+        break;
+         case API.customercategoryIdsWiseCourses:
+        className = "CustomerIdCategoryWiseResponse";
+        break;
+         case API.categoryIdsWiseCourses:
+        className = "CategoryWiseResponse";
+        break;
       default:
         className = 'CommonResponse';
     }
@@ -129,6 +206,33 @@ class APIManager {
     }
     if (className == 'LogoutResponse') {
       responseObj = LogoutResponse.fromJson(json);
+    }
+    if (className == 'ForgetpasswordResponse') {
+      responseObj = ForgetpasswordResponse.fromJson(json);
+    }
+     if (className == 'UpdatepasswordResponse') {
+      responseObj = UpdatepasswordResponse.fromJson(json);
+    }
+     if (className == 'LandingScreenResponse') {
+      responseObj = LandingScreenResponse.fromJson(json);
+    }
+      if (className == 'GetAllPlanResponse') {
+      responseObj = GetAllPlanResponse.fromJson(json);
+    }
+     if (className == 'GetServicesResponse') {
+      responseObj = GetServicesResponse.fromJson(json);
+    }
+      if (className == 'TestimonialResponse') {
+      responseObj = TestimonialResponse.fromJson(json);
+    }
+     if (className == 'CustomerCategoryListResponse') {
+      responseObj = CustomerCategoryListResponse.fromJson(json);
+    }
+    if (className == 'CustomerIdCategoryWiseResponse') {
+      responseObj = CustomerIdCategoryWiseResponse.fromJson(json);
+    }
+     if (className == 'CategoryWiseResponse') {
+      responseObj = CategoryWiseResponse.fromJson(json);
     }
 
     return responseObj;
@@ -156,18 +260,26 @@ class APIManager {
     if (token != "") {
       headers = {
         "Accept": 'application/json',
-        "x-api-key": "IjMgJzUSIikuLi1yYAFiMTMuKyQiNWQfZ2s0MiQzeHl2YGAyN",
+         "x-api-key": "IjMgJzUSIikuLi1yYAFiMTMuKyQiNWQfZ2s0MiQzeHl2YGAyN",
         //  "authToken": "1480B32EFFAD474D8F92056B9B242886-61",
-        "Authorization": "Bearer ${token}"
+         "Authorization": "Bearer ${token}"
       };
       print("header is $headers");
     } else {
-      headers = {
+//       if(api==API.categoryIdsWiseCourses)
+//       {
+//  headers = {
+       
+//       };
+//       }else{
+         headers = {
         "Accept": 'application/json',
-        "x-api-key": "IjMgJzUSIikuLi1yYAFiMTMuKyQiNWQfZ2s0MiQzeHl2YGAyN"
+         "x-api-key": "IjMgJzUSIikuLi1yYAFiMTMuKyQiNWQfZ2s0MiQzeHl2YGAyN"
         // "authToken":
         //     "${GlobalLists.loginResponseList.token}  ${"-"} ${GlobalLists.loginResponseList.employeemodel.employeeId}",
       };
+      // }
+     
     }
     print('URL is $url');
 

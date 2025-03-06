@@ -1,7 +1,8 @@
-
 import 'dart:async';
 
+import 'package:craft_school/screens/Landing_Screen.dart';
 import 'package:craft_school/screens/onboarding_screen.dart';
+import 'package:craft_school/utils/SPManager.dart';
 import 'package:craft_school/utils/UtilityFile.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
@@ -12,9 +13,9 @@ class SplashScreen extends StatefulWidget {
   static const String route = "/";
 
   const SplashScreen({super.key});
- 
+
   @override
- _SplashScreenState createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
- Utility().loadAPIConfig(context);
+    Utility().loadAPIConfig(context);
     _controller = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -37,17 +38,30 @@ class _SplashScreenState extends State<SplashScreen>
         curve: Curves.linear,
       ),
     );
+    navigationFun();
+  }
 
-     Timer(
-            Duration(seconds: 5),
-            () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => OnboardingScreen())));
-   }
+  navigationFun() async {
+    String? token = await SPManager().getAuthToken();
+    if (token != "") {
+      Timer(
+          Duration(seconds: 5),
+          () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => LandingScreen())));
+    } else {
+      Timer(
+          Duration(seconds: 5),
+          () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => OnboardingScreen())));
+    }
+  }
+
   @override
   void dispose() {
-    _controller.dispose();  // Dispose the AnimationController first!
-    super.dispose();  // Call super.dispose() after disposing of the controller.
+    _controller.dispose(); // Dispose the AnimationController first!
+    super.dispose(); // Call super.dispose() after disposing of the controller.
   }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
