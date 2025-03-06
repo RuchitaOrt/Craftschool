@@ -1,4 +1,5 @@
 import 'package:craft_school/providers/CourseDetailProvider.dart';
+import 'package:craft_school/providers/bottom_tab_provider.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
@@ -36,6 +37,12 @@ class SavedCourseScreen extends StatefulWidget {
 }
 
 class _SavedCourseScreenState extends State<SavedCourseScreen> {
+  @override
+  void initState() {
+    super.initState();
+     final tabState = Provider.of<BottomTabProvider>(context, listen: false);
+    tabState.setSelectedIndex(-1);
+  }
 final List<Video> videos = [
     Video(
       url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
@@ -72,11 +79,7 @@ final List<Video> videos = [
     CraftImagePath.image3,
     CraftImagePath.image1,
   ];
-  @override
-  void initState() {
-    super.initState();
-   
-  }
+
 
   @override
   void dispose() {
@@ -116,7 +119,7 @@ Widget build(BuildContext context) {
               ),
             ),
       backgroundColor: CraftColors.black18,
-      bottomNavigationBar: BottomAppBarWidget(index: -1,),
+      bottomNavigationBar: BottomAppBarWidget(),
       floatingActionButton:FloatingActionButtonWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     

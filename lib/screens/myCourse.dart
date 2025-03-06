@@ -179,7 +179,9 @@ Widget build(BuildContext context) {
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: CustomAppBar(
                isCategoryVisible: false,
-              onMenuPressed: () {},
+              onMenuPressed: () {
+                
+              },
                  onCategoriesPressed: () {  }, isContainerVisible: false,
             ),
           ),

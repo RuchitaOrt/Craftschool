@@ -15,8 +15,8 @@ class TrendingSkill extends StatelessWidget {
     required this.imagePaths,
     required this.title,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

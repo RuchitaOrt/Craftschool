@@ -1,5 +1,3 @@
-
-
 import 'package:craft_school/dto/ForgetPasswordDTO.dart';
 import 'package:craft_school/screens/CreatePostScreen.dart';
 import 'package:craft_school/screens/HelpSupport.dart';
@@ -26,6 +24,8 @@ import 'package:craft_school/screens/splash_screen.dart';
 import 'package:craft_school/screens/successful_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/BottomAppBarNavigationScreen.dart';
+
 class Routers {
   // Create a static method to configure the router
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -34,91 +34,95 @@ class Routers {
       // Arguments can be passed in the widget calling
       case SplashScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  SplashScreen(),
+          builder: (_) => SplashScreen(),
         );
-         case SignInScreen.route:
+      case SignInScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  SignInScreen(),
+          builder: (_) => SignInScreen(),
         );
       case SignUpScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  SignUpScreen(),
+          builder: (_) => SignUpScreen(),
         );
-        case CreatePasswordScreen.route:
+      case CreatePasswordScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  CreatePasswordScreen(),
+          builder: (_) => CreatePasswordScreen(),
         );
-         case LandingScreen.route:
+      case LandingScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  LandingScreen(),
+          builder: (_) => LandingScreen(),
         );
-         case BlogsScreen.route:
+      case BlogsScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  BlogsScreen(),
+          builder: (_) => BlogsScreen(),
         );
-         case PlanPriceCardScreen.route:
+      case PlanPriceCardScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  PlanPriceCardScreen(),
+          builder: (_) => PlanPriceCardScreen(),
         );
-         case AspiringTrainingScreen.route:
+      case AspiringTrainingScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  AspiringTrainingScreen(),
+          builder: (_) => AspiringTrainingScreen(),
         );
-        case MyCourseScreen.route:
+      case MyCourseScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  MyCourseScreen(),
+          builder: (_) => MyCourseScreen(),
         );
-         case AccountScreen.route:
+      //  case BottomAppBarWidget.route:
+      // return MaterialPageRoute(
+      //   builder: (_) =>  BottomAppBarWidget(),
+      // );
+      case AccountScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  AccountScreen(),
+          builder: (_) => AccountScreen(),
         );
-        case SuccessfulScreen.route:
+      case SuccessfulScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  SuccessfulScreen(),
+          builder: (_) => SuccessfulScreen(),
         );
-         case ChangePlan.route:
+      case ChangePlan.route:
         return MaterialPageRoute(
-          builder: (_) =>  ChangePlan(),
+          builder: (_) => ChangePlan(),
         );
-        case PersonalScreen.route:
+      case PersonalScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  PersonalScreen(),
+          builder: (_) => PersonalScreen(),
         );
-        case MasterScreen.route:
+      case MasterScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  MasterScreen(),
+          builder: (_) => MasterScreen(),
         );
-         case Settings.route:
+      case Settings.route:
         return MaterialPageRoute(
-          builder: (_) =>  Settings(),
+          builder: (_) => Settings(),
         );
-         case SavedCourseScreen.route:
+      case SavedCourseScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  SavedCourseScreen(),
+          builder: (_) => SavedCourseScreen(),
         );
-         case TermsCondition.route:
+      case TermsCondition.route:
         return MaterialPageRoute(
-          builder: (_) =>  TermsCondition(),
+          builder: (_) => TermsCondition(),
         );
-         case HelpSupport.route:
+      case HelpSupport.route:
         return MaterialPageRoute(
-          builder: (_) =>  HelpSupport(),
+          builder: (_) => HelpSupport(),
         );
-         case PostScreen.route:
+      case PostScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  PostScreen(),
+          builder: (_) => PostScreen(),
         );
-         case CreatePostScreen.route:
+      case CreatePostScreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  CreatePostScreen(),
+          builder: (_) => CreatePostScreen(),
         );
-         case Testimonial.route:
+      case Testimonial.route:
         return MaterialPageRoute(
-          builder: (_) =>  Testimonial(),
+          builder: (_) => Testimonial(),
         );
-         case Coursedetailscreen.route:
+      case Coursedetailscreen.route:
         return MaterialPageRoute(
-          builder: (_) =>  Coursedetailscreen(),
+          builder: (_) => Coursedetailscreen(),
         );
       case ForgetpasswordScreen.route:
         // Retrieve the arguments passed
@@ -126,7 +130,7 @@ class Routers {
         if (settings.arguments == null) {
           return _errorRoute();
         }
-        
+
         // If arguments are provided, pass them to the ForgetpasswordScreen constructor
         return MaterialPageRoute(
           builder: (_) => ForgetpasswordScreen(
@@ -135,17 +139,17 @@ class Routers {
             emailHint: args?.emailHint ?? '',
             buttonText: args?.buttonText ?? '',
             signInText: args?.signInText ?? '',
-            isEmailSectionnVisble:args?.isEmailSectionnVisble?? false,
+            isEmailSectionnVisble: args?.isEmailSectionnVisble ?? false,
             onButtonOnTap: args?.onButtonOnTap,
             onTextOnTap: args?.onTextOnTap,
-
           ),
         );
-      
+
       default:
-         return MaterialPageRoute(builder: (_) =>  SplashScreen());
+        return MaterialPageRoute(builder: (_) => SplashScreen());
     }
   }
+
   // Define an error route for handling unknown routes
   static Route<dynamic> _errorRoute() {
     return MaterialPageRoute(

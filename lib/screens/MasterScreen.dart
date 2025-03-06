@@ -1,5 +1,6 @@
 import 'package:craft_school/providers/CourseDetailProvider.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/bottom_tab_provider.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
@@ -23,19 +24,25 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
-   Widget browseOtherCourse() {
-    return ChangeNotifierProvider(
-      create: (_) => CourseDetailProvider(),
-      child: Consumer<CourseDetailProvider>(
-      builder: (context, provider, child) {
-        return 
-         BrowseOtherCourse(imagePaths:provider.imagePaths ,title:  "Trending Classes",onPressed: ()
-         {
+  @override
+  void initState() {
+    super.initState();
+    final tabState = Provider.of<BottomTabProvider>(context, listen: false);
+    tabState.setSelectedIndex(-1);
+  }
 
-         },);
-        
-      },
-    ));
+  Widget browseOtherCourse() {
+    return ChangeNotifierProvider(
+        create: (_) => CourseDetailProvider(),
+        child: Consumer<CourseDetailProvider>(
+          builder: (context, provider, child) {
+            return BrowseOtherCourse(
+              imagePaths: provider.imagePaths,
+              title: "Trending Classes",
+              onPressed: () {},
+            );
+          },
+        ));
   }
 
   @override
@@ -48,22 +55,26 @@ class _MasterScreenState extends State<MasterScreen> {
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
-                 isCategoryVisible: provider.isCategoryVisible,
+                isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
-                  provider.toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                  
-                },   onCategoriesPressed: () {  }, isContainerVisible: false,
+                  provider
+                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
+                },
+                onCategoriesPressed: () {},
+                isContainerVisible: false,
               ),
             ),
             backgroundColor: CraftColors.black18,
-            bottomNavigationBar: BottomAppBarWidget(index: -1,),
+            bottomNavigationBar: BottomAppBarWidget(),
             floatingActionButton: FloatingActionButtonWidget(),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
             body: Stack(
               children: [
                 // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
                 ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: 0.0, maxHeight: double.infinity),
+                  constraints: BoxConstraints(
+                      minHeight: 0.0, maxHeight: double.infinity),
                   child: ListView(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
@@ -71,25 +82,26 @@ class _MasterScreenState extends State<MasterScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                                        "Masters of the CraftSchool",
-                                        style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
-                                      ),
+                          "Masters of the CraftSchool",
+                          style: CraftStyles.tsWhiteNeutral50W700
+                              .copyWith(fontSize: 16),
+                        ),
                       ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 1,
-              ),
-                     ImageGridView(imagePaths:  provider.imagePaths),
-                        TrendingSkill(imagePaths:provider.imagePaths ,title:  CraftStrings.strtrendingSkills,onPressed: ()
-         {
-
-         },),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 1,
+                      ),
+                      ImageGridView(imagePaths: provider.imagePaths),
+                      TrendingSkill(
+                        imagePaths: provider.imagePaths,
+                        title: CraftStrings.strtrendingSkills,
+                        onPressed: () {},
+                      ),
                       browseOtherCourse(),
-                    
                     ],
                   ),
                 ),
                 if (provider.isContainerVisible)
-                        SlidingMenu(isVisible: provider.isContainerVisible),
+                  SlidingMenu(isVisible: provider.isContainerVisible),
               ],
             ),
           );
@@ -97,5 +109,4 @@ class _MasterScreenState extends State<MasterScreen> {
       ),
     );
   }
-
 }

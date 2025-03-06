@@ -1,3 +1,4 @@
+import 'package:craft_school/providers/bottom_tab_provider.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/widgets/BottomAppBarNavigationScreen.dart';
@@ -11,7 +12,7 @@ import 'package:craft_school/utils/sizeConfig.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
 
 class AspiringTrainingScreen extends StatefulWidget {
-   static const String route = "/services";
+  static const String route = "/services";
   const AspiringTrainingScreen({Key? key}) : super(key: key);
 
   @override
@@ -20,51 +21,55 @@ class AspiringTrainingScreen extends StatefulWidget {
 
 class _AspiringTrainingScreenState extends State<AspiringTrainingScreen> {
   @override
+  void initState() {
+    super.initState();
+    final tabState = Provider.of<BottomTabProvider>(context, listen: false);
+    tabState.setSelectedIndex(1);
+  }
+
+  @override
   Widget build(BuildContext context) {
- return 
-      ChangeNotifierProvider(
+    return ChangeNotifierProvider(
         create: (_) => LandingScreenProvider(),
-        child: 
-        Consumer<LandingScreenProvider>(
-        builder: (context, provider, _) {
-        return
-    Scaffold(
-     appBar: PreferredSize(
+        child: Consumer<LandingScreenProvider>(builder: (context, provider, _) {
+          return Scaffold(
+            appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
                 isCategoryVisible: false,
                 onMenuPressed: () {
-                  provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                  provider
+                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
                 },
-                   onCategoriesPressed: () {  }, isContainerVisible: false,
+                onCategoriesPressed: () {},
+                isContainerVisible: false,
               ),
             ),
-      backgroundColor: CraftColors.black18,
-      bottomNavigationBar: BottomAppBarWidget(index: 1,),
-      floatingActionButton:FloatingActionButtonWidget(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Stack(
+            backgroundColor: CraftColors.black18,
+            bottomNavigationBar: BottomAppBarWidget(),
+            floatingActionButton: FloatingActionButtonWidget(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            body: Stack(
               children: [
                 // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
                 ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: 0.0, maxHeight: double.infinity),
+                  constraints: BoxConstraints(
+                      minHeight: 0.0, maxHeight: double.infinity),
                   child: ListView(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
                     children: [
-                
-                       aspiringTraining(),
-                     
-                      
+                      aspiringTraining(),
                     ],
                   ),
                 ),
                 if (provider.isContainerVisible)
-                        SlidingMenu(isVisible: provider.isContainerVisible),
+                  SlidingMenu(isVisible: provider.isContainerVisible),
               ],
             ),
-    );
-      }));
+          );
+        }));
   }
 
   Widget aspiringTraining() {

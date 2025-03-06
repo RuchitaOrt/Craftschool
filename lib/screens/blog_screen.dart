@@ -1,4 +1,5 @@
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/bottom_tab_provider.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
@@ -23,6 +24,13 @@ class BlogsScreen extends StatefulWidget {
 
 class _BlogsScreenState extends State<BlogsScreen> {
   @override
+  void initState() {
+    final tabState = Provider.of<BottomTabProvider>(context, listen: false);
+    tabState.setSelectedIndex(2);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => LandingScreenProvider(),
@@ -34,27 +42,33 @@ class _BlogsScreenState extends State<BlogsScreen> {
               child: CustomAppBar(
                 isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
-                  provider.toggleSlidingContainer(); // Trigger toggle when menu is pressed
+                  provider
+                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
                 },
                 onCategoriesPressed: () {},
                 isContainerVisible: provider.isContainerVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,
-            bottomNavigationBar: BottomAppBarWidget(index: 2),
+            bottomNavigationBar: BottomAppBarWidget(),
             floatingActionButton: FloatingActionButtonWidget(),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
             body: Stack(
               children: [
                 // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
                 ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: 0.0, maxHeight: double.infinity),
+                  constraints: BoxConstraints(
+                      minHeight: 0.0, maxHeight: double.infinity),
                   child: ListView(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
                     children: [
                       blogsWidget(provider),
-                      TrendingSkill(imagePaths: provider.imagePaths, title: CraftStrings.strtrendingSkills, onPressed: () {}),
+                      TrendingSkill(
+                          imagePaths: provider.imagePaths,
+                          title: CraftStrings.strtrendingSkills,
+                          onPressed: () {}),
                       trendingMasterWidget(provider),
                     ],
                   ),
@@ -83,7 +97,8 @@ class _BlogsScreenState extends State<BlogsScreen> {
               children: [
                 Text(
                   "Blogs",
-                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                  style:
+                      CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
                 ),
               ],
             ),
@@ -96,7 +111,10 @@ class _BlogsScreenState extends State<BlogsScreen> {
                 var blog = provider.blogsItem[index];
 
                 // Null checks for blog data
-                if (blog == null || blog['image'] == null || blog['title'] == null || blog['subtext'] == null) {
+                if (blog == null ||
+                    blog['image'] == null ||
+                    blog['title'] == null ||
+                    blog['subtext'] == null) {
                   return Container(); // Skip this item if it's invalid
                 }
 
@@ -144,7 +162,8 @@ class _BlogsScreenState extends State<BlogsScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -153,13 +172,16 @@ class _BlogsScreenState extends State<BlogsScreen> {
                                           Container(
                                             decoration: BoxDecoration(
                                               color: CraftColors.secondary100,
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
                                               child: Text(
                                                 "New !",
-                                                style: CraftStyles.tssecondary800W500,
+                                                style: CraftStyles
+                                                    .tssecondary800W500,
                                               ),
                                             ),
                                           ),
@@ -176,23 +198,31 @@ class _BlogsScreenState extends State<BlogsScreen> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                                      SizedBox(
+                                          height:
+                                              SizeConfig.blockSizeVertical * 1),
                                       Text(
                                         blog['title'],
-                                        style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 16),
+                                        style: CraftStyles
+                                            .tsWhiteNeutral50W60016
+                                            .copyWith(fontSize: 16),
                                       ),
-                                      SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                                      SizedBox(
+                                          height:
+                                              SizeConfig.blockSizeVertical * 1),
                                       Text(
                                         blog['subtext'],
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 14),
+                                        style: CraftStyles.tsWhiteNeutral300W500
+                                            .copyWith(fontSize: 14),
                                       ),
                                       Text(
                                         "Oct 29,2024 | 5 min read",
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
+                                        style: CraftStyles.tsWhiteNeutral300W500
+                                            .copyWith(fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -219,20 +249,23 @@ class _BlogsScreenState extends State<BlogsScreen> {
                           SizedBox(height: SizeConfig.blockSizeVertical * 1),
                           Text(
                             blog['title'],
-                            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 16),
+                            style: CraftStyles.tsWhiteNeutral50W60016
+                                .copyWith(fontSize: 16),
                           ),
                           SizedBox(height: SizeConfig.blockSizeVertical * 1),
                           Text(
                             blog['subtext'],
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 14),
+                            style: CraftStyles.tsWhiteNeutral300W500
+                                .copyWith(fontSize: 14),
                           ),
                           Text(
                             "Oct 29,2024 | 5 min read",
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
+                            style: CraftStyles.tsWhiteNeutral300W500
+                                .copyWith(fontSize: 12),
                           ),
                           SizedBox(height: SizeConfig.blockSizeVertical * 1),
                           SizedBox(
@@ -240,12 +273,17 @@ class _BlogsScreenState extends State<BlogsScreen> {
                             child: ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                minimumSize: Size(SizeConfig.blockSizeVertical * 90, SizeConfig.blockSizeVertical * 5),
+                                minimumSize: Size(
+                                    SizeConfig.blockSizeVertical * 90,
+                                    SizeConfig.blockSizeVertical * 5),
                                 backgroundColor: CraftColors.neutralBlue800,
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  side: BorderSide(color: CraftColors.neutralBlue750, width: 2),
+                                  side: BorderSide(
+                                      color: CraftColors.neutralBlue750,
+                                      width: 2),
                                 ),
                                 elevation: 5,
                               ),
@@ -254,7 +292,8 @@ class _BlogsScreenState extends State<BlogsScreen> {
                                 children: [
                                   Text(
                                     CraftStrings.strReadMore,
-                                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 17),
+                                    style: CraftStyles.tsWhiteNeutral50W60016
+                                        .copyWith(fontSize: 17),
                                   ),
                                 ],
                               ),
@@ -287,7 +326,8 @@ class _BlogsScreenState extends State<BlogsScreen> {
               children: [
                 Text(
                   "Trending Masters",
-                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                  style:
+                      CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
                 ),
               ],
             ),
@@ -309,88 +349,110 @@ class _BlogsScreenState extends State<BlogsScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset(provider.trendingMasters[index]['image']!,
-                        width: SizeConfig.safeBlockHorizontal*28,
-                        height: SizeConfig.safeBlockVertical*22,
-                        fit: BoxFit.cover,),
-                        SizedBox(width: SizeConfig.safeBlockHorizontal*2),
+                        Image.asset(
+                          provider.trendingMasters[index]['image']!,
+                          width: SizeConfig.safeBlockHorizontal * 28,
+                          height: SizeConfig.safeBlockVertical * 22,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
                         Container(
-                           width: SizeConfig.safeBlockHorizontal*45,
+                          width: SizeConfig.safeBlockHorizontal * 45,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 provider.trendingMasters[index]['name']!,
-                                style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 16),
+                                style: CraftStyles.tsWhiteNeutral50W60016
+                                    .copyWith(fontSize: 16),
                               ),
-                              SizedBox(height: SizeConfig.safeBlockVertical*1,),
+                              SizedBox(
+                                height: SizeConfig.safeBlockVertical * 1,
+                              ),
                               Text(
-                            provider.trendingMasters[index]['subtitle']!,
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
-                          ),
-                           SizedBox(height: SizeConfig.safeBlockVertical*1,),
-                          Row(children: [
-                              Container(
-                                            decoration: BoxDecoration(
-                                              color: CraftColors.secondary100,
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
-                                              child: Text(
-                                                "Direction",
-                                                style: CraftStyles.tssecondary800W500.copyWith(fontSize: 10),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: SizeConfig.blockSizeHorizontal*1,),
-                                            Container(
-                                            decoration: BoxDecoration(
-                                              color: CraftColors.secondary100,
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
-                                              child: Text(
-                                                "Script Writing",
-                                                style: CraftStyles.tssecondary800W500.copyWith(fontSize: 10),
-                                              ),
-                                            ),
-                                          ),
-                          ],),
-SizedBox(height: SizeConfig.blockSizeVertical*1,),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 30,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(SizeConfig.blockSizeVertical * 60, SizeConfig.blockSizeVertical * 4),
-                                backgroundColor: CraftColors.neutralBlue750,
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: BorderSide(color: CraftColors.neutralBlue750, width: 2),
-                                ),
-                                elevation: 5,
+                                provider.trendingMasters[index]['subtitle']!,
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                                style: CraftStyles.tsWhiteNeutral50W60016
+                                    .copyWith(fontSize: 12),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              SizedBox(
+                                height: SizeConfig.safeBlockVertical * 1,
+                              ),
+                              Row(
                                 children: [
-                                  Text(
-                                    CraftStrings.strSeeAllCourses,
-                                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: CraftColors.secondary100,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "Direction",
+                                        style: CraftStyles.tssecondary800W500
+                                            .copyWith(fontSize: 10),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: SizeConfig.blockSizeHorizontal * 1,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: CraftColors.secondary100,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "Script Writing",
+                                        style: CraftStyles.tssecondary800W500
+                                            .copyWith(fontSize: 10),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
+                              SizedBox(
+                                height: SizeConfig.blockSizeVertical * 1,
+                              ),
+                              SizedBox(
+                                width: SizeConfig.blockSizeHorizontal * 30,
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(
+                                        SizeConfig.blockSizeVertical * 60,
+                                        SizeConfig.blockSizeVertical * 4),
+                                    backgroundColor: CraftColors.neutralBlue750,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 3),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(
+                                          color: CraftColors.neutralBlue750,
+                                          width: 2),
+                                    ),
+                                    elevation: 5,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        CraftStrings.strSeeAllCourses,
+                                        style: CraftStyles
+                                            .tsWhiteNeutral50W60016
+                                            .copyWith(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
-
                       ],
                     ),
                   ),

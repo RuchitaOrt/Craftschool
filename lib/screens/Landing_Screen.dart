@@ -1,6 +1,6 @@
-
 import 'package:craft_school/main.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/bottom_tab_provider.dart';
 import 'package:craft_school/screens/MasterScreen.dart';
 import 'package:craft_school/screens/courseDetailScreen.dart';
 import 'package:craft_school/utils/craft_images.dart';
@@ -21,104 +21,118 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   static const String route = "/landingScreen";
   const LandingScreen({super.key});
-  
+
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    final tabState = Provider.of<BottomTabProvider>(context, listen: false);
+    tabState.setSelectedIndex(0);
+    super.initState();
+  }
 
   Widget masterClassBlock() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Container(
-        decoration: BoxDecoration(
-            //color: Color(0x1ED76040),
-            // image: DecorationImage(
-            //   image: AssetImage(CraftImagePath.landingBackground),
-            // ),
-            ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
+      child: ChangeNotifierProvider(
+        create: (_) => BottomTabProvider(),
+        child: Consumer<BottomTabProvider>(
+          builder: (context, tabProvider, child) {
+            return Container(
               decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(20), // Border radius for the checkbox
-                border: Border.all(
-                  color: Colors.white, // White border when unselected
-                  width: 0.5, // Border width
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  CraftStrings.strLandingScreenSubText1,
-                  style: CraftStyles.tsNeutral500W500,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 3,
-            ),
-            Text(
-              CraftStrings.strLandingScreenSubText2,
-              textAlign: TextAlign.center,
-              style: CraftStyles.tsWhiteNeutral50W700,
-            ),
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 2,
-            ),
-            Text(
-              CraftStrings.strLandingScreenSubText3,
-              style: CraftStyles.tsNeutral500W500,
-            ),
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 2,
-            ),
-            SizedBox(
-              width: SizeConfig.blockSizeVertical * 22,
-              child: ElevatedButton(
-                onPressed: () {
-                    Navigator.of(routeGlobalKey.currentContext!)
-        .pushNamed(
-      MasterScreen.route,
-    
-    )
-        .then((value) {
-      
-    });
-                }
-                ,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(SizeConfig.blockSizeVertical * 0.5,
-                      SizeConfig.blockSizeVertical * 6),
-                  backgroundColor: CraftColors.primaryBlue550,
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  //color: Color(0x1ED76040),
+                  // image: DecorationImage(
+                  //   image: AssetImage(CraftImagePath.landingBackground),
+                  // ),
                   ),
-                  elevation: 5,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      CraftImagePath.play,
-                      height: 24.0,
-                      width: 24.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          20), // Border radius for the checkbox
+                      border: Border.all(
+                        color: Colors.white, // White border when unselected
+                        width: 0.5, // Border width
+                      ),
                     ),
-                    SizedBox(
-                        width: 8), // Add some spacing between icon and text
-                    Text(
-                      CraftStrings.strMasterClass,
-                      style: CraftStyles.tsWhiteNeutral50W60016
-                          .copyWith(fontSize: 14),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        CraftStrings.strLandingScreenSubText1,
+                        style: CraftStyles.tsNeutral500W500,
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 3,
+                  ),
+                  Text(
+                    CraftStrings.strLandingScreenSubText2,
+                    textAlign: TextAlign.center,
+                    style: CraftStyles.tsWhiteNeutral50W700,
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
+                  Text(
+                    CraftStrings.strLandingScreenSubText3,
+                    style: CraftStyles.tsNeutral500W500,
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
+                  SizedBox(
+                    width: SizeConfig.blockSizeVertical * 22,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(routeGlobalKey.currentContext!)
+                            .pushNamed(MasterScreen.route)
+                            .then((value) {});
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(SizeConfig.blockSizeVertical * 0.5,
+                            SizeConfig.blockSizeVertical * 6),
+                        backgroundColor: CraftColors.primaryBlue550,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 5,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            CraftImagePath.play,
+                            height: 24.0,
+                            width: 24.0,
+                          ),
+                          SizedBox(
+                              width:
+                                  8), // Add some spacing between icon and text
+                          Text(
+                            CraftStrings.strMasterClass,
+                            style: CraftStyles.tsWhiteNeutral50W60016
+                                .copyWith(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            )
-          ],
+            );
+          },
         ),
       ),
     );
@@ -199,7 +213,6 @@ class LandingScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget bannerWatchVideo(
       {String? tag,
@@ -450,9 +463,9 @@ class LandingScreen extends StatelessWidget {
                 ),
               ),
             ),
-             SizedBox(
-                    height: SizeConfig.blockSizeVertical * 1,
-                  ),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 1,
+            ),
           ],
         ),
       ),
@@ -1129,7 +1142,6 @@ class LandingScreen extends StatelessWidget {
     });
   }
 
-
   Widget flimMakingJourney() {
     return Consumer<LandingScreenProvider>(
       builder: (context, provider, child) {
@@ -1326,7 +1338,7 @@ class LandingScreen extends StatelessWidget {
                           CraftStrings.strBrowseCourse,
                           style: CraftStyles.tsWhiteNeutral50W60016,
                         ),
-                        SizedBox(width: SizeConfig.blockSizeHorizontal*1),
+                        SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
                         SvgPicture.asset(
                           CraftImagePath.arrowRight,
                           height: 24.0,
@@ -1528,7 +1540,7 @@ class LandingScreen extends StatelessWidget {
                           CraftStrings.strBrowseCourse,
                           style: CraftStyles.tsWhiteNeutral50W60016,
                         ),
-                        SizedBox(width: SizeConfig.blockSizeHorizontal*1),
+                        SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
                         SvgPicture.asset(
                           CraftImagePath.arrowRight,
                           height: 24.0,
@@ -1966,7 +1978,7 @@ class LandingScreen extends StatelessWidget {
     });
   }
 
-  Widget planPriceCard(String title,String price) {
+  Widget planPriceCard(String title, String price) {
     return Container(
       margin: EdgeInsets.all(6),
       width: SizeConfig.blockSizeHorizontal * 95,
@@ -2072,68 +2084,65 @@ class LandingScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      planPriceCard("Basic","₹ 799/-"),
+                      planPriceCard("Basic", "₹ 799/-"),
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 2,
                       ),
                       informationPlan(
                           "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.neutralBlue800,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: CraftColors
-                                  .white, // Set the border color
-                              width: 0.2, // Set the border width
+                      informationPlan("Download devices", "No"),
+                      informationPlan("All courses across 7 categories", "No"),
+                      informationPlan("Access to sessions by CraftSchool",
+                          "Learn by doing in just 30 days."),
+                      informationPlan("Supported devicese",
+                          "Computer, TV, Phone or Tablet"),
+                      informationPlan("Join exclusive Community", "Yes"),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 82,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(
+                                  SizeConfig.blockSizeVertical * 45,
+                                  SizeConfig.blockSizeVertical * 5),
+                              backgroundColor: CraftColors.neutralBlue800,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color:
+                                      CraftColors.white, // Set the border color
+                                  width: 0.2, // Set the border width
+                                ),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  CraftStrings.strSubscribeNow,
+                                  style: CraftStyles.tsWhiteNeutral50W60016
+                                      .copyWith(fontSize: 16),
+                                ),
+                              ],
                             ),
                           ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
                         ),
                       ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
                     ],
                   ),
                 ),
               ),
-             
+
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
               ),
@@ -2148,71 +2157,68 @@ class LandingScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      planPriceCard("Standard","₹ 4299/-"),
+                      planPriceCard("Standard", "₹ 4299/-"),
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 2,
                       ),
                       informationPlan(
                           "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.primaryBlue500,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                             // Set the border color
-                              width: 0.2, // Set the border width
+                      informationPlan("Download devices", "No"),
+                      informationPlan("All courses across 7 categories", "No"),
+                      informationPlan("Access to sessions by CraftSchool",
+                          "Learn by doing in just 30 days."),
+                      informationPlan("Supported devicese",
+                          "Computer, TV, Phone or Tablet"),
+                      informationPlan("Join exclusive Community", "Yes"),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 82,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(
+                                  SizeConfig.blockSizeVertical * 45,
+                                  SizeConfig.blockSizeVertical * 5),
+                              backgroundColor: CraftColors.primaryBlue500,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  // Set the border color
+                                  width: 0.2, // Set the border width
+                                ),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  CraftStrings.strSubscribeNow,
+                                  style: CraftStyles.tsWhiteNeutral50W60016
+                                      .copyWith(fontSize: 16),
+                                ),
+                              ],
                             ),
                           ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
                         ),
                       ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
                     ],
                   ),
                 ),
               ),
-             
+
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
               ),
-               Card(
+              Card(
                 elevation: 1.0,
                 color: CraftColors.neutralBlue800,
                 shape: RoundedRectangleBorder(
@@ -2223,68 +2229,65 @@ class LandingScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      planPriceCard("Premium","₹ 8799/-"),
+                      planPriceCard("Premium", "₹ 8799/-"),
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 2,
                       ),
                       informationPlan(
                           "Devices you can watch at the same time", "1"),
-                      informationPlan(
-                          "Download devices", "No"),
-                      informationPlan(
-                          "All courses across 7 categories", "No"),
-                      informationPlan(
-                          "Access to sessions by CraftSchool", "Learn by doing in just 30 days."),
-                      informationPlan(
-                          "Supported devicese", "Computer, TV, Phone or Tablet"),
-                      informationPlan(
-                          "Join exclusive Community", "Yes"),
-                            SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              Center(
-                child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 82,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeVertical * 45,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor:
-                              CraftColors.neutralBlue800,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: CraftColors
-                                  .white, // Set the border color
-                              width: 0.2, // Set the border width
+                      informationPlan("Download devices", "No"),
+                      informationPlan("All courses across 7 categories", "No"),
+                      informationPlan("Access to sessions by CraftSchool",
+                          "Learn by doing in just 30 days."),
+                      informationPlan("Supported devicese",
+                          "Computer, TV, Phone or Tablet"),
+                      informationPlan("Join exclusive Community", "Yes"),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 82,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(
+                                  SizeConfig.blockSizeVertical * 45,
+                                  SizeConfig.blockSizeVertical * 5),
+                              backgroundColor: CraftColors.neutralBlue800,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color:
+                                      CraftColors.white, // Set the border color
+                                  width: 0.2, // Set the border width
+                                ),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  CraftStrings.strSubscribeNow,
+                                  style: CraftStyles.tsWhiteNeutral50W60016
+                                      .copyWith(fontSize: 16),
+                                ),
+                              ],
                             ),
                           ),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              CraftStrings.strSubscribeNow,
-                              style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
                         ),
                       ),
-                    ),
-              ),
-                   SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
                     ],
                   ),
                 ),
               ),
-             
+
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
               ),
@@ -2299,111 +2302,103 @@ class LandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return
-    
-     ChangeNotifierProvider(
+    return ChangeNotifierProvider(
         create: (_) => LandingScreenProvider(),
-        child: 
-        Consumer<LandingScreenProvider>(
-        builder: (context, provider, _) {
-      return
-     Scaffold(
-   appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: CustomAppBar(
-                isContainerVisible: provider.isContainerVisible,
-                isCategoryVisible: provider.isCategoryVisible,
-                onMenuPressed: () {
-                  provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
-                }, onCategoriesPressed: () {provider.toggleSlidingCategory();  },
-              ),
-            ),
-      backgroundColor: CraftColors.black18,
-      bottomNavigationBar: BottomAppBarWidget(index: 0,),
-      floatingActionButton:FloatingActionButtonWidget(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    
-      body:  Stack(
-          children: [
-            ListView(
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              children: [
-                masterClassBlock(),
-                MasterImagesCarousel(),
-                // masterImages(),
-                annualPlanSignUp(),
-                everyMonthBlock(),
-                GestureDetector(
-                  onTap: ()
-                  {
-                      Navigator.of(
-                                                            routeGlobalKey
-                                                                .currentContext!,
-                                                          ).pushNamed(
-                                                            Coursedetailscreen.route,
-                                                            
-                                                          );
+        child: Consumer<LandingScreenProvider>(builder: (context, provider, _) {
+          return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: CustomAppBar(
+                  isContainerVisible: provider.isContainerVisible,
+                  isCategoryVisible: provider.isCategoryVisible,
+                  onMenuPressed: () {
+                    provider
+                        .toggleSlidingContainer(); // Trigger toggle when menu is pressed
                   },
-                  child: bannerImages(
-                      tag: "New !",
-                      title:
-                          "The great screenplay makes everybody step up to the bar and deliver.",
-                      subTitle: "Learn from the living legend Salim khan",
-                      textStyle: CraftStyles.tssecondary800W500,
-                      textBackground: CraftColors.secondary100,
-                      image: CraftImagePath.bannerImage),
+                  onCategoriesPressed: () {
+                    provider.toggleSlidingCategory();
+                  },
                 ),
-                masterOfCraftSchool(),
-                browseCourse(),
-                bannerImages(
-                    tag: "Exclusive",
-                    title:
-                        "A Legacy of Storytelling: The Final Teachings of Vikram Ghokle.",
-                    subTitle:
-                        "Recorded with profound insight and grace, this course is the last piece of wisdom Vikram Ghokle left us.",
-                    textStyle: CraftStyles.tsdarkBrownW500,
-                    textBackground: CraftColors.lightOrange,
-                    image: CraftImagePath.image4),
-                categoryCourse(),
-                bannerWatchVideo(
-                    tag: "",
-                    title: "Master the Filmmaking \nProcess with R. Balki",
-                    subTitle:
-                        "Start learning from R. Balki’s exclusive \ncourse – ",
-                    textStyle: CraftStyles.tsdarkBrownW500,
-                    textBackground: CraftColors.lightOrange,
-                    image: CraftImagePath.image9),
-                storyTellingWidget(),
-                joinCommunity(
-                    tag: "",
-                    title: "Join the CraftSchool \nCommunity",
-                    subTitle:
-                        "Connect with filmmakers and industry \nexperts, wherever you are.",
-                    textStyle: CraftStyles.tsdarkBrownW500,
-                    textBackground: CraftColors.lightOrange,
-                    image: CraftImagePath.bannerImage2,
-                    titleText: "Exclusive Community",
-                    subTitleText:
-                        "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"),
-                joinFlimFestival(),
-                flimMakingJourney(),
-             
-               
-              ],
-            ),
-             if (provider.isContainerVisible)
-                  SlidingMenu(isVisible:  provider.isContainerVisible),
-                   if (provider.isCategoryVisible)
-                   SlidingCategory(
-            isExpanded: provider.isCategoryVisible,
-            onToggleExpansion: provider.toggleSlidingCategory,
-          ),
-          ],
-        ));
-       
-        })
-    );
+              ),
+              backgroundColor: CraftColors.black18,
+              bottomNavigationBar: BottomAppBarWidget(),
+              floatingActionButton: FloatingActionButtonWidget(),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              body: Stack(
+                children: [
+                  ListView(
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    children: [
+                      masterClassBlock(),
+                      MasterImagesCarousel(),
+                      // masterImages(),
+                      annualPlanSignUp(),
+                      everyMonthBlock(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(
+                            routeGlobalKey.currentContext!,
+                          ).pushNamed(
+                            Coursedetailscreen.route,
+                          );
+                        },
+                        child: bannerImages(
+                            tag: "New !",
+                            title:
+                                "The great screenplay makes everybody step up to the bar and deliver.",
+                            subTitle: "Learn from the living legend Salim khan",
+                            textStyle: CraftStyles.tssecondary800W500,
+                            textBackground: CraftColors.secondary100,
+                            image: CraftImagePath.bannerImage),
+                      ),
+                      masterOfCraftSchool(),
+                      browseCourse(),
+                      bannerImages(
+                          tag: "Exclusive",
+                          title:
+                              "A Legacy of Storytelling: The Final Teachings of Vikram Ghokle.",
+                          subTitle:
+                              "Recorded with profound insight and grace, this course is the last piece of wisdom Vikram Ghokle left us.",
+                          textStyle: CraftStyles.tsdarkBrownW500,
+                          textBackground: CraftColors.lightOrange,
+                          image: CraftImagePath.image4),
+                      categoryCourse(),
+                      bannerWatchVideo(
+                          tag: "",
+                          title:
+                              "Master the Filmmaking \nProcess with R. Balki",
+                          subTitle:
+                              "Start learning from R. Balki’s exclusive \ncourse – ",
+                          textStyle: CraftStyles.tsdarkBrownW500,
+                          textBackground: CraftColors.lightOrange,
+                          image: CraftImagePath.image9),
+                      storyTellingWidget(),
+                      joinCommunity(
+                          tag: "",
+                          title: "Join the CraftSchool \nCommunity",
+                          subTitle:
+                              "Connect with filmmakers and industry \nexperts, wherever you are.",
+                          textStyle: CraftStyles.tsdarkBrownW500,
+                          textBackground: CraftColors.lightOrange,
+                          image: CraftImagePath.bannerImage2,
+                          titleText: "Exclusive Community",
+                          subTitleText:
+                              "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"),
+                      joinFlimFestival(),
+                      flimMakingJourney(),
+                    ],
+                  ),
+                  if (provider.isContainerVisible)
+                    SlidingMenu(isVisible: provider.isContainerVisible),
+                  if (provider.isCategoryVisible)
+                    SlidingCategory(
+                      isExpanded: provider.isCategoryVisible,
+                      onToggleExpansion: provider.toggleSlidingCategory,
+                    ),
+                ],
+              ));
+        }));
   }
 }
- 

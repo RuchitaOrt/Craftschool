@@ -46,6 +46,7 @@ dependencies:
   http_parser: 
   fluttertoast:
   shared_preferences:
+  page_transition: ^2.2.1
 
 
 

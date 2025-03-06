@@ -11,6 +11,9 @@ analyzer:
   errors:
     use_full_hex_values_for_flutter_colors: ignore
     unnecessary_this: ignore
+    file_names: ignore
+    sized_box_for_whitespace: ignore
+    no_leading_underscores_for_local_identifiers: ignore ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:
