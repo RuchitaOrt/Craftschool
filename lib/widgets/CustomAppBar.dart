@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
-import 'package:craft_school/utils/sizeConfig.dart';
 
 class CustomAppBar extends StatefulWidget {
   final VoidCallback onMenuPressed;
@@ -31,13 +30,11 @@ class _CustomAppBarState extends State<CustomAppBar>
   void initState() {
     super.initState();
 
-    // Animation controller for the menu icon
     _menuController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
-    // Rotation animation for the menu icon
     _menuRotationAnimation = Tween<double>(
       begin: 0,
       end: 0.5, // Rotate 180 degrees (0.5 turns)
@@ -51,7 +48,6 @@ class _CustomAppBarState extends State<CustomAppBar>
   void didUpdateWidget(CustomAppBar oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // Trigger animation when the menu visibility changes
     if (widget.isContainerVisible != oldWidget.isContainerVisible) {
       if (widget.isContainerVisible) {
         _menuController.forward();
@@ -71,7 +67,7 @@ class _CustomAppBarState extends State<CustomAppBar>
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: CraftColors.neutralBlue800,
-      elevation: 2, // Add a subtle shadow
+      elevation: 2,
       automaticallyImplyLeading: false,
       flexibleSpace: Container(
         decoration: BoxDecoration(
@@ -95,7 +91,6 @@ class _CustomAppBarState extends State<CustomAppBar>
               ),
               const Spacer(),
 
-              // Categories Dropdown Button
               GestureDetector(
                 onTap: widget.onCategoriesPressed,
                 child: Container(

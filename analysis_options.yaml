@@ -14,6 +14,8 @@ analyzer:
     file_names: ignore
     sized_box_for_whitespace: ignore
     no_leading_underscores_for_local_identifiers: ignore ignore
+    use_super_parameters: ignore
+    deprecated_member_use: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:
