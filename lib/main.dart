@@ -1,5 +1,15 @@
+
+import 'package:craft_school/providers/BlogProvider.dart';
 import 'package:craft_school/providers/CategoryListProvider.dart';
+import 'package:craft_school/providers/CommunityProvider.dart';
+import 'package:craft_school/providers/CourseDetailProvider.dart';
+import 'package:craft_school/providers/CoursesProvider.dart';
+import 'package:craft_school/providers/Faq_provider.dart';
+import 'package:craft_school/providers/GetServiceProvider.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/MasterAllProvider.dart';
+import 'package:craft_school/providers/membership_provider.dart';
+import 'package:craft_school/providers/personal_account_provider.dart';
 import 'package:craft_school/providers/sign_up_provider.dart';
 import 'package:craft_school/routes/routers.dart';
 import 'package:craft_school/screens/splash_screen.dart';
@@ -45,6 +55,36 @@ class _MyAppState extends State<MyApp> {
         ), 
         ChangeNotifierProvider<CategoryListProvider>(
           create: (context) => CategoryListProvider(),
+        ),
+         ChangeNotifierProvider<LandingScreenProvider>(
+          create: (context) => LandingScreenProvider(),
+        ),
+         ChangeNotifierProvider<MasterAllProvider>(
+          create: (context) => MasterAllProvider(),
+        ),
+          ChangeNotifierProvider<BlogProvider>(
+          create: (context) => BlogProvider(),
+        ),
+          ChangeNotifierProvider<CourseDetailProvider>(
+          create: (context) => CourseDetailProvider(),
+        ),
+         ChangeNotifierProvider<CoursesProvider>(
+          create: (context) => CoursesProvider(),
+        ),
+        ChangeNotifierProvider<CommunityProvider>(
+          create: (context) => CommunityProvider(),
+        ),
+         ChangeNotifierProvider<MembershipProvider>(
+          create: (context) => MembershipProvider(),
+        ),
+        ChangeNotifierProvider<PersonalAccountProvider>(
+          create: (context) => PersonalAccountProvider(),
+        ),
+        ChangeNotifierProvider<FAQProvider>(
+          create: (context) => FAQProvider(),
+        ),
+          ChangeNotifierProvider<GetServiceProvider>(
+          create: (context) => GetServiceProvider(),
         ),
         
       ],

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481943400603",
+    "project_id": "craftschool-6075c",
+    "storage_bucket": "craftschool-6075c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481943400603:android:2864561a64393d8e4f163e",
+        "android_client_info": {
+          "package_name": "com.ort.craft_school"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJj29TXurS1aG-JgqpB76KZWv5j3qthl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

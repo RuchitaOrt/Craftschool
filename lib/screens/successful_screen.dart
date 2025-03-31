@@ -1,9 +1,12 @@
+import 'package:craft_school/providers/LandingScreenProvider.dart';
 import 'package:craft_school/providers/membership_provider.dart';
 import 'package:craft_school/screens/Landing_Screen.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/widgets/CustomAppBar.dart';
+import 'package:craft_school/widgets/SlidingCategory.dart';
+import 'package:craft_school/widgets/SlidingMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
@@ -28,92 +31,104 @@ class SuccessfulScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+      create: (_) => LandingScreenProvider(),
+      child: Consumer<LandingScreenProvider>(
+        builder: (context, provider, _) {return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: CustomAppBar(
-          isCategoryVisible: false,
-          onMenuPressed: () {
-            // provider.toggleSlidingContainer(); // Trigger toggle when menu is pressed
-          },
-          onCategoriesPressed: () {},
-          isContainerVisible: false,
-        ),
-      ),
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: CustomAppBar(
+                isCategoryVisible: provider.isCategoryVisible,
+                onMenuPressed: () {
+                  provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                },
+                   onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
+              ),
+            ),
       backgroundColor: CraftColors.black18,
       body: ChangeNotifierProvider(
           create: (_) => MembershipProvider(),
           child: Consumer<MembershipProvider>(
               builder: (context, membershipProvider, _) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 14, right: 14),
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 1,
-                  ),
-                  SvgPicture.asset(
-                    CraftImagePath.successful,
-                    height: SizeConfig.blockSizeVertical * 20,
-                    width: SizeConfig.blockSizeHorizontal * 30,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            return Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 14),
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
-                      Text(
-                        textAlign: TextAlign.center,
-                        "Your Plan Has Been Successfully Updated!",
-                        style: CraftStyles.tsWhiteNeutral50W700
-                            .copyWith(fontSize: 20),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 1,
+                      ),
+                      SvgPicture.asset(
+                        CraftImagePath.successful,
+                        height: SizeConfig.blockSizeVertical * 20,
+                        width: SizeConfig.blockSizeHorizontal * 30,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            textAlign: TextAlign.center,
+                            "Your Plan Has Been Successfully Updated!",
+                            style: CraftStyles.tsWhiteNeutral50W700
+                                .copyWith(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 1,
+                      ),
+                      //chnage plan
+                      successsWidget(membershipProvider),
+                      SizedBox(
+                        height: SizeConfig.blockSizeVertical * 2,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: SizeConfig.blockSizeHorizontal * 30,
+                            right: SizeConfig.blockSizeHorizontal * 30),
+                        child: SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 43,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(
+                                    LandingScreen.route,
+                                  )
+                                  .then((value) {});
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(SizeConfig.blockSizeHorizontal * 43,
+                                  SizeConfig.blockSizeVertical * 5),
+                              backgroundColor: CraftColors.primaryBlue550,
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: Text(
+                              CraftStrings.strFinish,
+                              style: CraftStyles.tsWhiteNeutral50W60016,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 1,
-                  ),
-                  //chnage plan
-                  successsWidget(membershipProvider),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 30,
-                        right: SizeConfig.blockSizeHorizontal * 30),
-                    child: SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 43,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(
-                                LandingScreen.route,
-                              )
-                              .then((value) {});
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(SizeConfig.blockSizeHorizontal * 43,
-                              SizeConfig.blockSizeVertical * 5),
-                          backgroundColor: CraftColors.primaryBlue550,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Text(
-                          CraftStrings.strFinish,
-                          style: CraftStyles.tsWhiteNeutral50W60016,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                 if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+              if (provider.isCategoryVisible) SlidingCategory(
+                isExpanded: provider.isCategoryVisible,
+                onToggleExpansion: provider.toggleSlidingCategory,
               ),
+              ],
             );
           })),
     );
+        }));
   }
 
   Widget successsWidget(MembershipProvider membershipProvider) {

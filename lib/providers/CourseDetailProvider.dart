@@ -40,34 +40,7 @@ bool _isExpanded = false;
       // }
     notifyListeners();
   }
-  List<Map<String, dynamic>> courseCoveredTopics = [
-    {
-      
-      'title': 'Polish Your Acting & Nail That Audition',
-     
-    },
-    {
-      
-      'title': 'Learn the Art of Theater, Dance, & Magic',
-      
-    },
-    {
-     
-      'title': 'Bring Unforgettable Characters to Life',
-    
-    },
-    {
-      
-      'title': 'Overcome Stage Fright & Gain Confidence',
-      
-    },
-    {
-      
-      'title': 'Study Voice Acting & Refine Your Diction',
-      
-    },
-    // Add more static items as needed
-  ];
+ 
    final List<Map<String, String>> learnNewList = [
     {
     
@@ -126,6 +99,18 @@ List<Map<String, dynamic>> blogsItem = [
     isBuyNowExpanded = !isBuyNowExpanded;
     notifyListeners();  // Notify listeners to rebuild the widget
   }
+
+
+  //Other courses
+
+   bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
 }
 
 

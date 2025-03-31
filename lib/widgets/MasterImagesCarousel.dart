@@ -13,7 +13,10 @@ class MasterImagesCarousel extends StatefulWidget {
 }
 
 class _MasterImagesCarouselState extends State<MasterImagesCarousel> {
-  late Timer _timer;
+   Timer _timer=Timer(Duration(seconds: 3), ()
+   {
+
+   });
   int _currentPage = 0;
   final CarouselSliderController _carouselController = CarouselSliderController();  // Corrected CarouselController
 
@@ -31,7 +34,7 @@ class _MasterImagesCarouselState extends State<MasterImagesCarousel> {
 
   @override
   void dispose() {
-    _timer.cancel(); // Cancel the timer when the widget is disposed
+    _timer!.cancel(); // Cancel the timer when the widget is disposed
     super.dispose();
   }
 
@@ -85,13 +88,23 @@ class _MasterImagesCarouselState extends State<MasterImagesCarousel> {
                   ),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  widget.carousalImages[index].imageUrl,
-                  width: SizeConfig.safeBlockHorizontal * 33,  // 33% of screen width per image
-                  height: SizeConfig.blockSizeVertical * 20,
-                  fit: BoxFit.cover,  // Make sure the image covers the container
+              child: GestureDetector(
+                onTap: ()
+                {
+                  //  Navigator.of(routeGlobalKey.currentContext!)
+                  //     .pushNamed(
+                  //       MasterScreenDetail.route,arguments:"",
+                  //     )
+                  //     .then((value) {});
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    widget.carousalImages[index].imageUrl,
+                    width: SizeConfig.safeBlockHorizontal * 33,  // 33% of screen width per image
+                    height: SizeConfig.blockSizeVertical * 20,
+                    fit: BoxFit.cover,  // Make sure the image covers the container
+                  ),
                 ),
               ),
             ),

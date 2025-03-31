@@ -61,6 +61,7 @@ class SignInScreen extends StatelessWidget {
                       : SizeConfig.blockSizeVertical * 49,
                   child: ListView(
                     shrinkWrap: true,
+                    physics: ScrollPhysics(),
                     children: [
                       SizedBox(height: SizeConfig.blockSizeHorizontal * 1),
                       Text(
@@ -223,59 +224,9 @@ class SignInScreen extends StatelessWidget {
                                       height: SizeConfig.blockSizeVertical * 2),
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.end,
                                     children: [
-                                      Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              signInProvider.toggleCheckbox(
-                                                  !signInProvider.isChecked);
-                                            },
-                                            child: Container(
-                                              width: 20.0,
-                                              height: 20.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(
-                                                    4.0), // Border radius for the checkbox
-                                                border: Border.all(
-                                                  color: signInProvider
-                                                          .isChecked
-                                                      ? Colors
-                                                          .white // White border when selected
-                                                      : Colors
-                                                          .white, // White border when unselected
-                                                  width: 2.0, // Border width
-                                                ),
-                                                color: signInProvider.isChecked
-                                                    ? CraftColors
-                                                        .neutralBlue850 // Background color when checked
-                                                    : Colors
-                                                        .transparent, // Background color when unchecked
-                                              ),
-                                              child: signInProvider.isChecked
-                                                  ? Icon(
-                                                      Icons.check,
-                                                      color: Colors
-                                                          .white, // Color of the check mark
-                                                      size: 18.0,
-                                                    )
-                                                  : null,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    2,
-                                          ),
-                                          Text(
-                                            CraftStrings
-                                                .strRememberPassword, // The text to display next to the checkbox
-                                            style: CraftStyles
-                                                .tsWhiteNeutral300W500,
-                                          ),
-                                        ],
-                                      ),
+                                   
                                       Stack(
                                         children: [
                                           GestureDetector(

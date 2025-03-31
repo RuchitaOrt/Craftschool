@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:craft_school/screens/HomeScreen.dart';
 import 'package:craft_school/screens/Landing_Screen.dart';
+import 'package:craft_school/screens/courseDetailScreen.dart';
 import 'package:craft_school/screens/onboarding_screen.dart';
 import 'package:craft_school/utils/SPManager.dart';
 import 'package:craft_school/utils/UtilityFile.dart';
@@ -8,6 +10,7 @@ import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 
 class SplashScreen extends StatefulWidget {
   static const String route = "/";
@@ -38,16 +41,36 @@ class _SplashScreenState extends State<SplashScreen>
         curve: Curves.linear,
       ),
     );
-    navigationFun();
-  }
 
+    navigationFun();
+        // initDeepLinks();
+  }
+// void initDeepLinks() {
+//   uriLinkStream.listen((Uri? uri) {
+//     if (uri != null && uri.pathSegments.contains('product')) {
+//       final slug = uri.pathSegments.last;
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => Coursedetailscreen(slug: slug),
+//         ),
+//       );
+//     }
+//   });
+// }
   navigationFun() async {
     String? token = await SPManager().getAuthToken();
     if (token != "") {
       Timer(
           Duration(seconds: 5),
           () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => LandingScreen())));
+              MaterialPageRoute(builder: (context) => LandingScreen(isSignUp: false,))));
+      //  Timer(
+      //     Duration(seconds: 5),
+      //     () => Navigator.pushReplacement(context,
+      //         MaterialPageRoute(builder: (context) => HomeScreen(
+      //           // isSignUp: false,
+      //           ))));
     } else {
       Timer(
           Duration(seconds: 5),

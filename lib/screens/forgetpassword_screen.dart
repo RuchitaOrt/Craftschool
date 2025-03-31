@@ -1,5 +1,4 @@
 import 'package:craft_school/common_widget/custom_text_field_widget.dart';
-import 'package:craft_school/main.dart';
 import 'package:craft_school/providers/forget_password_provider.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
@@ -58,6 +57,7 @@ class ForgetpasswordScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             shrinkWrap: true,
+            physics: ScrollPhysics(),
             children: [
               SizedBox(height: SizeConfig.blockSizeVertical * 8),
               SizedBox(

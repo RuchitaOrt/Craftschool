@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
@@ -19,7 +21,7 @@ class CustomAppBar extends StatelessWidget {
       elevation: 0,
       automaticallyImplyLeading: false, 
       flexibleSpace: Padding(
-        padding: const EdgeInsets.only(top: 60, left: 8),
+        padding:  EdgeInsets.only(top:Platform.isAndroid?45: 60, left: 8),
         child: Row(
           children: [
             // Image on the left

@@ -1,4 +1,4 @@
-package com.example.craft_school
+package com.ort.craft_school
 
 import io.flutter.embedding.android.FlutterActivity
 

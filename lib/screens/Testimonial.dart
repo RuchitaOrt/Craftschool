@@ -25,8 +25,15 @@ class _TestimonialScreenState extends State<Testimonial> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //  Provider.of<PersonalAccountProvider>(context, listen: false).getPlanList();
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        final providerSubscription =
+          Provider.of<LandingScreenProvider>(context, listen: false);
+
+      if (!providerSubscription.isSubscriptionLoading) {
+        providerSubscription
+            .getcheckSubscriptionIndividualFlowWiseInfoAPI();
+      }
       // Only call the API if it's not already loading
       final provider = Provider.of<TestimonialProvider>(context, listen: false);
       if (!provider.isLoading) {
@@ -42,6 +49,7 @@ class _TestimonialScreenState extends State<Testimonial> {
         Consumer<LandingScreenProvider>(
         builder: (context, provider, _) {
         return
+
     Scaffold(
      appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -50,7 +58,7 @@ class _TestimonialScreenState extends State<Testimonial> {
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                 },
-                   onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
+                   onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isContainerVisible,
               ),
             ),
       backgroundColor: CraftColors.black18,
@@ -84,6 +92,10 @@ class _TestimonialScreenState extends State<Testimonial> {
 
   Widget realWidget() {
     return Consumer<TestimonialProvider>(builder: (context, provider, child) {
+       if(provider.isLoading)
+      {
+        return Center(child: CircularProgressIndicator());
+      }
       return Container(
         margin: EdgeInsets.all(8),
         width: SizeConfig.safeBlockHorizontal * 85,
@@ -116,90 +128,91 @@ class _TestimonialScreenState extends State<Testimonial> {
               // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
               Container(
                 height: SizeConfig.blockSizeVertical * 60,
-                child: Flexible(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverStaggeredGrid.countBuilder(
-                        crossAxisCount: 2, // Number of columns
-                        itemCount: provider.testimonialData.length,
-                        staggeredTileBuilder: (int index) {
-                          return StaggeredTile.fit(1); // Adjust this if needed
-                        },
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            elevation: 1.0,
-                            color: CraftColors.neutralBlue800,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: SizeConfig.blockSizeVertical * 1,
+                //removed fleible from here
+                child: CustomScrollView(
+                  slivers: [
+                    SliverStaggeredGrid.countBuilder(
+                      crossAxisCount: 2, // Number of columns
+                      itemCount: provider.testimonialData.length,
+                      staggeredTileBuilder: (int index) {
+                        return StaggeredTile.fit(1); // Adjust this if needed
+                      },
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          elevation: 1.0,
+                          color: CraftColors.neutralBlue800,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: SizeConfig.blockSizeVertical * 1,
+                                ),
+                                RatingBar.builder(
+                                  tapOnlyMode: false,
+                                  updateOnDrag: false,
+                                  ignoreGestures: true,
+                                  initialRating: double.parse(
+                                      provider.testimonialData[index].rating.toString()
+                                          ), // set initial rating
+                                  minRating:0, // minimum rating
+                                  direction: Axis
+                                      .horizontal, // horizontal or vertical
+                                  allowHalfRating:
+                                      true, // allow half star ratings
+                                  itemCount: 5, // number of stars
+                                  itemSize: 25, // size of each star
+                                  itemPadding: EdgeInsets.symmetric(
+                                      horizontal: 1.0), // space between stars
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
                                   ),
-                                  RatingBar.builder(
-                                    initialRating: double.parse(
-                                        provider.testimonialData[index].rating.toString()
-                                            ), // set initial rating
-                                    minRating:0, // minimum rating
-                                    direction: Axis
-                                        .horizontal, // horizontal or vertical
-                                    allowHalfRating:
-                                        true, // allow half star ratings
-                                    itemCount: 5, // number of stars
-                                    itemSize: 25, // size of each star
-                                    itemPadding: EdgeInsets.symmetric(
-                                        horizontal: 1.0), // space between stars
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
+                                  onRatingUpdate: (rating) {},
+                                ),
+                                SizedBox(
+                                  height: SizeConfig.blockSizeVertical * 1,
+                                ),
+                                Text(
+                                  provider.testimonialData[index].description ??
+                                  "",
+                                  style: CraftStyles.tsNeutral500W500
+                                      .copyWith(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: SizeConfig.blockSizeVertical * 1,
+                                ),
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius:
+                                          15.0, // Circle radius (size of the circle)
+                                      backgroundImage: NetworkImage(provider.testimonialData[index].photo!), // Image from local assets
                                     ),
-                                    onRatingUpdate: (rating) {},
-                                  ),
-                                  SizedBox(
-                                    height: SizeConfig.blockSizeVertical * 1,
-                                  ),
-                                  Text(
-                                    provider.testimonialData[index].comments ??
-                                    "",
-                                    style: CraftStyles.tsNeutral500W500
-                                        .copyWith(fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                    height: SizeConfig.blockSizeVertical * 1,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius:
-                                            15.0, // Circle radius (size of the circle)
-                                        backgroundImage: AssetImage(CraftImagePath
-                                            .image1), // Image from local assets
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            SizeConfig.blockSizeHorizontal * 2,
-                                      ),
-                                      Text(
-                                        provider.testimonialData[index].userName ??
-                                            "",
-                                        style: CraftStyles.tsNeutral500W500,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    SizedBox(
+                                      width:
+                                          SizeConfig.blockSizeHorizontal * 2,
+                                    ),
+                                    Text(
+                                      provider.testimonialData[index].name ??
+                                          "",
+                                      style: CraftStyles.tsNeutral500W500,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
               SizedBox(

@@ -1,29 +1,25 @@
-// To parse this JSON data, do
-//
-//     final logoutResponse = logoutResponseFromJson(jsonString);
-
 import 'dart:convert';
 
-LogoutResponse logoutResponseFromJson(String str) => LogoutResponse.fromJson(json.decode(str));
+CommonResponse logoutResponseFromJson(String str) => CommonResponse.fromJson(json.decode(str));
 
-String logoutResponseToJson(LogoutResponse data) => json.encode(data.toJson());
+String logoutResponseToJson(CommonResponse data) => json.encode(data.toJson());
 
-class LogoutResponse {
-    String status;
-    String message;
+class CommonResponse {
+  bool status;
+  String message;
 
-    LogoutResponse({
-        required this.status,
-        required this.message,
-    });
+  CommonResponse({
+    required this.status,
+    required this.message,
+  });
 
-    factory LogoutResponse.fromJson(Map<String, dynamic> json) => LogoutResponse(
-        status: json["status"],
-        message: json["message"],
-    );
+  factory CommonResponse.fromJson(Map<String, dynamic> json) => CommonResponse(
+    status: json["status"] ?? false,
+    message: json["message"] ?? "",
+  );
 
-    Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-    };
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "message": message,
+  };
 }

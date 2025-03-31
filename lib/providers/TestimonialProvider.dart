@@ -47,7 +47,7 @@ List<Datum> _testimonialData = [];
           TestimonialResponse resp = response;
 
           if (resp.status == true) {
-           testimonialData=resp.data;
+           testimonialData=resp.data!;
             isLoading = false;
           }
         },

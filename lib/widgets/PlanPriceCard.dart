@@ -2,14 +2,14 @@ import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
 import 'package:flutter/material.dart';
-
 class PlanPriceCard extends StatelessWidget {
   final String title;
   final String price;
+  final int planId;
   final bool isStandard;
   final int index; // Unique index for each plan card
   final int selectedPlanIndex; // Index of the selected plan from parent
-  final Function(int) onCheckboxChange; // Callback to handle checkbox selection
+  final Function(String,String ,int) onCheckboxChange; // Callback to handle checkbox selection with both title and planId
 
   PlanPriceCard({
     required this.title,
@@ -18,6 +18,7 @@ class PlanPriceCard extends StatelessWidget {
     required this.index,
     required this.selectedPlanIndex,
     required this.onCheckboxChange,
+    required this.planId,
   });
 
   @override
@@ -46,9 +47,12 @@ class PlanPriceCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Checkbox(
-                  value: selectedPlanIndex == index, // Check if this plan is selected
+                  value: selectedPlanIndex == planId, // Check if this plan is selected
                   onChanged: (bool? newValue) {
-                    onCheckboxChange(index); // Notify parent of the change
+                    if (newValue != null && newValue) {
+                      // Notify parent of the change with both title and planId
+                      onCheckboxChange(title,price ,planId);
+                    }
                   },
                   activeColor: CraftColors.primaryBlue500,
                   checkColor: CraftColors.neutral100,
@@ -71,3 +75,4 @@ class PlanPriceCard extends StatelessWidget {
     );
   }
 }
+

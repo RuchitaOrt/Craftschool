@@ -1,10 +1,15 @@
 import 'dart:io';
 
+import 'package:craft_school/dto/LogoutResponse.dart';
+import 'package:craft_school/dto/SavedCourseResponse.dart';
 import 'package:craft_school/dto/SignUpResponse.dart';
 import 'package:craft_school/main.dart';
+import 'package:craft_school/screens/Landing_Screen.dart';
+import 'package:craft_school/screens/savedCourse.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/APIManager.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
+import 'package:craft_school/utils/SPManager.dart';
 import 'package:craft_school/utils/ShowDialog.dart';
 import 'package:craft_school/utils/internetConnection.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +21,7 @@ class SignUpProvider with ChangeNotifier {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+    TextEditingController reasonController = TextEditingController();
 
   bool _isPasswordObscured = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -42,6 +48,14 @@ class SignUpProvider with ChangeNotifier {
   String? validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Last Name cannot be empty';
+    }
+    return null;
+  }
+
+
+  String? validateReason(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Reason cannot be empty';
     }
     return null;
   }
@@ -102,10 +116,13 @@ class SignUpProvider with ChangeNotifier {
         // if (response['status'] == true) {
         if (resp.status == true) {
           ShowDialogs.showToast(resp.message);
+            SPManager().setAuthToken(resp.data[0].token);
+         SPManager().setCustomerID(resp.data[0].customerId.toString());
+         SPManager().setCustomerName(resp.data[0].name);
           Navigator.of(
             routeGlobalKey.currentContext!,
           ).pushNamed(
-            SignInScreen.route,
+            LandingScreen.route,arguments:true
           );
         }
         // } else {
@@ -115,7 +132,82 @@ class SignUpProvider with ChangeNotifier {
 
         // }
       }, (error) {
-        print('ERR msg is $error');
+        print('ERR SignUpResponse is $error');
+
+        ShowDialogs.showToast("Server Not Responding");
+      }, jsonval: jsonbody);
+    } else {
+      /// Navigator.of(_keyLoader.currentContext).pop();
+      ShowDialogs.showToast("Please check internet connection");
+    }
+  }
+  Map<String, dynamic> createContactUsRequestBody() {
+    return {
+      "first_name": firstNameController.text,
+      "last_name": lastNameController.text,
+      "email": emailController.text,
+      "phone_no": phoneNumberController.text,
+      "reason": reasonController.text,
+      
+    };
+  }
+
+
+    contactUsAPI() async {
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createContactUsRequestBody();
+      print(jsonbody);
+
+      APIManager().apiRequest(routeGlobalKey.currentContext!, API.contact_us,
+          (response) async {
+        SavedCoursesResponse resp = response;
+        // if (response['status'] == true) {
+        if (resp.status == true) {
+          ShowDialogs.showToast(resp.message);
+           
+          Navigator.of(
+            routeGlobalKey.currentContext!,
+          ).pushNamed(
+            LandingScreen.route,
+          );
+        }
+      
+      }, (error) {
+        print('ERR SignUpResponse is $error');
+
+        ShowDialogs.showToast("Server Not Responding");
+      }, jsonval: jsonbody);
+    } else {
+      /// Navigator.of(_keyLoader.currentContext).pop();
+      ShowDialogs.showToast("Please check internet connection");
+    }
+  }
+
+   joinFlimFestAPI() async {
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createContactUsRequestBody();
+      print(jsonbody);
+
+      APIManager().apiRequest(routeGlobalKey.currentContext!, API.storeCustomerFlimFestival,
+          (response) async {
+        CommonResponse resp = response;
+        // if (response['status'] == true) {
+        if (resp.status == true) {
+          ShowDialogs.showToast(resp.message);
+           
+          Navigator.of(
+            routeGlobalKey.currentContext!,
+          ).pushNamed(
+            LandingScreen.route,
+          );
+        }
+      
+      }, (error) {
+        print('ERR SignUpResponse is $error');
 
         ShowDialogs.showToast("Server Not Responding");
       }, jsonval: jsonbody);

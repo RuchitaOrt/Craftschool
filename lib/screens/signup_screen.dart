@@ -49,6 +49,7 @@ class SignUpScreen extends StatelessWidget {
                 height: Platform.isAndroid? SizeConfig.blockSizeVertical * 75.5:SizeConfig.blockSizeVertical * 70,
                 child: ListView(
                   shrinkWrap: true,
+                  physics: ScrollPhysics(),
                   children: [
                     SizedBox(height: SizeConfig.blockSizeHorizontal * 1),
                     Text(

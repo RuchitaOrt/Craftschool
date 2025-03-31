@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final forgetpasswordResponse = forgetpasswordResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 ForgetpasswordResponse forgetpasswordResponseFromJson(String str) => ForgetpasswordResponse.fromJson(json.decode(str));
@@ -9,69 +5,25 @@ ForgetpasswordResponse forgetpasswordResponseFromJson(String str) => Forgetpassw
 String forgetpasswordResponseToJson(ForgetpasswordResponse data) => json.encode(data.toJson());
 
 class ForgetpasswordResponse {
- 
-    bool status;
-    String message;
-    Result result;
+  bool status;
+  String message;
+  List<dynamic> data;
 
-    ForgetpasswordResponse({
-       
-        required this.status,
-        required this.message,
-        required this.result,
-    });
+  ForgetpasswordResponse({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
 
-    factory ForgetpasswordResponse.fromJson(Map<String, dynamic> json) => ForgetpasswordResponse(
-       
-        status: json["status"],
-        message: json["message"],
-        result: Result.fromJson(json["result"]),
-    );
+  factory ForgetpasswordResponse.fromJson(Map<String, dynamic> json) => ForgetpasswordResponse(
+    status: json["status"] ?? false,
+    message: json["message"] ?? "",
+    data: json["data"] == null ? [] : List<dynamic>.from(json["data"].map((x) => x)),
+  );
 
-    Map<String, dynamic> toJson() => {
-       
-        "status": status,
-        "message": message,
-        "result": result.toJson(),
-    };
-}
-
-class Result {
-    Customer customer;
-    String email;
-
-    Result({
-        required this.customer,
-        required this.email,
-    });
-
-    factory Result.fromJson(Map<String, dynamic> json) => Result(
-        customer: Customer.fromJson(json["customer"]),
-        email: json["email"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "customer": customer.toJson(),
-        "email": email,
-    };
-}
-
-class Customer {
-    String iv;
-    String encryptedData;
-
-    Customer({
-        required this.iv,
-        required this.encryptedData,
-    });
-
-    factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        iv: json["iv"],
-        encryptedData: json["encryptedData"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "iv": iv,
-        "encryptedData": encryptedData,
-    };
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x)),
+  };
 }

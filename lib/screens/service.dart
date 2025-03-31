@@ -37,6 +37,15 @@ class _AspiringTrainingScreenState extends State<AspiringTrainingScreen> {
   @override
   void initState() {
     super.initState();
+    
+    final providerSubscription =
+          Provider.of<LandingScreenProvider>(context, listen: false);
+
+      if (!providerSubscription.isSubscriptionLoading) {
+        providerSubscription
+            .getcheckSubscriptionIndividualFlowWiseInfoAPI();
+      }
+
     // Keeping your original code as requested
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<GetServiceProvider>(context, listen: false);
@@ -73,44 +82,55 @@ class _AspiringTrainingScreenState extends State<AspiringTrainingScreen> {
         Consumer<LandingScreenProvider>(
         builder: (context, provider, _) {
         return
-    Scaffold(
-     appBar: PreferredSize(
+    WillPopScope(
+      onWillPop: ()async
+      {
+        provider.onBackPressed();
+        return false;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
-                isCategoryVisible: false,
+                isContainerVisible: provider.isContainerVisible,
+                isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
-                  provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                  provider
+                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
                 },
-                   onCategoriesPressed: () {  }, isContainerVisible: false,
+                onCategoriesPressed: () {
+                  provider.toggleSlidingCategory();
+                },
               ),
             ),
-      backgroundColor: CraftColors.black18,
-      bottomNavigationBar: BottomAppBarWidget(index: 1,),
-      floatingActionButton:FloatingActionButtonWidget(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Stack(
-              children: [
-                // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
-                ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: 0.0, maxHeight: double.infinity),
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    children: [
-                
-                       aspiringTraining(),
-                     
-                      
-                    ],
+        backgroundColor: CraftColors.black18,
+        bottomNavigationBar: BottomAppBarWidget(index: 1,),
+        floatingActionButton:FloatingActionButtonWidget(isOnLandingScreen: false,),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: Stack(
+                children: [
+                  // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
+                  ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: 0.0, maxHeight: double.infinity),
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      children: [
+                  
+                         aspiringTraining(),
+                       
+                        
+                      ],
+                    ),
                   ),
+                  if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+                if (provider.isCategoryVisible) SlidingCategory(
+                  isExpanded: provider.isCategoryVisible,
+                  onToggleExpansion: provider.toggleSlidingCategory,
                 ),
-                if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
-              if (provider.isCategoryVisible) SlidingCategory(
-                isExpanded: provider.isCategoryVisible,
-                onToggleExpansion: provider.toggleSlidingCategory,
+                ],
               ),
-              ],
-            ),
+      ),
     );
       }));
   }
@@ -119,9 +139,7 @@ class _AspiringTrainingScreenState extends State<AspiringTrainingScreen> {
     return Consumer<GetServiceProvider>(
       builder: (context, provider, child) {
          if (provider.isLoading) {
-          return Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+          return Center(child: CircularProgressIndicator());
         }
         return Padding(
           padding: const EdgeInsets.all(8.0),

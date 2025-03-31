@@ -428,6 +428,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    
     Provider.of<CategoryListProvider>(context, listen: false).getCategoryList();
   }
 

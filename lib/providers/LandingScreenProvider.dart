@@ -1,15 +1,30 @@
+import 'package:craft_school/dto/CheckSubscriptionIndividualFlowWiseInfoResponse.dart'
+    as checkSubscription;
 import 'package:craft_school/dto/CustomerCategoryListResponse.dart';
-import 'package:craft_school/dto/CustomerIdCategoryWiseResponse.dart' as catWise;
+import 'package:craft_school/dto/CustomerIdCategoryWiseResponse.dart'
+    as catWise;
+import 'package:craft_school/dto/GetLoggedInDevicesResponse.dart' as deviceInfo;
+import 'package:craft_school/dto/JoinFestivalResponse.dart' as joinFestival;
 import 'package:craft_school/dto/LandingScreenResponse.dart' as landingResp;
+import 'package:craft_school/dto/UpcomingCourseResponse.dart' as upcoming;
 import 'package:craft_school/dto/LogoutResponse.dart';
+import 'package:craft_school/dto/PayNowResponse.dart';
+import 'package:craft_school/dto/SavedCourseResponse.dart';
+
 import 'package:craft_school/main.dart';
+import 'package:craft_school/providers/CoursesProvider.dart';
+import 'package:craft_school/screens/DeviceLimitReachedScreen.dart';
+import 'package:craft_school/screens/Landing_Screen.dart';
+import 'package:craft_school/screens/RayzorPayHelper.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/APIManager.dart';
+import 'package:craft_school/utils/GlobalLists.dart';
 import 'package:craft_school/utils/SPManager.dart';
 import 'package:craft_school/utils/ShowDialog.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/internetConnection.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LandingScreenProvider with ChangeNotifier {
   // List to hold the image data (image paths or URLs)
@@ -37,27 +52,30 @@ class LandingScreenProvider with ChangeNotifier {
   List<Map<String, String>> trendingMasters = [
     {
       'name': 'Salim Khan',
-      'subtitle': 'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
+      'subtitle':
+          'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
       'image': CraftImagePath.image6,
     },
     {
       'name': 'Aashif Shaikh',
-       'subtitle': 'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
+      'subtitle':
+          'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
       'image': CraftImagePath.image4,
     },
     {
       'name': 'Salim Khan',
-       'subtitle': 'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
-      'image':CraftImagePath.image9,
+      'subtitle':
+          'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
+      'image': CraftImagePath.image9,
     },
     {
       'name': 'Aashif Shaikh',
-       'subtitle': 'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
+      'subtitle':
+          'An influential storyteller and screenplay writer, transformed Indian cinema with iconic films like Zanjeer and Deewar, bringing authenticity to the "Indian hero" archetype through compelling characters and a focus on human relationships.',
       'image': CraftImagePath.image3,
     },
     // Add more masters if needed
   ];
-
 
   final List<Map<String, String>> aspiringListItems = [
     {
@@ -285,8 +303,21 @@ class LandingScreenProvider with ChangeNotifier {
   //   {'label': 'Acting', 'image': CraftImagePath.acting},
   //   {'label': 'Editing', 'image': CraftImagePath.editing},
   //   {'label': 'Executive Production', 'image': CraftImagePath.executiveprod},
-   
+
   // ];
+  String selectedSingleChips = "0";
+  void onCategorySingleChipSelected(String id) {
+    selectedSingleChips = "";
+    selectedSingleChips = id;
+    if(id=='')
+    {
+ getCustomerIdWiseCategoryList([]);
+    }else{
+ getCustomerIdWiseCategoryList([int.parse(id)]);
+    }
+   
+    notifyListeners();
+  }
 
   List<List<CourseStatic>> filteredCourses = [
     // Example courses for each category
@@ -364,7 +395,8 @@ class LandingScreenProvider with ChangeNotifier {
     _isContainerVisible = !_isContainerVisible;
     notifyListeners(); // Notify listeners that the state has changed
   }
-    bool _isCategoryVisible = false;
+
+  bool _isCategoryVisible = false;
 
   bool get isCategoryVisible => _isCategoryVisible;
 
@@ -373,7 +405,6 @@ class LandingScreenProvider with ChangeNotifier {
     _isCategoryVisible = !_isCategoryVisible;
     notifyListeners(); // Notify listeners that the state has changed
   }
-
 
   List<landingResp.Banner> _banner1 = [];
   List<landingResp.Banner> _banner2 = [];
@@ -385,7 +416,7 @@ class LandingScreenProvider with ChangeNotifier {
   // Setter for banner1
   set banner1(List<landingResp.Banner> value) {
     _banner1 = value;
-    notifyListeners();  // Notify listeners when the value changes
+    notifyListeners(); // Notify listeners when the value changes
   }
 
   // Getter for banner2
@@ -394,7 +425,7 @@ class LandingScreenProvider with ChangeNotifier {
   // Setter for banner2
   set banner2(List<landingResp.Banner> value) {
     _banner2 = value;
-    notifyListeners();  // Notify listeners when the value changes
+    notifyListeners(); // Notify listeners when the value changes
   }
 
   // Getter for banner3
@@ -403,54 +434,9 @@ class LandingScreenProvider with ChangeNotifier {
   // Setter for banner3
   set banner3(List<landingResp.Banner> value) {
     _banner3 = value;
-    notifyListeners();  // Notify listeners when the value changes
+    notifyListeners(); // Notify listeners when the value changes
   }
 
-
-Future<Map<String, dynamic>> createRequestBody() async {
-    return {
-      "token": await SPManager().getAuthToken(),
-      
-    };
-  }
-  logoutAPI() async {
-    var status1 = await ConnectionDetector.checkInternetConnection();
-
-    if (status1) {
-      dynamic jsonbody = await createRequestBody();
-     
-
-      APIManager().apiRequest(routeGlobalKey.currentContext!, API.logout,
-          (response) async {
-        LogoutResponse resp = response;
-        // if (response['status'] == true) {
-         if (resp.status == "success") {
-          print("success");
-          ShowDialogs.showToast(resp.message);
-          SPManager().setAuthToken("");
-          Navigator.of(
-            routeGlobalKey.currentContext!,
-          ).pushNamed(
-            SignInScreen.route,
-          );
-         }
-        // } else {
-        //   // Handle failu
-        //   print("response status fail");
-        //   print(response['errors']);
-
-        // }
-      }, (error) {
-     
-        ShowDialogs.showToast("Server Not Responding");
-      }, jsonval: jsonbody);
-    } else {
-      /// Navigator.of(_keyLoader.currentContext).pop();
-      ShowDialogs.showToast("Please check internet connection");
-    }
-  }
-   bool _isLoading = false;
-     
   List<landingResp.CoursesDatum> _courses = [];
   List<landingResp.MastersDatum> _masters = [];
   List<landingResp.CarousalImagesDatum> _carousalImages = [];
@@ -461,7 +447,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
   // Setter for courses
   set courses(List<landingResp.CoursesDatum> value) {
     _courses = value;
-    notifyListeners();  // Notify listeners when the value changes
+    notifyListeners(); // Notify listeners when the value changes
   }
 
   // Getter for masters
@@ -470,7 +456,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
   // Setter for masters
   set masters(List<landingResp.MastersDatum> value) {
     _masters = value;
-    notifyListeners();  // Notify listeners when the value changes
+    notifyListeners(); // Notify listeners when the value changes
   }
 
   // Getter and setter for carousal images
@@ -481,6 +467,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
     notifyListeners();
   }
 
+  bool _isLoading = false;
   // Loading state
   bool get isLoading => _isLoading;
 
@@ -489,6 +476,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
     _isLoading = value;
     notifyListeners();
   }
+
   bool _isCategoryLoading = false;
   // Loading state
   bool get isCategoryLoading => _isCategoryLoading;
@@ -498,6 +486,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
     _isCategoryLoading = value;
     notifyListeners();
   }
+
   // API call for home screen data
   Future<void> homeScreenAPI() async {
     // Set loading to true when the API request starts
@@ -507,7 +496,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
 
     if (status1) {
       dynamic jsonbody = "";
-     
+
       return APIManager().apiRequest(
         routeGlobalKey.currentContext!,
         API.homeScreen,
@@ -519,9 +508,9 @@ Future<Map<String, dynamic>> createRequestBody() async {
             masters = resp.data.masters.data;
             courses = resp.data.courses.data;
             carousalImages = resp.data.carousalImages.data;
-            banner1=resp.data.banners.data.banner1;
-            banner2=resp.data.banners.data.banner2;
-            banner3=resp.data.banners.data.banner3;
+            banner1 = resp.data.banners.data.banner1;
+            banner2 = resp.data.banners.data.banner2;
+            banner3 = resp.data.banners.data.banner3;
 
             // Once data is fetched, set isLoading to false
             isLoading = false;
@@ -529,7 +518,7 @@ Future<Map<String, dynamic>> createRequestBody() async {
         },
         (error) {
           // Handle error case
-         
+
           ShowDialogs.showToast("Server Not Responding");
 
           // Set loading to false in case of an error
@@ -546,14 +535,16 @@ Future<Map<String, dynamic>> createRequestBody() async {
       return Future.error("No Internet Connection");
     }
   }
-List<Datum> _categoryList = [];
+
+  List<Datum> _categoryList = [];
 
   // Getter for data
   List<Datum> get categoryList => _categoryList;
   set categoryList(List<Datum> data) {
     _categoryList = data;
   }
-   Future<void> getCustomerCategoryList() async {
+
+  Future<void> getCustomerCategoryList() async {
     _isCategoryLoading = true;
     notifyListeners();
 
@@ -567,27 +558,37 @@ List<Datum> _categoryList = [];
         (response) {
           CustomerCategoryListResponse resp = response;
           categoryList = resp.data;
-         
-          _isCategoryLoading = false;
 
+          selectedSingleChips = categoryList[0].id.toString();
+          _isCategoryLoading = false;
+          if (!isCategoryWiseLoading) {
+            print("Token getting test");
+            print(categoryList.length);
+            getCustomerIdWiseCategoryList(
+                [
+                  // int.parse(categoryList[0].id.toString()
+                  // )
+                  ]);
+          }
           notifyListeners();
         },
         (error) {
           _isCategoryLoading = false;
-         
+          print("Error customerSignupCategoriesList $error");
           notifyListeners();
-          ShowDialogs.showToast("Server Not Responding");
+          // ShowDialogs.showToast("Server Not Responding");
         },
         path: jsonbody,
       );
     } else {
       _isCategoryLoading = false;
-     
+
       notifyListeners();
       ShowDialogs.showToast("Please check internet connection");
     }
   }
- bool _isCategoryWiseLoading = false;
+
+  bool _isCategoryWiseLoading = false;
   // Loading state
   bool get isCategoryWiseLoading => _isCategoryWiseLoading;
 
@@ -597,54 +598,527 @@ List<Datum> _categoryList = [];
     notifyListeners();
   }
 
-List<catWise.Datum> _categoryWiseList = [];
+  List<catWise.Datum> _categoryWiseList = [];
 
   // Getter for data
   List<catWise.Datum> get categoryWiseList => _categoryWiseList;
   set categoryWiseList(List<catWise.Datum> data) {
     _categoryWiseList = data;
   }
-  Future<Map<String, dynamic>> createCustomerCategoryRequestBody(String category) async {
-    return {
-      "category_ids":[category],
-    "start":0,
-    "length":3
-      
-    };
+
+  Map<String, dynamic> createRequestBody(var categoryIds) {
+    return {"category_ids": categoryIds, "start": "0", "length": "0"};
   }
-   Future<void> getCustomerIdWiseCategoryList(String category) async {
+
+  Future<void> getCustomerIdWiseCategoryList(List<int> category) async {
+    print("getCustomerIdWiseCategoryList response category");
+    categoryWiseList = [];
     _isCategoryWiseLoading = true;
     notifyListeners();
 
-    var status1 = await ConnectionDetector.checkInternetConnection();
+    bool hasInternet = await ConnectionDetector.checkInternetConnection();
+    if (!hasInternet) {
+      _isCategoryWiseLoading = false;
+      notifyListeners();
+      ShowDialogs.showToast("Please check internet connection");
+      return;
+    }
 
-    if (status1) {
-      var jsonbody = createCustomerCategoryRequestBody(category);
+    try {
+      print("getCustomerIdWiseCategoryList requestBody");
+      var requestBody = createRequestBody(category);
+      print("getCustomerIdWiseCategoryList ${requestBody.toString()}");
+      print("getCustomerIdWiseCategoryList apiRequest");
       await APIManager().apiRequest(
         routeGlobalKey.currentContext!,
         API.customercategoryIdsWiseCourses,
         (response) {
-          catWise.CustomerIdCategoryWiseResponse resp = response;
-          categoryWiseList = resp.data;
-        
+          print("getCustomerIdWiseCategoryList response category");
+          print(response);
+
+          catWise.CustomerIdCategoryWiseResponse category1WiseList = response;
+          categoryWiseList = category1WiseList.data;
+          print("getCustomerIdWiseCategoryList categoryWiseList.data.length");
+          print(category1WiseList.data.length);
           _isCategoryWiseLoading = false;
           notifyListeners();
         },
         (error) {
           _isCategoryWiseLoading = false;
-         
           notifyListeners();
           ShowDialogs.showToast("Server Not Responding");
         },
-        path: jsonbody,
+        jsonval: requestBody,
       );
-    } else {
+    } catch (e) {
       _isCategoryWiseLoading = false;
-     
       notifyListeners();
-      ShowDialogs.showToast("Please check internet connection");
+      ShowDialogs.showToast("Something went wrong");
     }
   }
+
+  bool _isjoinFestiveLoading = false;
+  // Loading state
+  bool get isjoinFestiveLoading => _isjoinFestiveLoading;
+
+  // Set loading state
+  set isjoinFestiveLoading(bool value) {
+    _isjoinFestiveLoading = value;
+    notifyListeners();
+  }
+
+  List<joinFestival.Datum> _joinFestivalList = [];
+
+  // Getter for data
+  List<joinFestival.Datum> get joinFestivalList => _joinFestivalList;
+  set joinFestivalList(List<joinFestival.Datum> data) {
+    _joinFestivalList = data;
+  }
+
+  Future<void> getJoinFestivalAPI() async {
+    // Set loading to true when the API request starts
+    isjoinFestiveLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = "";
+
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.getjoinflimfestival,
+        (response) async {
+          joinFestival.JoinFestivalResponse resp = response;
+
+          if (resp.status == true) {
+            _joinFestivalList = resp.data;
+            isjoinFestiveLoading = false;
+          }
+        },
+        (error) {
+          // Handle error case
+
+          ShowDialogs.showToast("Server Not Responding");
+
+          // Set loading to false in case of an error
+          isjoinFestiveLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+
+      // Set loading to false when no internet
+      isjoinFestiveLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+
+  //checksubscriptionindivdualflow
+  bool _isSubscriptionLoading = false;
+  // Loading state
+  bool get isSubscriptionLoading => _isSubscriptionLoading;
+
+  // Set loading state
+  set isSubscriptionLoading(bool value) {
+    _isSubscriptionLoading = value;
+    notifyListeners();
+  }
+
+  List<checkSubscription.Datum> _subscriptionList = [];
+
+  // Getter for data
+  List<checkSubscription.Datum> get subscriptionList => _subscriptionList;
+  set subscriptionList(List<checkSubscription.Datum> data) {
+    _subscriptionList = data;
+  }
+
+  Map<String, dynamic> createcheckSubscriptionRequestBody(String courseslug) {
+    return {
+      "course_slug": courseslug,
+    };
+  }
+
+getcheckSubscriptionIndividualFlowWiseInfoAPI(
+      {String courseslug = ""}) async {
+
+    isSubscriptionLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createcheckSubscriptionRequestBody(courseslug);
+print(jsonbody);
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.checkSubscriptionIndividualFlowWiseInfo,
+        (response) async {
+          checkSubscription.CheckSubscriptionIndividualFlowWiseInfoResponse
+              resp = response;
+
+          if (resp.status == true) {
+            // subscriptionList=resp.data;
+            _subscriptionList=resp.data;
+          
+            print("subscriptionList.length");
+print(_subscriptionList.length);
+notifyListeners();
+//            clear_cookies:1, // 1 - clear cookies, 0 - do not clear cookies
+
+// limit_device_login_status:0, // 0 - never the screen block, 1 - block the screen
+
+// customer_subscription_flow_status:0, // 0 - default, 1 - sign in, 2 - subscription,
+
+// course_status:0, // 0 - not purchased or subscribed to course, 1 - purchased course, 2 - subscribed,
+            GlobalLists.clearCookies =
+                _subscriptionList[0].clearCookies.toString();
+            GlobalLists.courseStatus =
+                _subscriptionList[0].courseStatus.toString();
+GlobalLists.planStatus=_subscriptionList[0].planInfo.isEmpty?"0":"1";
+GlobalLists.communityPlan=_subscriptionList[0].planInfo.isEmpty?"No":_subscriptionList[0].planInfo[0].communityAccess;
+            print("#ruchita provider ${GlobalLists.clearCookies}");
+            if (_subscriptionList[0].clearCookies == 1) {
+              await SPManager().setAuthToken("");
+              await SPManager().setCustomerID("");
+              await SPManager().setCustomerName("");
+              GlobalLists.authtoken = "";
+              GlobalLists.customerID = "";
+              GlobalLists.customerName = "";
+
+              var token = await SPManager().getAuthToken();
+              print("token    notifyListeners() $token");
+              GlobalLists.logoutdevice = "1";
+              ShowDialogs.showDeviceLimitExceededSheet(
+                  routeGlobalKey.currentContext!);
+
+              notifyListeners();
+            }
+            if (_subscriptionList[0].limitDeviceLoginStatus == 1) {
+              Navigator.of(routeGlobalKey.currentContext!)
+                  .pushNamed(DeviceLimitReachedScreen.route,
+                      arguments: resp.message) // Use pushReplacementNamed
+                  .then((value) {});
+            }
+            isSubscriptionLoading = false;
+            notifyListeners();
+          }
+        },
+        (error) {
+          // Handle error case
+          print(
+              'Error CheckSubscriptionIndividualFlowWiseInfoResponse: $error');
+          ShowDialogs.showToast("Server Not Responding");
+          isSubscriptionLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+      isSubscriptionLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+
+  List<deviceInfo.Datum> _deviceInfoList = [];
+
+  // Getter for data
+  List<deviceInfo.Datum> get deviceInfoList => _deviceInfoList;
+  set deviceInfoList(List<deviceInfo.Datum> data) {
+    _deviceInfoList = data;
+  }
+
+  bool _isDeviceInfoLoading = false;
+  // Loading state
+  bool get isDeviceInfoLoading => _isDeviceInfoLoading;
+
+  // Set loading state
+  set isDeviceInfoLoading(bool value) {
+    _isDeviceInfoLoading = value;
+    notifyListeners();
+  }
+
+  Map<String, dynamic> createLoggedInRequestBody() {
+    return {
+      "token": GlobalLists.authtoken,
+    };
+  }
+
+  Future<void> getLoggedInDeviceInfoAPI() async {
+    _deviceInfoList = [];
+    isDeviceInfoLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createLoggedInRequestBody();
+
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.fetchCustomerloginDeviceInfo,
+        (response) async {
+          deviceInfo.GetLoggedInDevicesResponse resp = response;
+
+          if (resp.status == true) {
+            _deviceInfoList = resp.data;
+            print("_deviceInfoList");
+            print(_deviceInfoList[0].deviceInfo.length);
+            isDeviceInfoLoading = false;
+            notifyListeners();
+          }
+        },
+        (error) {
+          // Handle error case
+          print(
+              'Error fetchCustomerloginDeviceInfo: $error');
+          ShowDialogs.showToast("Server Not Responding");
+          isDeviceInfoLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+      isDeviceInfoLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+
+
+
+
+
+
+  //watchTimeCourse
+
+
+
+  Map<String, dynamic> createWatchTimeRequestBody(String courseSlug,String topicSlug,String courseStatus,
+      String coursesTime) {
+    return {
+       "course_slug":courseSlug,
+    "course_topic_slug":topicSlug,
+    "course_topic_watch_time":coursesTime,
+    "course_status":courseStatus
+    };
+  }
+  bool _isWatchTimeLoading = false;
+  // Loading state
+  bool get isWatchTimeLoading => _isWatchTimeLoading;
+
+  // Set loading state
+  set isWatchTimeLoading(bool value) {
+    _isWatchTimeLoading = value;
+    notifyListeners();
+  }
+watchTimeAPI({String? courseSlug,String? topicSlug,String ?courseStatus,
+      String? coursesTime}) async {
+
+        print("_callWatchTimeAPI api called");
+    isWatchTimeLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createWatchTimeRequestBody(courseSlug!,topicSlug!,courseStatus!,
+       coursesTime!);
+
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.storecoursetopicwisewatchtime,
+        (response) async {
+          SavedCoursesResponse
+              resp = response;
+ print("_callWatchTimeAPI api called Response");
+          if (resp.status == true) {
+          
+            isWatchTimeLoading = false;
+            notifyListeners();
+          }
+        },
+        (error) {
+          // Handle error case
+          print(
+              'Error storecoursetopicwisewatchtime: $error');
+          ShowDialogs.showToast("Server Not Responding");
+          isWatchTimeLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+      isWatchTimeLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+
+
+
+  //Order Payment api
+  Map<String, dynamic> createsubscribeNowRequestBody(String planId,String coursesId,String flimCourse) {
+    return {
+     "plan_id":planId,
+    "course_id":coursesId,
+    "film_appreciation_course":flimCourse
+    };
+  }
+   
+   
+  bool _isSubscribeNowLoading = false;
+  // Loading state
+  bool get isSubscribeNowLoading => _isSubscribeNowLoading;
+
+  // Set loading state
+  set isSubscribeNowLoading(bool value) {
+    _isSubscribeNowLoading = value;
+    notifyListeners();
+  }
+  subscribeNowAPI(String planId,String coursesId,String flimCourse) async {
+
+       
+    isSubscribeNowLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createsubscribeNowRequestBody(planId,coursesId,flimCourse);
+
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.customerProcessSubscription,
+        (response) async {
+          PayNowResponse
+              resp = response;
+ 
+          if (resp.status == true) {
+           var options = {
+          // 'key': "rzp_test_gqKFdvUujfNFKy",
+          'key': resp.razorpayKey,
+          'name': resp.razorpaySecret,
+          'order_id': resp.razorpayOrderId,
+        };
+
+            isSubscribeNowLoading = false;
+               final razorpayHelper = RazorpayHelper(resp.razorpayOrderId!
+           );
+        razorpayHelper.openPaymentGateway(options);
+            notifyListeners();
+          }
+        },
+        (error) {
+          // Handle error case
+          print(
+              'Error: $error');
+          ShowDialogs.showToast("Server Not Responding");
+          isSubscribeNowLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+      isSubscribeNowLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+//rayzor payment
+ Map<String, dynamic> createpayNowRequestBody(String orderId,String? transaction_id,String? payment_status,String? payment_response,String? signature,String? payment_id) {
+    return {
+    "transaction_id":transaction_id,
+    "payment_status":payment_status,
+    "payment_response":payment_response,
+    "razorpay_order_id":orderId,
+    "signature":signature,
+    "payment_id":payment_id
+    };
+  }
+  payNowAPI({String? orderId,String? transaction_id,String? payment_status,String? payment_response,String? signature,String? payment_id })async {
+
+       
+    isSubscribeNowLoading = true;
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      dynamic jsonbody = createpayNowRequestBody(orderId!,transaction_id,payment_status,payment_response,signature,payment_id);
+
+      return APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.customerUpdatePaymentResponse,
+        (response) async {
+          SavedCoursesResponse
+              resp = response;
+ 
+          if (resp.status == true) {
+             Navigator.of(
+          routeGlobalKey.currentContext!,
+        ).pushNamed(
+          LandingScreen.route,
+        );
+           ShowDialogs.showToast(resp.message);
+          }
+        },
+        (error) {
+          // Handle error case
+          print(
+              'Error: $error');
+          ShowDialogs.showToast("Server Not Responding");
+          isSubscribeNowLoading = false;
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      // No internet connection
+      ShowDialogs.showToast("Please check internet connection");
+      isSubscribeNowLoading = false;
+      return Future.error("No Internet Connection");
+    }
+  }
+    void saveEverySkillCourse(int index) {
+      final providercourse =
+          Provider.of<CoursesProvider>(routeGlobalKey.currentContext!, listen: false);
+         providercourse.savedCourseAPI(courses[index].courseId);
+  courses[index].savedFlag = true;
+  notifyListeners(); // Notify UI to rebuild
+}
+
+void unSaveEverySkillCourse(int index) {
+   final providercourse =
+   Provider.of<CoursesProvider>(routeGlobalKey.currentContext!, listen: false);
+         providercourse.unSavedCourseAPI(courses[index].courseId);
+  courses[index].savedFlag = false;
+  notifyListeners(); // Notify UI to rebuild
+}
+
+
+
+
+//
+ void saveCustomerCategoryCourse(int categoryIndex,int index) {
+      final providercourse =
+          Provider.of<CoursesProvider>(routeGlobalKey.currentContext!, listen: false);
+         providercourse.savedCourseAPI(categoryWiseList[categoryIndex].courses[index].courseId);
+  categoryWiseList[categoryIndex].courses[index].savedFlag = true;
+  notifyListeners(); // Notify UI to rebuild
+}
+
+void unSaveCustomerCategoryCourse(int categoryIndex,int index) {
+   final providercourse =
+   Provider.of<CoursesProvider>(routeGlobalKey.currentContext!, listen: false);
+         providercourse.unSavedCourseAPI(categoryWiseList[categoryIndex].courses[index].courseId);
+  categoryWiseList[categoryIndex].courses[index].savedFlag = false;
+  notifyListeners(); // Notify UI to rebuild
+}
+  Future<bool> onBackPressed() async {
+    Navigator.of(routeGlobalKey.currentContext!).pushNamed(LandingScreen.route);
+    return true;
+  }
+
+
+
+
 }
 
 class ChipItem {

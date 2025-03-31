@@ -1,14 +1,19 @@
+import 'package:craft_school/main.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/personal_account_provider.dart';
 import 'package:craft_school/screens/account_screen.dart';
 import 'package:craft_school/screens/change_plan.dart';
 import 'package:craft_school/screens/personal_screen.dart';
+import 'package:craft_school/screens/signIn_screen.dart';
+import 'package:craft_school/screens/signup_screen.dart';
+import 'package:craft_school/utils/GlobalLists.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/widgets/CustomAppBar.dart';
+import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
-import 'package:craft_school/widgets/or_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,50 +35,175 @@ class _SettingsState extends State<Settings> {
     {'label': 'iphone & ipad', },
     {'label': 'Android Ohones & Tablets', },
   ];
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final providerSubscription =
+          Provider.of<LandingScreenProvider>(context, listen: false);
+
+      if (!providerSubscription.isSubscriptionLoading) {
+        providerSubscription
+            .getcheckSubscriptionIndividualFlowWiseInfoAPI();
+      }
+      // Only call the API if it's not already loading
+      if(GlobalLists.authtoken!="")
+      {
+      final provider = Provider.of<PersonalAccountProvider>(context, listen: false);
+      if (!provider.isLoading) {
+        provider.getCustomerInfoAPI();
+
+        
+       
+      }
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    
+    return
+    ChangeNotifierProvider(
         create: (_) => LandingScreenProvider(),
-        child: Consumer<LandingScreenProvider>(builder: (context, provider, _) {
-          return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: CustomAppBar(
-                isCategoryVisible: false,
-                onMenuPressed: () {
-                  provider
-                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                },
-                onCategoriesPressed: () {},
-                isContainerVisible: false,
+        child: 
+     Consumer<LandingScreenProvider>(builder: (context, provider, _) {
+      
+      return WillPopScope(
+        onWillPop: ()async
+      {
+        provider.onBackPressed();
+        return false;
+      },
+        child: Scaffold(
+        
+           appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: CustomAppBar(
+                  isCategoryVisible: provider.isCategoryVisible,
+                  onMenuPressed: () {
+                    provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                  },
+                     onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isContainerVisible,
+                ),
               ),
-            ),
-            backgroundColor: CraftColors.black18,
-            body: Stack(
-              children: [
-                // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                      minHeight: 0.0, maxHeight: double.infinity),
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    children: [
-                      simpleTransplantPlanWidget(),
-                    ],
+          backgroundColor: CraftColors.black18,
+          body: Stack(
+            children: [
+              // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    minHeight: 0.0, maxHeight: double.infinity),
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  children: [
+               GlobalLists.authtoken!=""?     simpleTransplantPlanWidget():Container(child: 
+               Column(children: [
+        
+                 Card(
+                  elevation: 1.0,
+                  color: CraftColors.neutralBlue800,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+        
+                      children: [
+                      
+                           Center(
+                             child: SvgPicture.asset(
+                                                   CraftImagePath.device, // Replace with your image path
+                                                   fit: BoxFit.contain, // Ensures the image fills the space
+                                                 ),
+                           ),
+                             Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            "Sign In To CraftSchool",
+                            style: CraftStyles.tsWhiteNeutral50W700
+                                .copyWith(fontSize: 18),
+                          ),
+                        ),
+                         Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                           CraftStrings.strGetSignInsubIntro,
+                            style: CraftStyles.tsWhiteNeutral50W700
+                                .copyWith(fontSize: 12),
+                          ),
+                        ),
+                  
+        
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 1,
+                        ),
+                        SizedBox(
+                width: SizeConfig.blockSizeHorizontal * 32,
+                child: ElevatedButton(
+                  onPressed: () {
+                  
+                    Navigator.of(
+                      routeGlobalKey.currentContext!,
+                    ).pushNamed(
+                      SignInScreen.route,
+                    );
+                    
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(SizeConfig.blockSizeVertical * 32,
+                        SizeConfig.blockSizeVertical * 5),
+                    backgroundColor: CraftColors.primaryBlue550,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 5,
+                  ),
+                  child: Text(
+                  CraftStrings.strSignIn,
+                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
                   ),
                 ),
-                if (provider.isContainerVisible)
-                  SlidingMenu(isVisible: provider.isContainerVisible),
-              ],
-            ),
-          );
-        }));
+              ),
+                SizedBox(
+                          height: SizeConfig.blockSizeVertical * 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                 
+               ],),),
+                  ],
+                ),
+              ),
+               if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+                if (provider.isCategoryVisible) SlidingCategory(
+                  isExpanded: provider.isCategoryVisible,
+                  onToggleExpansion: provider.toggleSlidingCategory,
+                ),
+            ],
+          ),
+        ),
+      );
+    }));
   }
 
   Widget simpleTransplantPlanWidget() {
-    return Consumer<LandingScreenProvider>(builder: (context, provider, child) {
-      return Container(
+    
+    return Consumer<PersonalAccountProvider>(builder: (context, personalprovider, child) {
+       if (personalprovider.isLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+      return  Container(
         margin: EdgeInsets.all(4),
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -93,7 +223,7 @@ class _SettingsState extends State<Settings> {
               ),
 
               // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
-              Card(
+            Card(
                 elevation: 1.0,
                 color: CraftColors.neutralBlue800,
                 shape: RoundedRectangleBorder(
@@ -138,9 +268,9 @@ class _SettingsState extends State<Settings> {
                           ],
                         ),
                       ),
-                      informationPlan("First name", "Vineet"),
-                      informationPlan("Last name", "Rai"),
-                      informationPlan("Phone number", "+919029847566"),
+                      informationPlan("First name", personalprovider.firstNameController.text),
+                      informationPlan("Last name", personalprovider.lastNameController.text),
+                      informationPlan("Phone number", personalprovider.phoneNumberController.text),
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 1,
                       ),
@@ -196,8 +326,8 @@ class _SettingsState extends State<Settings> {
                           ],
                         ),
                       ),
-                      informationPlan("Email", "Vineet@gmail.com"),
-                      informationPlan("Password", "********"),
+                      informationPlan("Email", personalprovider.emailController.text),
+                      informationPlan("Password", "*******"),
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 1,
                       ),
@@ -311,7 +441,7 @@ class _SettingsState extends State<Settings> {
                                 style: CraftStyles.tsWhiteNeutral50W700
                                     .copyWith(fontSize: 20),
                               ),
-                              GestureDetector(
+                       personalprovider.data.isEmpty?Container():     personalprovider.data[0].memberShip.isNotEmpty? personalprovider.data[0].memberShip[0].planName!=""?GestureDetector(
                                 onTap: ()
                                 {
                                    Navigator.of(context)
@@ -320,13 +450,16 @@ class _SettingsState extends State<Settings> {
                         )
                         .then((value) {});
                                 },
-                                child: Icon(Icons.menu))
+                                child: Icon(Icons.more_horiz,color: CraftColors.neutral100,)):Container():Container()
+
                             ],
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("No Membership",style:   CraftStyles.tsWhiteNeutral300W400,),
+                          child: Text(personalprovider.data.isEmpty?"No Membership": personalprovider.data[0].memberShip.isEmpty?"No Membership":
+                          personalprovider.data[0].memberShip[0].planName==""?"No Membership":
+                          personalprovider.data[0].memberShip[0].planName,style:   CraftStyles.tsWhiteNeutral300W400,),
                         ),
                         SizedBox(
                           height: SizeConfig.blockSizeVertical * 1,
@@ -358,14 +491,15 @@ class _SettingsState extends State<Settings> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             textAlign: TextAlign.center,
-                            "Payment Method",
+                         "Payment Method",
                             style: CraftStyles.tsWhiteNeutral50W700
                                 .copyWith(fontSize: 20),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("No Payment Stored",style:   CraftStyles.tsWhiteNeutral300W400,),
+                          child: Text(
+                personalprovider.data.isEmpty?"":         personalprovider.data[0].paymentMethod,style:   CraftStyles.tsWhiteNeutral300W400,),
                         ),
                         SizedBox(
                           height: SizeConfig.blockSizeVertical * 1,
@@ -404,7 +538,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("Change your default language",style:   CraftStyles.tsWhiteNeutral300W400,),
+                          child: Text(personalprovider.data.isEmpty?"": personalprovider.data[0].appLanguage,style:   CraftStyles.tsWhiteNeutral300W400,),
                         ),
                         SizedBox(
                           height: SizeConfig.blockSizeVertical * 1,
@@ -430,7 +564,7 @@ class _SettingsState extends State<Settings> {
                   child: GestureDetector(
                     onTap: ()
                     {
-                      provider.logoutAPI();
+                      personalprovider.logoutAPI("");
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

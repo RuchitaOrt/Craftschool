@@ -19,11 +19,13 @@ class CraftStrings {
       "Enter your personal details to sign up.";
   static const String strFirstName = "First Name";
   static const String strLastName = "Last Name";
+   static const String strReason = "Reason";
   static const String strEmail = "Email";
   static const String strPhoneNo = "Phone Number";
   static const String strpassword = "Password";
   static const String strEnterFirstName = "Enter your First Name";
   static const String strEnterLastName = "Enter your Last Name";
+    static const String strEnterReason = "Enter your Reason";
   static const String strEnterEmail = "Enter your Email";
   static const String strEnterPhoneNo = "Enter your Phone Number";
   static const String strEnterpassword = "Enter your Password";
@@ -49,9 +51,11 @@ class CraftStrings {
   static const String strResetLinkSent = "Reset Link Sent!";
   static const String strResetPassword = "Reset Password";
   static const String strNewpassword = "New Password";
+    static const String strOTP = "OTP";
   static const String strConfirmpassword = "Confirm Password";
   static const String strEnterConfirmpassword = "Enter your confirm password";
   static const String strEnterNewpassword = "Enter your new password";
+   static const String strEnterOtp = "Enter your Otp";
   static const String strResetpasswordSuccesfully =
       "Password Reset Successfully!";
   static const String strResetpasswordSuccesfullyDetail =
@@ -66,7 +70,7 @@ class CraftStrings {
       "Gain insider knowledge from top actors and \nfilmmakers with immersive, on-demand courses \nacross acting, production, and more.";
   static const String strMasterClass = "Master Classes";
   static const String strAnnualPlan =
-      "Starting at ₹999/month (billed annually) for all \nclasses and sessions";
+      "Starting at ₹999/month (billed annually) for all classes and sessions";
   static const String strLandingScreenSubText4 =
       "Learn from the best, with \nfresh classes every month.";
   static const String strLandingScreenSubText5 =
@@ -84,6 +88,7 @@ class CraftStrings {
   static const String strReadMore = "Read More";
   static const String strSubscribeNow = "Subscribe Now";
   static const String strStartCourse = "Start Course";
+    static const String strWatchNow = "Watch Now";
   static const String strSampleVideo = "Sample Video";
   static const String strBts = "BTS";
   static const String strShare = "Share";
@@ -100,7 +105,10 @@ class CraftStrings {
   static const String strHelpandsupport = "Help & Support";
   static const String strTermscondition = "Terms & Condition";
   static const String strSetting = "Setting";
+    static const String strExploreCourse = "Explore Courses";
+  static const String strContactUs = "Contact us";
   static const String strMyCourses = "My Courses";
+    static const String strFAQ= "FAQ";
   static const String strSavedCourses = "Saved List";
   static const String strPublish = "Publish";
   static const String strimages = "Images";
@@ -111,4 +119,11 @@ class CraftStrings {
    static const String strContinue = "Continue";
   static const String strConfirm="Confirm";
    static const String strFinish="Finish";
+   static const String strTrendingClass= "Trending Classes";
+    static const String strAllCategory = "All Categories";
+    static const String strCategory = "Categories";
+     static const String strLatest= "Latest";
+     static const String strExploretitle= "Try some of our courses";
+        static const String strExploreSubtitle= "Enter your email and we’ll send you some samples of our favorite classes.";
+       static const String strSubmit= "Submit";
 }

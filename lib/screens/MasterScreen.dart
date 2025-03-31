@@ -1,14 +1,17 @@
 import 'package:craft_school/providers/CourseDetailProvider.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
+import 'package:craft_school/providers/MasterAllProvider.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
 import 'package:craft_school/widgets/BottomAppBarNavigationScreen.dart';
 import 'package:craft_school/widgets/BrowseOtherCourse.dart';
+import 'package:craft_school/widgets/BrowseTrendingCourse.dart';
 import 'package:craft_school/widgets/CustomAppBar.dart';
 import 'package:craft_school/widgets/FloatingActionButton.dart';
 import 'package:craft_school/widgets/ImageGridView.dart';
+import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
 import 'package:craft_school/widgets/TrendingSkill.dart';
 import 'package:flutter/material.dart';
@@ -23,19 +26,50 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
-   Widget browseOtherCourse() {
-    return ChangeNotifierProvider(
-      create: (_) => CourseDetailProvider(),
-      child: Consumer<CourseDetailProvider>(
-      builder: (context, provider, child) {
-        return 
-         BrowseOtherCourse(imagePaths:provider.imagePaths ,title:  "Trending Classes",onPressed: ()
-         {
 
-         },);
-        
-      },
-    ));
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final providerSubscription =
+          Provider.of<LandingScreenProvider>(context, listen: false);
+
+      if (!providerSubscription.isSubscriptionLoading) {
+        providerSubscription
+            .getcheckSubscriptionIndividualFlowWiseInfoAPI();
+      }
+      // Only call the API if it's not already loading
+      final provider = Provider.of<MasterAllProvider>(context, listen: false);
+      if (!provider.isLoading) {
+        provider.getMasterAllAPI();
+       
+        provider.getTrendingClassAPI();
+      }
+      if(!provider.istrendingMasterLoading)
+      {
+ provider.getTrendingMasterAPI();
+      }
+    });
+  }
+   Widget browseOtherCourse() {
+    return Consumer<MasterAllProvider>(
+    builder: (context, provider, child) {
+      return 
+       BrowseTrendingCourse(imagePaths:provider.trendingClassData ,title: CraftStrings.strTrendingClass,onPressed: ()
+       {
+    
+       },
+        onSaveButtonOnTap: (index) {
+                  provider.saveTrendingCourse(index);
+                },
+                onunSaveButtonOnTap: (index) {
+                  provider.unsaveTrendingCourse(index);
+                },);
+      
+    },
+        );
   }
 
   @override
@@ -48,20 +82,23 @@ class _MasterScreenState extends State<MasterScreen> {
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
-                 isCategoryVisible: provider.isCategoryVisible,
+                isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
-                  provider.toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                  
-                },   onCategoriesPressed: () {  }, isContainerVisible: false,
+                  provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                },
+                   onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,
-            bottomNavigationBar: BottomAppBarWidget(index: -1,),
-            floatingActionButton: FloatingActionButtonWidget(),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            // bottomNavigationBar: BottomAppBarWidget(index: -1,),
+            // floatingActionButton: FloatingActionButtonWidget(),
+            // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             body: Stack(
               children: [
                 // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
+               Consumer<MasterAllProvider>(
+                builder: (context, provider, child) {
+              return
                 ConstrainedBox(
                   constraints: BoxConstraints(minHeight: 0.0, maxHeight: double.infinity),
                   child: ListView(
@@ -78,8 +115,8 @@ class _MasterScreenState extends State<MasterScreen> {
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 1,
               ),
-                     ImageGridView(imagePaths:  provider.imagePaths),
-                        TrendingSkill(imagePaths:provider.imagePaths ,title:  CraftStrings.strtrendingSkills,onPressed: ()
+                     ImageGridView(imagePaths:  provider.masterAllData),
+                        TrendingSkill(imagePaths:provider.trendingMasterData ,title:  CraftStrings.strtrendingSkills,onPressed: ()
          {
 
          },),
@@ -87,9 +124,12 @@ class _MasterScreenState extends State<MasterScreen> {
                     
                     ],
                   ),
-                ),
-                if (provider.isContainerVisible)
-                        SlidingMenu(isVisible: provider.isContainerVisible),
+                );}),
+                if (provider.isContainerVisible) SlidingMenu(isVisible: provider.isContainerVisible),
+              if (provider.isCategoryVisible) SlidingCategory(
+                isExpanded: provider.isCategoryVisible,
+                onToggleExpansion: provider.toggleSlidingCategory,
+              ),
               ],
             ),
           );

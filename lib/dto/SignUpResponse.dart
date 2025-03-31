@@ -7,28 +7,52 @@ String signUpResponseToJson(SignUpResponse data) => json.encode(data.toJson());
 class SignUpResponse {
     bool status;
     String message;
-    String token;
-    PlanInfo planInfo;
+    List<Datum> data;
+    List<PlanInfo> planInfo;
 
     SignUpResponse({
         required this.status,
         required this.message,
-        required this.token,
+        required this.data,
         required this.planInfo,
     });
 
     factory SignUpResponse.fromJson(Map<String, dynamic> json) => SignUpResponse(
-        status: json["status"],
-        message: json["message"],
-        token: json["token"],
-        planInfo: PlanInfo.fromJson(json["planInfo"]),
+        status: json["status"] ?? false,
+        message: json["message"] ?? '',
+        data: json["data"] != null ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))) : [],
+        planInfo: json["planInfo"] != null ? List<PlanInfo>.from(json["planInfo"].map((x) => PlanInfo.fromJson(x))) : [],
     );
 
     Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "planInfo": List<dynamic>.from(planInfo.map((x) => x.toJson())),
+    };
+}
+
+class Datum {
+    String token;
+    String name;
+    int customerId;
+
+    Datum({
+        required this.token,
+        required this.name,
+        required this.customerId,
+    });
+
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        token: json["token"] ?? '',
+        name: json["name"] ?? '',
+        customerId: json["customer_id"] ?? 0,
+    );
+
+    Map<String, dynamic> toJson() => {
         "token": token,
-        "planInfo": planInfo.toJson(),
+        "name": name,
+        "customer_id": customerId,
     };
 }
 
@@ -44,9 +68,9 @@ class PlanInfo {
     });
 
     factory PlanInfo.fromJson(Map<String, dynamic> json) => PlanInfo(
-        planName: json["plan_Name"],
-        planExpireDate: json["plan_expire_date"],
-        status: json["status"],
+        planName: json["plan_Name"] ?? '',
+        planExpireDate: json["plan_expire_date"] ?? '',
+        status: json["status"] ?? 0,
     );
 
     Map<String, dynamic> toJson() => {

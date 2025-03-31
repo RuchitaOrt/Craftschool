@@ -61,6 +61,7 @@ List<Datum> _serviceData = [];
           if (resp.status == true) {
            serviceData=resp.data;
             isLoading = false;
+            notifyListeners();
           }
         },
         (error) {

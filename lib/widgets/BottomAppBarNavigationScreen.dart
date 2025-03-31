@@ -1,9 +1,13 @@
+import 'dart:io';
 import 'package:craft_school/screens/blog_screen.dart';
 import 'package:craft_school/screens/myCourse.dart';
 import 'package:craft_school/screens/service.dart';
+import 'package:craft_school/screens/settings.dart';
 import 'package:craft_school/utils/craft_colors.dart';
+import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomAppBarWidget extends StatefulWidget {
   final int index;
@@ -12,64 +16,51 @@ class BottomAppBarWidget extends StatefulWidget {
   @override
   _BottomAppBarWidgetState createState() => _BottomAppBarWidgetState();
 }
+
 class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   int _selectedIndex = 0;
-@override
-  void initState() {
-    super.initState();
-    // Now you can safely access 'widget' and initialize _selectedIndex
-    _selectedIndex = widget.index; // Example of using 'widget' safely
-  }
+
   final List<String> _tabTitles = [
     'My Courses',
     'Services',
     'Blog',
-    'Community',
-    'Categories',
+    'My Space',
   ];
 
-  // Function to handle tab selection
-  void _onTabSelected(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.index;
+  }
+
+  void _onTabSelected(int index) async {
     setState(() {
-      _selectedIndex = index; // Update selected tab index
+      _selectedIndex = index;
     });
 
-    // Navigate based on the selected index
-    if (_selectedIndex == 0) {
-      Navigator.of(context)
-        .pushReplacementNamed(MyCourseScreen.route) // Use pushReplacementNamed
-        .then((value) {
-          // This will ensure that once the user returns, the state is updated
-          setState(() {
-            _selectedIndex = 0;  // Ensure the correct tab is highlighted
-          });
-        });
-    } else if (_selectedIndex == 2) {
-      Navigator.of(context)
-        .pushReplacementNamed(BlogsScreen.route) // Use pushReplacementNamed
-        .then((value) {
-          setState(() {
-            _selectedIndex = 2;  // Ensure the Blog tab is highlighted
-          });
-        });
-    } else if (_selectedIndex == 1) {
-      Navigator.of(context)
-        .pushReplacementNamed(AspiringTrainingScreen.route) // Use pushReplacementNamed
-        .then((value) {
-          setState(() {
-            _selectedIndex = 1;  // Ensure the Services tab is highlighted
-          });
-        });
+    if (index == 0) {
+      await Navigator.of(context).pushNamed(MyCourseScreen.route);
+    } else if (index == 1) {
+      await Navigator.of(context).pushNamed(AspiringTrainingScreen.route);
+    } else if (index == 2) {
+      await Navigator.of(context).pushNamed(BlogsScreen.route);
+    } else if (index == 3) {
+      await Navigator.of(context).pushNamed(Settings.route);
     }
+    // ❗️ Don't reset the index here! Just keep last selected tab.
   }
 
   @override
   Widget build(BuildContext context) {
+    double bottomAppBarHeight = Platform.isAndroid
+        ? SizeConfig.blockSizeVertical * 9
+        : SizeConfig.blockSizeVertical * 12;
+
     return Container(
-      height: SizeConfig.blockSizeVertical * 11.5,
+      height: bottomAppBarHeight,
       decoration: BoxDecoration(
         color: CraftColors.neutralBlue800,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
@@ -80,119 +71,154 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildTabIcon(Icons.home, _tabTitles[0], 0),
-            _buildTabIcon(Icons.search, _tabTitles[1], 1),
-            const SizedBox(width: 40), // Space for the Floating Action Button (FAB)
-            _buildTabIcon(Icons.notifications, _tabTitles[2], 2),
-            _buildTabIcon(Icons.settings, _tabTitles[3], 3),
+            _buildTabIcon(CraftImagePath.courses, _tabTitles[0], 0),
+            _buildTabIcon(CraftImagePath.services, _tabTitles[1], 1),
+            const SizedBox(width: 20),
+            _buildTabIcon(CraftImagePath.blogs, _tabTitles[2], 2),
+            _buildTabIcon(CraftImagePath.myspace, _tabTitles[3], 3),
           ],
         ),
       ),
     );
   }
 
-  // Helper function to build a tab icon with text
-  Widget _buildTabIcon(IconData icon, String title, int index) {
-    return GestureDetector(
-      onTap: () => _onTabSelected(index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: _selectedIndex == index ? Colors.white : Colors.grey,
-          ),
-          Text(
-            title,
-            style: TextStyle(
+  Widget _buildTabIcon(String icon, String title, int index) {
+    return Flexible(
+      child: GestureDetector(
+        onTap: () => _onTabSelected(index),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              icon,
+              width: 18,
+              height: 18,
               color: _selectedIndex == index ? Colors.white : Colors.grey,
-              fontSize: 12,
             ),
-          ),
-        ],
+            Text(
+              title,
+              style: TextStyle(
+                color: _selectedIndex == index ? Colors.white : Colors.grey,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+// import 'dart:io';
+// import 'package:craft_school/screens/PostScreen.dart';
+// import 'package:craft_school/screens/blog_screen.dart';
+// import 'package:craft_school/screens/myCourse.dart';
+// import 'package:craft_school/screens/service.dart';
+// import 'package:craft_school/screens/settings.dart';
+// import 'package:craft_school/utils/craft_colors.dart';
+// import 'package:craft_school/utils/craft_images.dart';
+// import 'package:craft_school/utils/sizeConfig.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
+
+// class BottomAppBarWidget extends StatefulWidget {
+//   final int index;
+//   const BottomAppBarWidget({super.key, required this.index});
+
+//   @override
+//   _BottomAppBarWidgetState createState() => _BottomAppBarWidgetState();
+// }
+
 // class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
 //   int _selectedIndex = 0;
 
-//   // List of custom widgets for each tab
+//   @override
+//   void initState() {
+//     super.initState();
+//     _selectedIndex = widget.index;
+//   }
+
 //   final List<String> _tabTitles = [
 //     'My Courses',
 //     'Services',
 //     'Blog',
-//     'Community',
-//     'Categories',
+//     'My Space',
 //   ];
 
 //   // Function to handle tab selection
-//   void _onTabSelected(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//        if(_selectedIndex==0)
-//       {
-//           Navigator.of(context)
-//         .pushNamed(
-//       MyCourseScreen.route,
-    
-//     )
-//         .then((value) {
-      
-//     });
-//       }else
-//       if(_selectedIndex==2)
-//       {
-//           Navigator.of(context)
-//         .pushNamed(
-//       BlogsScreen.route,
-    
-//     )
-//         .then((value) {
-      
-//     });
-//       }else if(_selectedIndex==1)
-//       {
-//           Navigator.of(context)
-//         .pushNamed(
-//       AspiringTrainingScreen.route,
-    
-//     )
-//         .then((value) {
-      
-//     });
-//       } 
-    
-//     });
+//   // void _onTabSelected(int index) {
+//   //   setState(() {
+//   //     _selectedIndex = index; // Update selected tab index
+//   //   });
+
+//   //   // Navigate based on the selected index
+//   //   if (_selectedIndex == 0) {
+//   //     Navigator.of(context).pushNamed(MyCourseScreen.route).then((value) {
+//   //       setState(() {
+//   //         _selectedIndex = 0; // Ensure the correct tab is highlighted
+//   //       });
+//   //     });
+//   //   } else if (_selectedIndex == 2) {
+//   //     Navigator.of(context).pushNamed(BlogsScreen.route).then((value) {
+//   //       setState(() {
+//   //         _selectedIndex = 2; // Ensure the Blog tab is highlighted
+//   //       });
+//   //     });
+//   //   } else if (_selectedIndex == 1) {
+//   //     Navigator.of(context)
+//   //         .pushNamed(AspiringTrainingScreen.route)
+//   //         .then((value) {
+//   //       setState(() {
+//   //         _selectedIndex = 1; // Ensure the Services tab is highlighted
+//   //       });
+//   //     });
+//   //   } else if (_selectedIndex == 3) {
+//   //     Navigator.of(context).pushNamed(Settings.route).then((value) {});
+//   //   }
+//   // }
+// void _onTabSelected(int index) {
+//   setState(() {
+//     _selectedIndex = index;
+//   });
+
+//   if (index == 0) {
+//     Navigator.of(context).pushNamed(MyCourseScreen.route);
+//   } else if (index == 1) {
+//     Navigator.of(context).pushNamed(AspiringTrainingScreen.route);
+//   } else if (index == 2) {
+//     Navigator.of(context).pushNamed(BlogsScreen.route);
+//   } else if (index == 3) {
+//     Navigator.of(context).pushNamed(Settings.route);
 //   }
+// }
 
 //   @override
 //   Widget build(BuildContext context) {
+//     double bottomAppBarHeight = Platform.isAndroid
+//         ? SizeConfig.blockSizeVertical * 9
+//         : SizeConfig.blockSizeVertical * 12;
+
 //     return Container(
-//       height: SizeConfig.blockSizeVertical * 11.5, // Adjust height based on your design
+//       height: bottomAppBarHeight, // Adjust the height based on platform
 //       decoration: BoxDecoration(
 //         color: CraftColors.neutralBlue800,
-//         borderRadius: BorderRadius.only(
-//           topLeft: Radius.circular(30),  // Curved top-left corner
-//           topRight: Radius.circular(30), // Curved top-right corner
+//         borderRadius: const BorderRadius.only(
+//           topLeft: Radius.circular(30),
+//           topRight: Radius.circular(30),
 //         ),
 //       ),
 //       child: BottomAppBar(
 //         elevation: 0,
-//         color: Colors.transparent, // Transparent to show the custom curve below
+//         color: Colors.transparent,
 //         child: Row(
 //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //           children: [
-//             // Home Tab
-//             _buildTabIcon(Icons.home, _tabTitles[0], 0),
-//             // Services Tab
-//             _buildTabIcon(Icons.search, _tabTitles[1], 1),
-//             const SizedBox(width: 40), // Space for the Floating Action Button (FAB)
-//             // Blog Tab
-//             _buildTabIcon(Icons.notifications, _tabTitles[2], 2),
-//             // Community Tab
-//             _buildTabIcon(Icons.settings, _tabTitles[3], 3),
+//             _buildTabIcon(CraftImagePath.courses, _tabTitles[0], 0),
+//             _buildTabIcon(CraftImagePath.services, _tabTitles[1], 1),
+//             const SizedBox(
+//                 width: 20), // Space for the Floating Action Button (FAB)
+//             _buildTabIcon(CraftImagePath.blogs, _tabTitles[2], 2),
+//             _buildTabIcon(CraftImagePath.myspace, _tabTitles[3], 3),
 //           ],
 //         ),
 //       ),
@@ -200,24 +226,32 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
 //   }
 
 //   // Helper function to build a tab icon with text
-//   Widget _buildTabIcon(IconData icon, String title, int index) {
-//     return GestureDetector(
-//       onTap: () => _onTabSelected(index),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Icon(
-//             icon,
-//             color: _selectedIndex == index ? Colors.white : Colors.grey, // Change color based on selection
-//           ),
-//           Text(
-//             title,
-//             style: TextStyle(
-//               color: _selectedIndex == index ? Colors.white : Colors.grey, // Change text color based on selection
-//               fontSize: 12,
+//   Widget _buildTabIcon(String icon, String title, int index) {
+//     return Flexible(
+//       child: GestureDetector(
+//         onTap: () => _onTabSelected(index),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             // Icon(
+//             //   icon,
+//             //   color: _selectedIndex == index ? Colors.white : Colors.grey,
+//             // ),
+//             SvgPicture.asset(
+//               icon,
+//               width: 18,
+//               height: 18,
+//               color: _selectedIndex == index ? Colors.white : Colors.grey,
 //             ),
-//           ),
-//         ],
+//             Text(
+//               title,
+//               style: TextStyle(
+//                 color: _selectedIndex == index ? Colors.white : Colors.grey,
+//                 fontSize: 12,
+//               ),
+//             ),
+//           ],
+//         ),
 //       ),
 //     );
 //   }

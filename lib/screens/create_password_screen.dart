@@ -1,6 +1,7 @@
 import 'package:craft_school/common_widget/custom_text_field_widget.dart';
 import 'package:craft_school/dto/ForgetPasswordDTO.dart';
 import 'package:craft_school/main.dart';
+import 'package:craft_school/providers/forget_password_provider.dart';
 import 'package:craft_school/screens/forgetpassword_screen.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/craft_strings.dart';
@@ -46,32 +47,42 @@ class CreatePasswordScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 0),
           child: Column(
             children: [
-              Consumer<SignInProvider>(builder: (context, signInProvider, _) {
+              Consumer<ForgetPasswordProvider>(builder: (context, forgetProvider, _) {
                 return SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 100,
                   height: SizeConfig.blockSizeVertical * 30,
                   child: ListView(
                     shrinkWrap: true,
+                    physics: ScrollPhysics(),
                     children: [
                       SizedBox(height: SizeConfig.blockSizeHorizontal * 1),
-                      Consumer<SignInProvider>(
-                        builder: (context, signInProvider, _) {
+                      Consumer<ForgetPasswordProvider>(
+                        builder: (context, forgetProvider, _) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
                             child: Form(
-                              key: signInProvider
+                              key: forgetProvider
                                   .formKey, // Wrap all fields inside the Form widget
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                              CustomTextFieldWidget(
+                                    title: CraftStrings.strOTP,
+                                    hintText: CraftStrings.strEnterOtp,
+                                    onChange: (val) {},
+                                    textEditingController:
+                                        forgetProvider.otpController,
+                                    autovalidateMode: AutovalidateMode.disabled,
+                                    validator: forgetProvider.validateOTP,
+                                  ),
                                   CustomTextFieldWidget(
                                     title: CraftStrings.strNewpassword,
                                     hintText: CraftStrings.strEnterNewpassword,
                                     onChange: (val) {},
                                     textEditingController:
-                                        signInProvider.passwordController,
+                                        forgetProvider.passwordController,
                                     autovalidateMode: AutovalidateMode.disabled,
-                                    validator: signInProvider.validatePassword,
+                                    validator: forgetProvider.validatePassword,
                                   ),
 
                                   // Password Field with Validation
@@ -85,18 +96,18 @@ class CreatePasswordScreen extends StatelessWidget {
                                   TextFormField(
                                     style: CraftStyles.tsWhiteNeutral300W50012,
                                     obscureText:
-                                        signInProvider.isPasswordObscured,
-                                    controller: signInProvider
+                                        forgetProvider.isPasswordObscured,
+                                    controller: forgetProvider
                                         .confirmpasswordController,
                                     validator:
-                                        signInProvider.validateConfirmPassword,
+                                        forgetProvider.validateConfirmPassword,
                                     autovalidateMode: AutovalidateMode.disabled,
                                     decoration: InputDecoration(
                                       suffixIcon: IconButton(
-                                        onPressed: signInProvider
+                                        onPressed: forgetProvider
                                             .togglePasswordVisibility,
                                         icon: Icon(
-                                          signInProvider.isPasswordObscured
+                                          forgetProvider.isPasswordObscured
                                               ? Icons.visibility
                                               : Icons.visibility_off,
                                           color: CraftColors.neutral50,
@@ -160,7 +171,7 @@ class CreatePasswordScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: CraftColors.black18,
       body: ChangeNotifierProvider(
-        create: (_) => SignInProvider(),
+        create: (_) => ForgetPasswordProvider(),
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -174,33 +185,13 @@ class CreatePasswordScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Consumer<SignInProvider>(
-                builder: (context, signInProvider, _) {
+              child: Consumer<ForgetPasswordProvider>(
+                builder: (context, forgetProvider, _) {
                   return ElevatedButton(
                     onPressed: () {
-                      if (signInProvider.validateForm()) {
+                      if (forgetProvider.validateForm()) {
                         // Proceed with form submission
-                        Navigator.pushNamed(
-                          context,
-                          ForgetpasswordScreen.route,
-                          arguments: ForgetPasswordDTO(
-                              title: CraftStrings.strResetpasswordSuccesfully,
-                              detailText: CraftStrings
-                                  .strResetpasswordSuccesfullyDetail,
-                              emailHint: CraftStrings.strEmail,
-                              buttonText: CraftStrings.strSignIn,
-                              signInText: CraftStrings.strHome,
-                              isEmailSectionnVisble: false,
-                              onButtonOnTap: () {
-                                Navigator.of(
-                                  routeGlobalKey.currentContext!,
-                                ).pushNamedAndRemoveUntil(
-                                  SignInScreen.route,
-                                  (route) => false,
-                                );
-                              },
-                              onTextOnTap: () {}),
-                        );
+                       forgetProvider.updatePassword();
                       } else {
                         // Form is invalid, show error messages
                       }
