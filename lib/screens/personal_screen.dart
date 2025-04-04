@@ -86,7 +86,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
               Consumer<PersonalAccountProvider>(builder: (context, personalAccountProvider, _) {
                 return SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 100,
-                  height: SizeConfig.blockSizeVertical * 60,
+                  height: SizeConfig.blockSizeVertical * 65 ,
                   child: ListView(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
@@ -127,6 +127,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                CustomTextFieldWidget(
                                   title: CraftStrings.strEmail,
                                   hintText: CraftStrings.strEnterEmail,
+                                    isFieldDisabled: true,
                                   onChange: (val) {},
                                   textEditingController:
                                       personalAccountProvider.emailController,

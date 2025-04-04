@@ -24,6 +24,7 @@ class CraftStrings {
   static const String strPhoneNo = "Phone Number";
   static const String strpassword = "Password";
   static const String strEnterFirstName = "Enter your First Name";
+    static const String strSearch = "Search for anything";
   static const String strEnterLastName = "Enter your Last Name";
     static const String strEnterReason = "Enter your Reason";
   static const String strEnterEmail = "Enter your Email";
@@ -82,7 +83,7 @@ class CraftStrings {
   static const String strViewAll = "View All";
   static const String strBrowseCourse = "Browse Courses";
   static const String strJoinCommunity = "Join Exclusive Community";
-  static const String strJoinFirmFestival = "Join Firm Festival";
+  static const String strJoinFirmFestival = "Join Film Festival";
   static const String strLearnMore = "Learn More";
   static const String strLearnText = "LEARN ENJOY.DON'T GATEKEEP";
   static const String strReadMore = "Read More";
@@ -91,6 +92,7 @@ class CraftStrings {
     static const String strWatchNow = "Watch Now";
   static const String strSampleVideo = "Sample Video";
   static const String strBts = "BTS";
+    static const String strJoinUs = "Join Us";
   static const String strShare = "Share";
   static const String strAboutCourse = "About Courses";
   static const String strSaveToLater = "Save to later";

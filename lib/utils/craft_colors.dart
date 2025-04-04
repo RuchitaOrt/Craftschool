@@ -26,4 +26,7 @@ class CraftColors {
   static const Color darkBrown = Color(0xff8C3B00);
   static const Color yellow = Color(0xffFACC15);
    static const Color red = Color(0xffE53A3A);
+   static const Color purple = Color(0xff572FC5);
+   static const Color redlight = Color(0xffFFD1B0);
+    static const Color purplelight = Color(0xffCEC0F3);
 }

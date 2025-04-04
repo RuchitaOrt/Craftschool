@@ -85,14 +85,14 @@ class BrowseOtherCourse extends StatelessWidget {
                                     children: [
                                   ( imagePaths[index].tagName==""||imagePaths[index].tagName==null)?Container():   Container(
                                         decoration: BoxDecoration(
-                                          color: CraftColors.secondary100,
+                                          color: CraftStyles.getTagBackgroundColor(imagePaths[index].tagName,),
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: Text(
                                            imagePaths[index].tagName!,
-                                            style: CraftStyles.tssecondary800W500,
+                                            style:CraftStyles.getTagTextStyle( imagePaths[index].tagName,),
                                           ),
                                         ),
                                       ),

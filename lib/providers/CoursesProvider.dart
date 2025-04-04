@@ -125,7 +125,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error getAllCourses: $error');
           ShowDialogs.showToast("Server Not Responding");
           isLoading = false;
         },
@@ -184,7 +184,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error particularCourseDetailsBySlug: $error');
           ShowDialogs.showToast("Server Not Responding");
           iscourseDetailLoading = false;
         },
@@ -247,7 +247,7 @@ class CoursesProvider with ChangeNotifier {
             _othercourseList.addAll(resp.data);
             print("_othercourseList.length");
             print(_othercourseList.length);
-            totalLengthothercourses = resp.total;
+            totalLengthothercourses = int.parse(resp.total);
             _startothercourses +=
                 _lengthothercourses; // Update the start for next fetch
             isOtherLoading = false;
@@ -256,7 +256,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error everySkillYouNeed: $error');
           ShowDialogs.showToast("Server Not Responding");
           isOtherLoading = false;
         },
@@ -323,7 +323,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error getSavedCoursesList: $error');
           ShowDialogs.showToast("Server Not Responding");
           isSavedLoading = false;
         },
@@ -359,7 +359,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error saveCourse: $error');
           // ShowDialogs.showToast("Server Not Responding");
           isLoading = false;
         },
@@ -394,7 +394,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error unSaveCourse: $error');
           // ShowDialogs.showToast("Server Not Responding");
           isLoading = false;
         },
@@ -463,7 +463,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error mycourse: $error');
           ShowDialogs.showToast("Server Not Responding");
           ismycourseLoading = false;
         },
@@ -601,7 +601,7 @@ class CoursesProvider with ChangeNotifier {
         },
         (error) {
           // Handle error case
-          print('Error: $error');
+          print('Error getCourseReviews: $error');
           ShowDialogs.showToast("Server Not Responding");
           isReviewcourseLoading = false;
         },

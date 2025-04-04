@@ -173,10 +173,17 @@ print("courseDetail");
                                                                     index]
                                                                 .freeVideo ==
                                                             "Yes" ||
-                                                        GlobalLists
-                                                                .courseStatus !=
-                                                            0)
+                                                        (GlobalLists.courseStatus !="0")
+                                                            )
                                                     ? () {
+                                                          print("CLICKED");print(GlobalLists
+                                                                .courseStatus);
+                                                                print(provider
+                                                                .courseDetailList[
+                                                                    0]
+                                                                .courseModules[
+                                                                    index]
+                                                                .freeVideo);
                                                         // Toggle the expanded state via the provider
                                                         print("SLUG");
                                                         print(provider
@@ -212,7 +219,9 @@ print("courseDetail");
                                                               .watchTime,
                                                         );
                                                       }
-                                                    : () {},
+                                                    : () {
+                                                        print("CLICKED ELSE");
+                                                    },
                                                 child: Stack(
                                                   children: [
                                                     // Thumbnail image
@@ -1492,6 +1501,7 @@ print("courseDetail");
                                             .courseData[0].courseId,
                                         "");
                                   } else {
+                                
                                     _navigateToVideoScreen(
                                         provider.courseDetailList[0]
                                             .courseModules[0].topicVideo,
@@ -1624,6 +1634,7 @@ print("courseDetail");
                   provider.toggleSlidingCategory();
                 },
                 isContainerVisible: provider.isCategoryVisible,
+                
               ),
             ),
             backgroundColor: CraftColors.black18,
@@ -1918,5 +1929,48 @@ Widget reviewList()
     } else {
       return 'In Progress';
     }
+  }
+}
+class ThumbnailWidget extends StatefulWidget {
+  final String videoUrl;
+  const ThumbnailWidget({Key? key, required this.videoUrl}) : super(key: key);
+
+  @override
+  _ThumbnailWidgetState createState() => _ThumbnailWidgetState();
+}
+
+class _ThumbnailWidgetState extends State<ThumbnailWidget> {
+  ImageProvider? thumbnailImage;
+  final VideoThumbnailCache thumbnailCache = VideoThumbnailCache();
+  @override
+  void initState() {
+    super.initState();
+    fetchThumbnail();
+  }
+
+  void fetchThumbnail() {
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        thumbnailImage = thumbnailCache.getThumbnailImage(widget.videoUrl);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 100),
+      width: SizeConfig.blockSizeHorizontal * 27,
+      height: SizeConfig.blockSizeVertical * 13,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        image: thumbnailImage != null
+            ? DecorationImage(
+                image: thumbnailImage!,
+                fit: BoxFit.cover,
+              )
+            : null,
+      ),
+    );
   }
 }

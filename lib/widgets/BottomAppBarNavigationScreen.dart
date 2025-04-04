@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:craft_school/screens/AllCourses.dart';
+import 'package:craft_school/screens/PostScreen.dart';
 import 'package:craft_school/screens/blog_screen.dart';
 import 'package:craft_school/screens/myCourse.dart';
 import 'package:craft_school/screens/service.dart';
@@ -22,8 +24,8 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
 
   final List<String> _tabTitles = [
     'My Courses',
-    'Services',
-    'Blog',
+    'Courses',
+    'Community',
     'My Space',
   ];
 
@@ -41,9 +43,9 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
     if (index == 0) {
       await Navigator.of(context).pushNamed(MyCourseScreen.route);
     } else if (index == 1) {
-      await Navigator.of(context).pushNamed(AspiringTrainingScreen.route);
+      await Navigator.of(context).pushNamed(AllCourses.route);
     } else if (index == 2) {
-      await Navigator.of(context).pushNamed(BlogsScreen.route);
+      await Navigator.of(context).pushNamed(PostScreen.route);
     } else if (index == 3) {
       await Navigator.of(context).pushNamed(Settings.route);
     }

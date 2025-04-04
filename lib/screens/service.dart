@@ -104,7 +104,7 @@ class _AspiringTrainingScreenState extends State<AspiringTrainingScreen> {
               ),
             ),
         backgroundColor: CraftColors.black18,
-        bottomNavigationBar: BottomAppBarWidget(index: 1,),
+        bottomNavigationBar: BottomAppBarWidget(index: -1,),
         floatingActionButton:FloatingActionButtonWidget(isOnLandingScreen: false,),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Stack(

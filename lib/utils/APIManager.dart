@@ -33,6 +33,7 @@ import 'package:craft_school/dto/PayNowResponse.dart';
 import 'package:craft_school/dto/SavedCourseListResponse.dart';
 import 'package:craft_school/dto/SavedCourseResponse.dart';
 import 'package:craft_school/dto/SavedPostListResponse.dart';
+import 'package:craft_school/dto/SeachListResponse.dart';
 import 'package:craft_school/dto/SignUpResponse.dart';
 import 'package:craft_school/dto/TestimonialResponse.dart';
 import 'package:craft_school/dto/TrendingClassResponse.dart';
@@ -103,7 +104,9 @@ enum API {
   news_letter,
   post_reviews,
   faq,
-  getCourseReviews
+  getCourseReviews,
+  searchCourseMaster
+  
 }
 
 enum HTTPMethod { GET, POST, PUT, DELETE }
@@ -128,6 +131,7 @@ class APIManager {
   static String addCommunityPost = "${baseURL!}/add_community_post";
   static String updatePersonalInfo = "${baseURL!}/updatePersonalInfo";
   static String editCommunityPost = "${baseURL!}/update_community_post";
+  static String careerSave = "${baseURL!}/Career_Save";
   var url;
   void loadConfiguration(String configString) {
     Map config = jsonDecode(configString);
@@ -327,6 +331,9 @@ class APIManager {
          case API.getCourseReviews:
         apiPathString = "/getCourseReviews";
         break;
+          case API.searchCourseMaster:
+        apiPathString = "/searchCourseMaster";
+        break;
 
       default:
         apiPathString = "/Login";
@@ -498,7 +505,9 @@ class APIManager {
          case API.getCourseReviews:
         className = "GetCourseReviewResponse";
         break;
-        
+         case API.searchCourseMaster:
+        className = "SeachListResponse";
+        break;
         
       default:
         className = 'CommonResponse';
@@ -622,6 +631,9 @@ class APIManager {
     }
      if (className == 'GetCourseReviewResponse') {
       responseObj = GetCourseReviewResponse.fromJson(json);
+    }
+     if (className == 'SeachListResponse') {
+      responseObj = SeachListResponse.fromJson(json);
     }
     
 

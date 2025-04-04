@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+
 class RegexHelper {
   final String locationRegex = r'^[a-zA-Z0-9, /]*$';
   final String textAndSpaceRegex = r'^[a-zA-Z ]*$';
@@ -60,4 +64,21 @@ class RegexHelper {
   bool isPanCardValid(String panCard) {
     return RegExp(panCardRegex).hasMatch(panCard);
   }
+
+//   Future<void> getDeviceInfo() async {
+//   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  
+//   if (Platform.isAndroid) {
+//     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+//     print('Android Device Info:');
+//     print('Model: ${androidInfo.device}');
+//     print('Manufacturer: ${androidInfo.manufacturer}');
+//     print('Android Version: ${androidInfo.version.release}');
+//   } else if (Platform.isIOS) {
+//     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  
+//     print('Model: ${iosInfo.utsname.machine}');
+//     print('OS Version: ${iosInfo.systemVersion}');
+//   }
+// }
 }

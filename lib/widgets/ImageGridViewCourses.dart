@@ -2,6 +2,7 @@ import 'package:craft_school/dto/AllCoursesResponse.dart';
 import 'package:craft_school/main.dart';
 import 'package:craft_school/screens/courseDetailScreen.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
+import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_styles.dart';
 import 'package:craft_school/utils/sizeConfig.dart';
@@ -52,6 +53,29 @@ class ImageGridViewCourses extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+           child: Padding(
+                              padding: const EdgeInsets.only(left: 8, top: 8),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              ( imagePaths[index].tagName==""||imagePaths[index].tagName==null)?Container():   Container(
+                                    decoration: BoxDecoration(
+                                      color: CraftStyles.getTagBackgroundColor(imagePaths[index].tagName),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                       imagePaths[index].tagName!,
+                                        style: CraftStyles.getTagTextStyle(imagePaths[index].tagName)
+                                      
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,

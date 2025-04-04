@@ -1,4 +1,3 @@
-
 class GlobalLists {
   //GlobalLists.
 
@@ -8,12 +7,13 @@ class GlobalLists {
   static var userId;
   static String? selectedCategoryChipId;
   static String? authtoken;
-   static String? customerID;
-    static String? customerName;
-    static String? clearCookies="0";
-     static String? logoutdevice="0";
-         static String? courseStatus="0";
-          static String? planStatus="0";
-           static String? communityPlan="No";
-    
+  static String? customerID;
+  static String? customerName;
+    static String? customerEmail;
+      static String? customerPhone;
+  static String? clearCookies = "0";
+  static String? logoutdevice = "0";
+  static String courseStatus = "0";
+  static String? planStatus = "0";
+  static String? communityPlan = "No";
 }

@@ -72,7 +72,9 @@ class _CategoryCourseWidgetState extends State<CategoryCourseWidget> {
   @override
   Widget build(BuildContext context) {
     print("tokenlanding");
-    return
+    return  ChangeNotifierProvider(
+        create: (_) => LandingScreenProvider(),
+        child: 
 Consumer<LandingScreenProvider>(
       builder: (context, provider, _) {
         // Show loading spinner while fetching data
@@ -92,6 +94,7 @@ Consumer<LandingScreenProvider>(
               onCategoriesPressed: () {
                 provider.toggleSlidingCategory();
               },
+             
             ),
           ),
           backgroundColor: CraftColors.black18,
@@ -307,6 +310,6 @@ Consumer<LandingScreenProvider>(
         ],
       ),
     );
-      });
+      }));
   }
 }

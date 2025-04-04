@@ -50,97 +50,109 @@ final providerSubscription =
       create: (_) => LandingScreenProvider(),
       child: Consumer<LandingScreenProvider>(
         builder: (context, provider, _) {
-          return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: CustomAppBar(
-                isCategoryVisible: provider.isCategoryVisible,
-                onMenuPressed: () {
-                  provider
-                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                },
-                onCategoriesPressed: () {
-                  provider.toggleSlidingCategory();
-                },
-                isContainerVisible: provider.isCategoryVisible,
-              ),
-            ),
-            backgroundColor: CraftColors.black18,
-            // bottomNavigationBar: BottomAppBarWidget(
-            // index: 0,
-            // ),
-            // floatingActionButton: FloatingActionButtonWidget(),
-            // floatingActionButtonLocation:
-            //     FloatingActionButtonLocation.centerDocked,
-            body: Stack(
-              children: [
-                // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
-                Consumer<CoursesProvider>(builder: (context, provider, child) {
-                  return ListView(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Courses",
-                          style: CraftStyles.tsWhiteNeutral50W700
-                              .copyWith(fontSize: 16),
-                        ),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 1,
-                      ),
-                      ImageGridViewCourses(
-                       imagePaths: provider.courseList,
-                       onSaveButtonOnTap: (index) {
-                         provider.savedCourseAPI(
-                             provider.courseList[index].courseId);
-                            provider.saveAllCourse(index);
-                       },
-                        onunSaveButtonOnTap: (index) {
-                         provider.unSavedCourseAPI(
-                             provider.courseList[index].courseId);
-                            provider.unSaveAllCourse(index);
-                       },
+          return WillPopScope(
+              onWillPop: ()async
+      {
+        provider.onBackPressed();
+        return false;
+      },
 
-                                              ),
-                      if (provider.courseList.length != provider.totalLength)
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Call the API to fetch more blogs
-                                provider.getCourseAPI();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: CraftColors.neutralBlue800,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+            child: Scaffold(
+               bottomNavigationBar: BottomAppBarWidget(index: 1,),
+                  floatingActionButton: FloatingActionButtonWidget(isOnLandingScreen: false,),
+                  floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: CustomAppBar(
+                  isCategoryVisible: provider.isCategoryVisible,
+                  onMenuPressed: () {
+                    provider
+                        .toggleSlidingContainer(); // Trigger toggle when menu is pressed
+                  },
+                  onCategoriesPressed: () {
+                    provider.toggleSlidingCategory();
+                  },
+                  isContainerVisible: provider.isCategoryVisible,
+               
+                ),
+              ),
+              backgroundColor: CraftColors.black18,
+              // bottomNavigationBar: BottomAppBarWidget(
+              // index: 0,
+              // ),
+              // floatingActionButton: FloatingActionButtonWidget(),
+              // floatingActionButtonLocation:
+              //     FloatingActionButtonLocation.centerDocked,
+              body: Stack(
+                children: [
+                  // Wrap ListView with ConstrainedBox to ensure it gets proper layout constraints
+                  Consumer<CoursesProvider>(builder: (context, provider, child) {
+                    return ListView(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Courses",
+                            style: CraftStyles.tsWhiteNeutral50W700
+                                .copyWith(fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 1,
+                        ),
+                        ImageGridViewCourses(
+                         imagePaths: provider.courseList,
+                         onSaveButtonOnTap: (index) {
+                           provider.savedCourseAPI(
+                               provider.courseList[index].courseId);
+                              provider.saveAllCourse(index);
+                         },
+                          onunSaveButtonOnTap: (index) {
+                           provider.unSavedCourseAPI(
+                               provider.courseList[index].courseId);
+                              provider.unSaveAllCourse(index);
+                         },
+            
+                                                ),
+                        if (provider.courseList.length != provider.totalLength)
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Call the API to fetch more blogs
+                                  provider.getCourseAPI();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: CraftColors.neutralBlue800,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                 ),
-                              ),
-                              child: Text(
-                                "View More",
-                                style: CraftStyles.tsWhiteNeutral50W60016
-                                    .copyWith(fontSize: 12),
+                                child: Text(
+                                  "View More",
+                                  style: CraftStyles.tsWhiteNeutral50W60016
+                                      .copyWith(fontSize: 12),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
-                  );
-                }),
-                if (provider.isContainerVisible)
-                  SlidingMenu(isVisible: provider.isContainerVisible),
-                if (provider.isCategoryVisible)
-                  SlidingCategory(
-                    isExpanded: provider.isCategoryVisible,
-                    onToggleExpansion: provider.toggleSlidingCategory,
-                  ),
-              ],
+                      ],
+                    );
+                  }),
+                  if (provider.isContainerVisible)
+                    SlidingMenu(isVisible: provider.isContainerVisible),
+                  if (provider.isCategoryVisible)
+                    SlidingCategory(
+                      isExpanded: provider.isCategoryVisible,
+                      onToggleExpansion: provider.toggleSlidingCategory,
+                    ),
+                ],
+              ),
             ),
           );
         },

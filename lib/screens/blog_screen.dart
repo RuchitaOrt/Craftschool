@@ -94,10 +94,11 @@ class _BlogsScreenState extends State<BlogsScreen> {
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
+               
               ),
             ),
               backgroundColor: CraftColors.black18,
-              bottomNavigationBar: BottomAppBarWidget(index: 2,),
+              bottomNavigationBar: BottomAppBarWidget(index: -1,),
               floatingActionButton: FloatingActionButtonWidget(isOnLandingScreen: false,),
               floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
               body: Stack(
@@ -233,19 +234,34 @@ GestureDetector(
                         ),
                       
                           SizedBox(height: SizeConfig.blockSizeVertical * 2),
-                          Container(
+                          (blog.tags.isNotEmpty)?  Container(
                             decoration: BoxDecoration(
-                              color: CraftColors.secondary100,
+                              color: CraftStyles.getTagBackgroundColor("New"),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                "New !",
-                                style: CraftStyles.tssecondary800W500,
+                              child: 
+                             
+                              Wrap(
+                                spacing: 6.0, // Horizontal space
+                                runSpacing: 6.0, // Vertical space
+                                children: blog.tags.map((tag) {
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: CraftStyles.getTagBackgroundColor(tag),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      tag,
+                                      style: CraftStyles.getTagTextStyle(tag),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ),
-                          ),
+                          ):Container(),
                           SizedBox(height: SizeConfig.blockSizeVertical * 1),
                           Text(
                             blog.title,
@@ -379,7 +395,7 @@ GestureDetector(
                         fit: BoxFit.cover,),
                         SizedBox(width: SizeConfig.safeBlockHorizontal*2),
                         Container(
-                           width: SizeConfig.safeBlockHorizontal*45,
+                           width: SizeConfig.safeBlockHorizontal*50,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,23 +412,28 @@ GestureDetector(
                             style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
                           ),
                            SizedBox(height: SizeConfig.safeBlockVertical*1,),
-                          Row(children: [
-                              Container(
-                                            decoration: BoxDecoration(
-                                              color: CraftColors.secondary100,
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
-                                              child: Text(
-                                               provider.trendingMasterData[index].description,
-                                                style: CraftStyles.tssecondary800W500.copyWith(fontSize: 10),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: SizeConfig.blockSizeHorizontal*1,),
-                                           
-                          ],),
+                    (provider.trendingMasterData[index].tags.isNotEmpty)?  Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: 
+                     
+                      Wrap(
+                        spacing: 6.0, // Horizontal space
+                        runSpacing: 6.0, // Vertical space
+                        children: provider.trendingMasterData[index].tags.map((tag) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: CraftStyles.getTagBackgroundColor(tag),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              tag,
+                              style: CraftStyles.getTagTextStyle(tag),
+                            ),
+                          );
+                        }).toList(),
+                      )
+                                        ):Container(),
 SizedBox(height: SizeConfig.blockSizeVertical*1,),
                           SizedBox(
                             width: SizeConfig.blockSizeHorizontal * 40,

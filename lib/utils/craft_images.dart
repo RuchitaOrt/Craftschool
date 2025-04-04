@@ -47,6 +47,7 @@ class CraftImagePath {
   static String image9 = "assets/images/Image9.png";
   static String lock = "assets/images/lock.svg";
   static String star = "assets/images/Goldstar1.png";
+  static String starGold = "assets/images/star.svg";
   static String bannerImage2 = "assets/images/banner1.png";
   static String check = "assets/images/check.png";
   static String fridauCraftWhite = "assets/images/fridaycraftwhite.svg";
@@ -93,4 +94,7 @@ class CraftImagePath {
   static String services = "assets/images/services.svg";
 
     static String help = "assets/images/help.svg";
+     static String coming = "assets/images/coming.png";
+
+       static String notfound = "assets/images/notfound.svg";
 }

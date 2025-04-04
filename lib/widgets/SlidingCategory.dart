@@ -80,7 +80,7 @@ class _SlidingCategoryState extends State<SlidingCategory> {
                               ),
                               child: ListTile(
                                 dense: true,
-                                leading: SvgPicture.asset(CraftImagePath.acting),
+                                leading: SvgPicture.network(category.icon,width: 16,height: 16,),
                                 title: Text(
                                   category.categoryName,
                                   style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),

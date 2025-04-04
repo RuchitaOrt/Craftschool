@@ -83,6 +83,7 @@ print(provider.membershipList.length);
                   provider.toggleSlidingCategory();
                 },
                 isContainerVisible: provider.isContainerVisible,
+               
               ),
             ),
             backgroundColor: CraftColors.black18,

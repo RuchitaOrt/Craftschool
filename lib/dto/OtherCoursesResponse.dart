@@ -6,7 +6,7 @@ String otherCoursesResponseToJson(OtherCoursesResponse data) => json.encode(data
 
 class OtherCoursesResponse {
   bool status;
-  int total;
+  dynamic total;
   String message;
   List<Datum> data;
 

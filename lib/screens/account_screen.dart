@@ -99,6 +99,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 children: [
                                     CustomTextFieldWidget(
                                   title: CraftStrings.strEmail,
+                                  isFieldDisabled: true,
                                   hintText: CraftStrings.strEnterEmail,
                                   onChange: (val) {},
                                   textEditingController:
@@ -215,6 +216,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
+              
               ),
             ),
             backgroundColor: CraftColors.black18,

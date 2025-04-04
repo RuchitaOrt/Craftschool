@@ -229,11 +229,12 @@ Future<Map<String, dynamic>> createRequestBody(String token) async {
           {
  ShowDialogs.showToast(resp.message);
           SPManager().setAuthToken("");
-          Navigator.of(
-            routeGlobalKey.currentContext!,
-          ).pushNamed(
-            SignInScreen.route,
-          );
+         
+          Navigator.of(routeGlobalKey.currentContext!).pushNamedAndRemoveUntil(
+  SignInScreen.route,
+  (route) => false,  // Removes everything from the stack
+);
+
           }else{
             
           }
@@ -280,6 +281,10 @@ String profileImageUrl = '';
            lastNameController.text=resp.data[0].lastName;
            emailController.text=resp.data[0].email;
           profileImageUrl =resp.data[0].userProfilePic ?? '';
+          GlobalLists.customerEmail=resp.data[0].email;
+          GlobalLists.customerPhone=resp.data[0].phoneNo;
+          GlobalLists.customerName=resp.data[0].firstName;
+
           notifyListeners();
             // Once data is fetched, set isLoading to false
             isLoading = false;

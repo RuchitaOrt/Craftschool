@@ -29,6 +29,7 @@ class JoinFestivalResponse {
 }
 
 class Datum {
+   final int id;
   String title;
   String flimFestivalDate;
   String shortDesc;
@@ -36,6 +37,7 @@ class Datum {
   String slug;
 
   Datum({
+     required this.id,
     required this.title,
     required this.flimFestivalDate,
     required this.shortDesc,
@@ -44,6 +46,7 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+     id: json['id'] ?? 0,
     title: json["title"] ?? '',
     flimFestivalDate: json["flim_festival_date"] ?? '',
     shortDesc: json["short_desc"] ?? '',
@@ -52,6 +55,7 @@ class Datum {
   );
 
   Map<String, dynamic> toJson() => {
+    "id":id,
     "title": title,
     "flim_festival_date": flimFestivalDate,
     "short_desc": shortDesc,

@@ -11,6 +11,7 @@ import 'package:craft_school/providers/membership_provider.dart';
 import 'package:craft_school/providers/personal_account_provider.dart';
 import 'package:craft_school/screens/AllCourses.dart';
 import 'package:craft_school/screens/BlogDetailScreen.dart';
+import 'package:craft_school/screens/Career.dart';
 import 'package:craft_school/screens/CategoryCourseWidget.dart';
 import 'package:craft_school/screens/ContactUs.dart';
 import 'package:craft_school/screens/CreatePostScreen.dart';
@@ -82,9 +83,15 @@ class Routers {
         return MaterialPageRoute(
           builder: (_) =>  ContactUs(),
         );
-         case JoinFlimFest.route:
+         case Career.route:
         return MaterialPageRoute(
-          builder: (_) =>  JoinFlimFest(),
+          builder: (_) =>  Career(),
+        );
+       
+         case JoinFlimFest.route:
+          final args = settings.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) =>  JoinFlimFest(flimId: args ?? "",),
         );
  case CategoryCourseWidget.route:
         return MaterialPageRoute(

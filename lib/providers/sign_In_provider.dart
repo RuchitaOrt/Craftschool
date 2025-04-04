@@ -122,6 +122,7 @@ class SignInProvider with ChangeNotifier {
          SPManager().setAuthToken(resp.data[0].token);
          SPManager().setCustomerID(resp.data[0].customerId.toString());
          SPManager().setCustomerName(resp.data[0].name);
+     
         
         Navigator.of(
           routeGlobalKey.currentContext!,

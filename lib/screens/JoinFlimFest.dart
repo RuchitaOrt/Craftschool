@@ -17,8 +17,9 @@ import 'package:provider/provider.dart';
 import 'package:craft_school/providers/sign_up_provider.dart';
 
 class JoinFlimFest extends StatelessWidget {
+  final String flimId;
   static const String route = "/joinFlimFest";
-  JoinFlimFest({super.key});
+  JoinFlimFest({super.key, required this.flimId});
   final BorderRadius borderRadius = const BorderRadius.all(
     Radius.circular(8),
   );
@@ -53,7 +54,7 @@ class JoinFlimFest extends StatelessWidget {
               SizedBox(
                 width: SizeConfig.blockSizeHorizontal * 100,
                 height: Platform.isAndroid
-                    ? SizeConfig.blockSizeVertical * 75.5
+                    ? SizeConfig.blockSizeVertical * 73
                     : SizeConfig.blockSizeVertical * 70,
                 child: ListView(
                   shrinkWrap: true,
@@ -183,7 +184,7 @@ class JoinFlimFest extends StatelessWidget {
                             return ElevatedButton(
                               onPressed: () {
                                 if (signUpProvider.validateForm()) {
-                                  signUpProvider.joinFlimFestAPI();
+                                  signUpProvider.joinFlimFestAPI(flimId,signUpProvider.firstNameController.text,signUpProvider.phoneNumberController.text,signUpProvider.emailController.text);
                                 } else {
                                   // Form is invalid, show error messages
                                 }

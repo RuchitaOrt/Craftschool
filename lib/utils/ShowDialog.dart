@@ -81,6 +81,33 @@ static exitDialog()
       ],
     ),
   );
+  
+}
+static logoutDialog({required Function onYesPressed})
+{
+  showDialog(
+    context: routeGlobalKey.currentContext!,
+    builder: (context) => AlertDialog(
+      title: Text('Logout'),
+      content: Text('Are you sure you want to Logout?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // Close dialog
+          },
+          child: Text('No'),
+        ),
+        TextButton(
+          onPressed: ()
+          {
+            onYesPressed();  
+    Navigator.of(context).pop(); 
+          },
+          child: Text('Yes'),
+        ),
+      ],
+    ),
+  );
 }
   static Future<bool> showConfirmDialogdelete(BuildContext context,
       String dialogTitle, String dialogMessage, Function() onYesTap) async {

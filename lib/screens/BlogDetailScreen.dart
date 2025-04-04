@@ -76,6 +76,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                   provider.toggleSlidingCategory();
                 },
                 isContainerVisible: provider.isCategoryVisible,
+                
               ),
             ),
             backgroundColor: CraftColors.black18,
@@ -102,7 +103,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 tag: provider.blogDetailList[0].tags,
                                 title: provider.blogDetailList[0].title,
                                 subTitle: provider.blogDetailList[0].readTime,
-                                textStyle: CraftStyles.tssecondary800W500,
+                               
                                 textBackground: CraftColors.secondary100,
                                 description:
                                     provider.blogDetailList[0].description,
@@ -190,7 +191,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
       {List<String>? tag,
       String? title,
       String? subTitle,
-      TextStyle? textStyle,
+      // TextStyle? textStyle,
       Color? textBackground,
       String? description,
       String? image}) {
@@ -236,7 +237,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         return Container(
           
           decoration: BoxDecoration(
-            color: textBackground,
+            color: CraftStyles.getTagBackgroundColor(tag[index]),
             borderRadius: BorderRadius.circular(8),
           ),
           child:
@@ -245,7 +246,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
             child: Center(
               child: Text(
                 tag[index],
-                style: textStyle,
+                style:  CraftStyles.getTagTextStyle(tag[index]),
                 textAlign: TextAlign.center,
               ),
             ),

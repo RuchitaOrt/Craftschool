@@ -6,6 +6,7 @@ import 'package:craft_school/dto/CustomerIdCategoryWiseResponse.dart'
 import 'package:craft_school/dto/GetLoggedInDevicesResponse.dart' as deviceInfo;
 import 'package:craft_school/dto/JoinFestivalResponse.dart' as joinFestival;
 import 'package:craft_school/dto/LandingScreenResponse.dart' as landingResp;
+import 'package:craft_school/dto/SeachListResponse.dart' as search;
 import 'package:craft_school/dto/UpcomingCourseResponse.dart' as upcoming;
 import 'package:craft_school/dto/LogoutResponse.dart';
 import 'package:craft_school/dto/PayNowResponse.dart';
@@ -16,6 +17,7 @@ import 'package:craft_school/providers/CoursesProvider.dart';
 import 'package:craft_school/screens/DeviceLimitReachedScreen.dart';
 import 'package:craft_school/screens/Landing_Screen.dart';
 import 'package:craft_school/screens/RayzorPayHelper.dart';
+import 'package:craft_school/screens/SearchScreen.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/APIManager.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
@@ -39,6 +41,13 @@ class LandingScreenProvider with ChangeNotifier {
     CraftImagePath.image8,
     CraftImagePath.image9
   ];
+bool isSearchVisible = false;
+
+void toggleSearch() {
+  
+    isSearchVisible = !isSearchVisible;
+  notifyListeners();
+}
 
   // Getter to access the image data
   List<String> get imagePaths => _imagePaths;
@@ -405,7 +414,25 @@ class LandingScreenProvider with ChangeNotifier {
     _isCategoryVisible = !_isCategoryVisible;
     notifyListeners(); // Notify listeners that the state has changed
   }
+  bool _isSearchIconVisible = false;
 
+  bool get isSearchIconVisible => _isSearchIconVisible;
+
+  // Method to toggle the visibility of the sliding container
+  void toggleSearchIconCategory() {
+    _isSearchIconVisible = !_isSearchIconVisible;
+    if(_isSearchIconVisible)
+    {
+ Navigator.push(
+                  routeGlobalKey.currentContext!,
+                  MaterialPageRoute(builder: (context) => const SearchScreen()), // Open Search Screen
+                );
+    }else{
+      Navigator.pop(routeGlobalKey.currentContext!)
+;    }
+       
+    notifyListeners(); // Notify listeners that the state has changed
+  }
   List<landingResp.Banner> _banner1 = [];
   List<landingResp.Banner> _banner2 = [];
   List<landingResp.Banner> _banner3 = [];
@@ -782,9 +809,13 @@ GlobalLists.communityPlan=_subscriptionList[0].planInfo.isEmpty?"No":_subscripti
               await SPManager().setAuthToken("");
               await SPManager().setCustomerID("");
               await SPManager().setCustomerName("");
+          
               GlobalLists.authtoken = "";
               GlobalLists.customerID = "";
               GlobalLists.customerName = "";
+              GlobalLists.customerEmail="";
+              GlobalLists.customerPhone="";
+            
 
               var token = await SPManager().getAuthToken();
               print("token    notifyListeners() $token");
@@ -1117,6 +1148,67 @@ void unSaveCustomerCategoryCourse(int categoryIndex,int index) {
   }
 
 
+//search
+  List<search.Datum> _searchList = [];
+
+  // Getter for data
+  List<search.Datum> get searchList => _searchList;
+  set searchList(List<search.Datum> data) {
+    _searchList = data;
+  }
+
+  bool _isSearchLoading = false;
+  // Loading state
+  bool get isSearchLoading => _isSearchLoading;
+
+  // Set loading state
+  set isSearchLoading(bool value) {
+    _isSearchLoading = value;
+    notifyListeners();
+  }
+
+  createSearchRequestBody(String courseSlug,
+      ) {
+    return {
+       "search":courseSlug,
+    
+    };
+  }
+  Future<void> getSearchList(String courseSlug) async {
+    _isSearchLoading = true;
+    notifyListeners();
+
+    var status1 = await ConnectionDetector.checkInternetConnection();
+
+    if (status1) {
+      var jsonbody = createSearchRequestBody(courseSlug);
+          print("Search jsonbody");
+      print(jsonbody);
+      await APIManager().apiRequest(
+        routeGlobalKey.currentContext!,
+        API.searchCourseMaster,
+        (response) {
+          search.SeachListResponse resp = response;
+          searchList = resp.data;
+
+         _isSearchLoading=false;
+          notifyListeners();
+        },
+        (error) {
+          _isSearchLoading = false;
+          print("Error searchList $error");
+          notifyListeners();
+          // ShowDialogs.showToast("Server Not Responding");
+        },
+        jsonval: jsonbody,
+      );
+    } else {
+      _isSearchLoading = false;
+
+      notifyListeners();
+      ShowDialogs.showToast("Please check internet connection");
+    }
+  }
 
 
 }

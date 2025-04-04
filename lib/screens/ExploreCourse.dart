@@ -144,6 +144,7 @@ class ExploreCourse extends StatelessWidget {
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
+               
               ),
             ),
       backgroundColor: CraftColors.black18,

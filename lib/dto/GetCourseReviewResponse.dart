@@ -39,7 +39,7 @@ class GetCourseReviewResponse {
 
 class Datum {
   String comments;
-  int rating;
+  dynamic rating;
   String usersName;
   String userProfilePic;
   DateTime? createdAt;

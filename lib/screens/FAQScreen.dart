@@ -111,6 +111,7 @@ class _FAQScreenState extends State<FAQScreen> {
                 onMenuPressed: provider.toggleSlidingContainer,
                 onCategoriesPressed: provider.toggleSlidingCategory,
                 isContainerVisible: provider.isContainerVisible,
+               
               ),
             ),
             backgroundColor: CraftColors.black18,

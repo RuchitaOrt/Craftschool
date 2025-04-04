@@ -1,4 +1,4 @@
-import 'package:craft_school/dto/GetAllCommunityResponse.dart';
+
 import 'package:craft_school/screens/CreatePostScreen.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
 import 'package:craft_school/utils/ShowDialog.dart';
@@ -46,8 +46,8 @@ class PostWidget extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundImage: 
-                  post.medias.isNotEmpty
-                      ? NetworkImage(post.medias[0].mediaUrl)
+                  post.userProfilePic.isNotEmpty
+                      ? NetworkImage(post.userProfilePic)
                       :
                        AssetImage(CraftImagePath.whiteCamera) as ImageProvider,
                 ),
@@ -140,50 +140,85 @@ class PostWidget extends StatelessWidget {
           ),
           // Staggered grid of images
           post.medias.isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                    child: StaggeredGridView.countBuilder(
-                      crossAxisCount: 4, // Number of columns in the grid
-                      itemCount: post.medias.length,
-                      shrinkWrap: true, // Ensures the grid takes up only as much space as needed
-                      physics: NeverScrollableScrollPhysics(), // Disables scroll behavior for the grid itself
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child:
-                            isVideo(post.medias[index].mediaUrl,)
-          ? VideoPlayerWidget(videoUrl:  post.medias[index].mediaUrl,)
-          : Image.network(
-            post.medias[index].mediaUrl,
-              width: double.infinity,
-              height: SizeConfig.safeBlockVertical * 20,
-              fit: BoxFit.cover,
-            ),
-                            // Image.network(
-                            //  post.medias[index].mediaUrl,
-                            //   width: double.infinity,
-                            //   height: SizeConfig.safeBlockVertical * 20, // Height of the image
-                            //   fit: BoxFit.cover,
-                            // ),
-                          ),
-                        );
-                      },
-                      staggeredTileBuilder: (index) {
-                        if (index % 2 == 0) {
-                          return StaggeredTile.count(2, 1); // 2 columns wide, 1 row tall
-                        } else {
-                          return StaggeredTile.count(2, 2); // 2 columns wide, 2 rows tall
-                        }
-                      },
-                      mainAxisSpacing: 8.0, // Space between rows
-                      crossAxisSpacing: 8.0, // Space between columns
-                    ),
-                  ),
-                )
+              ? 
+              //grid view
+            Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: MasonryGridView.builder(
+          physics: NeverScrollableScrollPhysics(), // Disables grid scrolling
+          shrinkWrap: true, // Makes grid fit content
+          gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Two columns like your Figma design
+          ),
+          itemCount: post.medias.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: 
+                 isVideo(post.medias[index].mediaUrl,)
+          ? 
+          VideoPlayerWidget(videoUrl:  post.medias[index].mediaUrl,)
+          :
+                Image.network(
+                 post.medias[index].mediaUrl,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    )
+
+          //     Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: ClipRRect(
+          //           borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+          //           child: StaggeredGridView.countBuilder(
+          //             crossAxisCount: 4, // Number of columns in the grid
+          //             itemCount: post.medias.length,
+          //             shrinkWrap: true, // Ensures the grid takes up only as much space as needed
+          //             physics: NeverScrollableScrollPhysics(), // Disables scroll behavior for the grid itself
+          //             itemBuilder: (context, index) {
+          //               return Padding(
+          //                 padding: const EdgeInsets.all(1.0),
+          //                 child: ClipRRect(
+          //                   borderRadius: BorderRadius.circular(8),
+          //                   child:
+          //                   isVideo(post.medias[index].mediaUrl,)
+          // ? VideoPlayerWidget(videoUrl:  post.medias[index].mediaUrl,)
+          // : Image.network(
+          //   post.medias[index].mediaUrl,
+          //     width: double.infinity,
+          //     height: SizeConfig.safeBlockVertical * 20,
+          //     fit: BoxFit.cover,
+          //   ),
+          //                   // Image.network(
+          //                   //  post.medias[index].mediaUrl,
+          //                   //   width: double.infinity,
+          //                   //   height: SizeConfig.safeBlockVertical * 20, // Height of the image
+          //                   //   fit: BoxFit.cover,
+          //                   // ),
+          //                 ),
+          //               );
+          //             },
+          //             staggeredTileBuilder: (index) {
+          //               if (index % 2 == 0) {
+          //                 return StaggeredTile.count(2, 1); // 2 columns wide, 1 row tall
+          //               } else {
+          //                 return StaggeredTile.count(2, 2); // 2 columns wide, 2 rows tall
+          //               }
+          //             },
+          //             mainAxisSpacing: 8.0, // Space between rows
+          //             crossAxisSpacing: 8.0, // Space between columns
+          //           ),
+          //         ),
+          //       )
               : Container(),
 
           // Post caption, likes, and comments

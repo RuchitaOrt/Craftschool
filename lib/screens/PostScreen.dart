@@ -2,10 +2,16 @@ import 'package:craft_school/main.dart';
 import 'package:craft_school/providers/CommunityProvider.dart';
 import 'package:craft_school/providers/LandingScreenProvider.dart';
 import 'package:craft_school/screens/SavedPostScreen.dart';
+import 'package:craft_school/screens/autoscroll.dart';
+import 'package:craft_school/screens/service_plan_screen.dart';
+import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
 import 'package:craft_school/utils/ShowDialog.dart';
 import 'package:craft_school/utils/craft_images.dart';
+import 'package:craft_school/utils/craft_strings.dart';
+import 'package:craft_school/widgets/BottomAppBarNavigationScreen.dart';
 import 'package:craft_school/widgets/CommentWidget.dart';
+import 'package:craft_school/widgets/FloatingActionButton.dart';
 import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
 import 'package:flutter/material.dart';
@@ -58,13 +64,17 @@ class _PostScreenState extends State<PostScreen> {
         providerSubscription
             .getcheckSubscriptionIndividualFlowWiseInfoAPI();
       }
- 
-      final provider = Provider.of<CommunityProvider>(context, listen: false);
+       final provider = Provider.of<CommunityProvider>(context, listen: false);
+ if(GlobalLists.communityPlan == "Yes")
+ {
+
       if (!provider.isgetCommunityLoading) {
       
           print("_communityListcall2");
         provider.getCommunityAPI(true);
       }
+ }
+     
          print("upcomingList");
        if (!provider.isgetUpcomgLoading) {
       
@@ -145,363 +155,577 @@ class _PostScreenState extends State<PostScreen> {
           duration: Duration(milliseconds: 300), curve: Curves.easeIn);
     }
   }
-
+  Widget joinCommunity(
+      {String? tag,
+      String? title,
+      String? subTitle,
+      TextStyle? textStyle,
+      Color? textBackground,
+      String? titleText,
+      String? subTitleText,
+      String? image}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(CraftImagePath.community_join),
+              fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        // height: SizeConfig.blockSizeVertical * 90,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    title!,
+                    textAlign: TextAlign.center,
+                    style: CraftStyles.tsWhiteNeutral50W60016
+                        .copyWith(fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 1,
+                  ),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: subTitle,
+                          style: CraftStyles.tsWhiteNeutral300W500,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: CraftColors.neutralBlue850,
+              margin: EdgeInsets.all(16),
+              width: SizeConfig.safeBlockHorizontal * 100,
+              height: SizeConfig.blockSizeVertical * 30,
+              child: SlantedImageReel(),
+             
+            ),
+            SvgPicture.asset(
+              CraftImagePath.starGold,
+                     
+            ),
+            Text(
+              textAlign: TextAlign.center,
+              titleText!,
+              style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 18),
+            ),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 1,
+            ),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: subTitleText,
+                    style: CraftStyles.tsWhiteNeutral300W500,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 1,
+            ),
+            Consumer<LandingScreenProvider>(
+                builder: (context, provider, child) {
+              return SizedBox(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: ScrollPhysics(),
+                  itemCount: provider.joinCommunityList
+                      .length, // Use the length of the list from provider
+                  itemBuilder: (context, index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 90,
+                          child: Row(
+                            children: [
+                              Image.asset(CraftImagePath.check),
+                              SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: SizeConfig.blockSizeHorizontal * 70,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 4,
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: provider
+                                                      .joinCommunityList[index]
+                                                  ['title']!,
+                                              style: CraftStyles
+                                                  .tsWhiteNeutral300W500,
+                                            ),
+                                            TextSpan(
+                                              text: provider
+                                                      .joinCommunityList[index]
+                                                  ['subtext']!,
+                                              style: CraftStyles
+                                                  .tsWhiteNeutral300W500
+                                                  .copyWith(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              );
+            }),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 1,
+            ),
+            SizedBox(
+              width: SizeConfig.blockSizeHorizontal * 55,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (GlobalLists.communityPlan == "Yes") {
+                    Navigator.of(context)
+                        .pushNamed(PostScreen.route)
+                        .then((value) {});
+                  }else if(GlobalLists.authtoken!="")
+                  {
+  Navigator.of(context)
+                        .pushNamed(PlanPriceCardScreen.route)
+                        .then((value) {});
+                  } else {
+                    Navigator.of(context)
+                        .pushNamed(SignInScreen.route)
+                        .then((value) {});
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(SizeConfig.blockSizeHorizontal * 45,
+                      SizeConfig.blockSizeVertical * 5),
+                  backgroundColor: CraftColors.primaryBlue550,
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 5,
+                ),
+                child: Text(
+                  CraftStrings.strJoinCommunity,
+                  style: CraftStyles.tsWhiteNeutral50W60016,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 1,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (_) => LandingScreenProvider(),
         child: Consumer<LandingScreenProvider>(builder: (context, provider, _) {
-          return Scaffold(
-            
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: CustomAppBar(
-                  isContainerVisible: provider.isContainerVisible,
-                  isCategoryVisible: provider.isCategoryVisible,
-                  onMenuPressed: () {
-                    provider
-                        .toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                  },
-                  onCategoriesPressed: () {
-                    provider.toggleSlidingCategory();
-                  },
+          return WillPopScope(
+             onWillPop: ()async
+      {
+        provider.onBackPressed();
+        return false;
+      },
+            child: Scaffold(
+                bottomNavigationBar: BottomAppBarWidget(index: 2,),
+                floatingActionButton: FloatingActionButtonWidget(isOnLandingScreen: false,),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(kToolbarHeight),
+                  child: CustomAppBar(
+                    isContainerVisible: provider.isContainerVisible,
+                    isCategoryVisible: provider.isCategoryVisible,
+                    onMenuPressed: () {
+                      provider
+                          .toggleSlidingContainer(); // Trigger toggle when menu is pressed
+                    },
+                    onCategoriesPressed: () {
+                      provider.toggleSlidingCategory();
+                    },
+                  ),
                 ),
-              ),
-              backgroundColor: CraftColors.black18,
-              body: Consumer<CommunityProvider>(
-                  builder: (context, communityprovider, _) {
-                
-                return Stack(
-                  children: [
-                    // Main content (ListView and other widgets)
-                    SingleChildScrollView(
-                      controller: _scrollController,
-                      physics: ScrollPhysics(),
-                      child: ListView(
-                        shrinkWrap: true,
+                backgroundColor: CraftColors.black18,
+                body: Consumer<CommunityProvider>(
+                    builder: (context, communityprovider, _) {
+                  
+                  return Stack(
+                    children: [
+                      // Main content (ListView and other widgets)
+                      SingleChildScrollView(
+                        controller: _scrollController,
                         physics: ScrollPhysics(),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Hello ${GlobalLists.customerName} !",
-                                      style: CraftStyles.tsWhiteNeutral50W700,
-                                    ),
-                                     Row(
-                                       children: [
-                                         SvgPicture.asset(
-                                                                 CraftImagePath.notification,
-                                                                 width: 30, // Play button size
-                                                                 height: 30, // Adjust size as needed
-                                                               ),
-                                                               SizedBox(width: SizeConfig.blockSizeHorizontal*2,),
-                                                                GestureDetector(
-                                                                  onTap: ()
-                                                                  {
-                                                                     Navigator.of(context)
-                        .pushNamed(
-                          SavedPostScreen.route,
-                        )
-                        .then((value) {});
-                                                                  },
-                                                                  child: SvgPicture.asset(
-                                                                                          CraftImagePath.saved,
-                                                                                          width: 30, // Play button size
-                                                                                          height: 30, // Adjust size as needed
-                                                                                        ),
-                                                                ),
-                                       ],
-                                     ),
-                                   
-                                  ],
-                                ),
-                                SizedBox(height: SizeConfig.blockSizeVertical*2,),
-                                Text(
-                                  "What’s new with you? Would you like to share something with the community?🤗",
-                                  style: CraftStyles.tsWhiteNeutral300W400,
-                                ),
-                              ],
-                            ),
-                          ),
-Text(communityprovider.communityList.length.toString()),
-                          // List of posts
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: ScrollPhysics(),
-                            itemCount: communityprovider.communityList.length,
-                            itemBuilder: (context, index) {
-                              
-                              return PostWidget(
-                                post: communityprovider.communityList[index],
-                                index: index,
-                                onCommentPostTap: (index) {
-                                  communityprovider.commentList.clear();
-                                  communityprovider.commentsCommunityAPI(
-                                      communityprovider.communityList[index].id
-                                          .toString());
-                                  _showCommentBottomSheet(communityprovider
-                                      .communityList[index].id
-                                      .toString());
-                                },
-                                onReportPostTap: (index) {
-                                  {
-                                    // Handle report submission logic
-                                    String reason =
-                                        communityprovider.reportController.text;
-                                    if (reason.isNotEmpty) {
-                                      // Call the report API or handle reporting here
-                                      print("Reporting Post: $reason");
-                                      Navigator.pop(
-                                          context); // Close the report sheet after submission
-                                      communityprovider.reportCommunityAPI(
-                                          communityprovider
-                                              .communityList[index].id
-                                              .toString(),
-                                          reason);
-                                    } else {
-                                      // Show some error if reason is empty
-                                      print(
-                                          "Please provide a reason for reporting.");
-                                    }
-                                  }
-                                },
-                                onDeletePostTap: (index) {
-                                  communityprovider.deleteCommunityAPI(
-                                      communityprovider.communityList[index].id
-                                          .toString());
-                                },
-                                onLikeTap: (index) {
-                                  print("like");
-                                  final post =
-                                      communityprovider.communityList[index];
-                                  int postcount = int.parse(post.likeCount);
-                                  // Check if the post is already liked
-                                  if (post.hasLiked) {
-                                    // If the post is liked, dislike the post
-                                    post.hasLiked = false;
-                                    postcount--; // Decrease the like count
-                                    if (postcount >= 0) {
-                                      post.likeCount = postcount.toString();
-                                    }
-
-                                    communityprovider.dislikeCommunityAPI(
-                                        post.id.toString()); // Call dislike API
-                                  } else {
-                                    // If the post is not liked, like the post
-                                    post.hasLiked = true;
-                                    postcount++; // Increase the like count
-                                    post.likeCount = postcount.toString();
-                                    communityprovider.likeCommunityAPI(
-                                        post.id.toString()); // Call like API
-                                  }
-
-                                  // Call setState to update the UI immediately
-                                  setState(() {});
-                                },
-                                onSaveButtonOnTap: (index) {
-                                  print("saved");
-                                  final post =
-                                      communityprovider.communityList[index];
-
-                                  if (post.hasSaved) {
-                                    // If the post is liked, dislike the post
-                                    post.hasSaved = false;
-
-                                    communityprovider.unsavedCommunityAPI(
-                                        post.id.toString()); // Call dislike API
-                                  } else {
-                                    // If the post is not liked, like the post
-                                    post.hasSaved = true;
-
-                                    communityprovider.savedCommunityAPI(
-                                        post.id.toString()); // Call like API
-                                  }
-                                  // Call setState to update the UI immediately
-                                  setState(() {});
-                                },
-                                reportController:
-                                    communityprovider.reportController,
-                              );
-                            },
-                          ),
-
-                        (communityprovider.communityList.length >= communityprovider.totalLength)?Container():
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // Call the API to fetch more blogs
-                                    communityprovider.getCommunityAPI(false);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: CraftColors.neutralBlue800,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
+                        child: ListView(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Hello ${GlobalLists.customerName} !",
+                                        style: CraftStyles.tsWhiteNeutral50W700,
+                                      ),
+                                       Row(
+                                         children: [
+                                           SvgPicture.asset(
+                                                                   CraftImagePath.notification,
+                                                                   width: 30, // Play button size
+                                                                   height: 30, // Adjust size as needed
+                                                                 ),
+                                                                 SizedBox(width: SizeConfig.blockSizeHorizontal*2,),
+                                                                  GestureDetector(
+                                                                    onTap: ()
+                                                                    {
+                                                                       Navigator.of(context)
+                          .pushNamed(
+                            SavedPostScreen.route,
+                          )
+                          .then((value) {});
+                                                                    },
+                                                                    child: SvgPicture.asset(
+                                                                                            CraftImagePath.saved,
+                                                                                            width: 30, // Play button size
+                                                                                            height: 30, // Adjust size as needed
+                                                                                          ),
+                                                                  ),
+                                         ],
+                                       ),
+                                     
+                                    ],
                                   ),
-                                  child:communityprovider.isgetCommunityLoading?CircularProgressIndicator(color: CraftColors.neutral100,): Text(
-                                    "View More",
-                                    style: CraftStyles.tsWhiteNeutral50W60016
-                                        .copyWith(fontSize: 12),
+                                  SizedBox(height: SizeConfig.blockSizeVertical*2,),
+                                  Text(
+                                    "What’s new with you? Would you like to share something with the community?🤗",
+                                    style: CraftStyles.tsWhiteNeutral300W400,
+                                  ),
+                                ],
+                              ),
+                            ),
+                        GlobalLists.authtoken!=""?Container(): GlobalLists.communityPlan == "Yes"?Container():     joinCommunity(
+                              tag: "",
+                              title: "Join the CraftSchool \nCommunity",
+                              subTitle:
+                                  "Connect with filmmakers and industry \nexperts, wherever you are.",
+                              textStyle: CraftStyles.tsdarkBrownW500,
+                              textBackground: CraftColors.lightOrange,
+                              image: CraftImagePath.bannerImage2,
+                              titleText: "Exclusive Community",
+                              subTitleText:
+                                  "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"),
+            Text(communityprovider.communityList.length.toString()),
+                            // List of posts
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              itemCount: communityprovider.communityList.length,
+                              itemBuilder: (context, index) {
+                                
+                                return PostWidget(
+                                  post: communityprovider.communityList[index],
+                                  index: index,
+                                  onCommentPostTap: (index) {
+                                    communityprovider.commentList.clear();
+                                    communityprovider.commentsCommunityAPI(
+                                        communityprovider.communityList[index].id
+                                            .toString());
+                                    _showCommentBottomSheet(communityprovider
+                                        .communityList[index].id
+                                        .toString());
+                                  },
+                                  onReportPostTap: (index) {
+                                    {
+                                      // Handle report submission logic
+                                      String reason =
+                                          communityprovider.reportController.text;
+                                      if (reason.isNotEmpty) {
+                                        // Call the report API or handle reporting here
+                                        print("Reporting Post: $reason");
+                                        Navigator.pop(
+                                            context); // Close the report sheet after submission
+                                        communityprovider.reportCommunityAPI(
+                                            communityprovider
+                                                .communityList[index].id
+                                                .toString(),
+                                            reason);
+                                      } else {
+                                        // Show some error if reason is empty
+                                        print(
+                                            "Please provide a reason for reporting.");
+                                      }
+                                    }
+                                  },
+                                  onDeletePostTap: (index) {
+                                    communityprovider.deleteCommunityAPI(
+                                        communityprovider.communityList[index].id
+                                            .toString());
+                                  },
+                                  onLikeTap: (index) {
+                                    print("like");
+                                    final post =
+                                        communityprovider.communityList[index];
+                                    int postcount = int.parse(post.likeCount);
+                                    // Check if the post is already liked
+                                    if (post.hasLiked) {
+                                      // If the post is liked, dislike the post
+                                      post.hasLiked = false;
+                                      postcount--; // Decrease the like count
+                                      if (postcount >= 0) {
+                                        post.likeCount = postcount.toString();
+                                      }
+            
+                                      communityprovider.dislikeCommunityAPI(
+                                          post.id.toString()); // Call dislike API
+                                    } else {
+                                      // If the post is not liked, like the post
+                                      post.hasLiked = true;
+                                      postcount++; // Increase the like count
+                                      post.likeCount = postcount.toString();
+                                      communityprovider.likeCommunityAPI(
+                                          post.id.toString()); // Call like API
+                                    }
+            
+                                    // Call setState to update the UI immediately
+                                    setState(() {});
+                                  },
+                                  onSaveButtonOnTap: (index) {
+                                    print("saved");
+                                    final post =
+                                        communityprovider.communityList[index];
+            
+                                    if (post.hasSaved) {
+                                      // If the post is liked, dislike the post
+                                      post.hasSaved = false;
+            
+                                      communityprovider.unsavedCommunityAPI(
+                                          post.id.toString()); // Call dislike API
+                                    } else {
+                                      // If the post is not liked, like the post
+                                      post.hasSaved = true;
+            
+                                      communityprovider.savedCommunityAPI(
+                                          post.id.toString()); // Call like API
+                                    }
+                                    // Call setState to update the UI immediately
+                                    setState(() {});
+                                  },
+                                  reportController:
+                                      communityprovider.reportController,
+                                );
+                              },
+                            ),
+            
+                          (communityprovider.communityList.length >= communityprovider.totalLength)?Container():
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // Call the API to fetch more blogs
+                                      communityprovider.getCommunityAPI(false);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: CraftColors.neutralBlue800,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child:communityprovider.isgetCommunityLoading?CircularProgressIndicator(color: CraftColors.neutral100,): Text(
+                                      "View More",
+                                      style: CraftStyles.tsWhiteNeutral50W60016
+                                          .copyWith(fontSize: 12),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-
-                            
-                               
-                              upcomingCourses("Upcoming Course"),
-                          // // Section 1
-                          // SizedBox(
-                          //   key:
-                          //       _section1Key, // Add key to scroll to this section
-                          //   height: SizeConfig.safeBlockVertical * 100,
-                          //   child: upcomingCourses("Upcoming Courses"),
-                          // ),
-                          // // Section 2
-                          // SizedBox(
-                          //   key:
-                          //       _section2Key, // Add key to scroll to this section
-                          //   height: SizeConfig.safeBlockVertical * 100,
-                          //   child: upcomingCourses("Competitions"),
-                          // ),
-                          // // Section 3
-                          // SizedBox(
-                          //   key:
-                          //       _section3Key, // Add key to scroll to this section
-                          //   height: SizeConfig.safeBlockVertical * 100,
-                          //   child: upcomingCourses("Live & Webinars"),
-                          // ),
-                        ],
-                      ),
-                    ),
-
-                    // Floating action row fixed at the bottom
-                    // Align(
-                    //   alignment: Alignment.bottomCenter,
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(12.0),
-                    //     child: Container(
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.black.withOpacity(0.6),
-                    //         borderRadius: BorderRadius.circular(12),
-                    //       ),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //         children: [
-                    //           // "Upcoming Courses" button with color change
-                    //           IconButton(
-                    //             icon: Text(
-                    //               'Upcoming Courses',
-                    //               style:
-                    //                   CraftStyles.tsNeutral100W40010.copyWith(
-                    //                 color: _currentSection == 1
-                    //                     ? Colors.green
-                    //                     : (_currentSection == 0
-                    //                         ? Colors.white
-                    //                         : Colors.white),
-                    //               ),
-                    //             ),
-                    //             onPressed: () {
-                    //               _scrollToSection(
-                    //                   _section1Key); // Scroll to Section 1
-                    //             },
-                    //           ),
-                    //           // "Competitions" button with color change
-                    //           IconButton(
-                    //             icon: Text(
-                    //               'Competitions',
-                    //               style:
-                    //                   CraftStyles.tsNeutral100W40010.copyWith(
-                    //                 color: _currentSection == 2
-                    //                     ? Colors.green
-                    //                     : (_currentSection == 0
-                    //                         ? Colors.white
-                    //                         : Colors.white),
-                    //               ),
-                    //             ),
-                    //             onPressed: () {
-                    //               _scrollToSection(
-                    //                   _section2Key); // Scroll to Section 2
-                    //             },
-                    //           ),
-                    //           // "Live & Webinars" button with color change
-                    //           IconButton(
-                    //             icon: Text(
-                    //               'Live & Webinars',
-                    //               style:
-                    //                   CraftStyles.tsNeutral100W40010.copyWith(
-                    //                 color: _currentSection == 3
-                    //                     ? Colors.green
-                    //                     : (_currentSection == 0
-                    //                         ? Colors.white
-                    //                         : Colors.white),
-                    //               ),
-                    //             ),
-                    //             onPressed: () {
-                    //               _scrollToSection(
-                    //                   _section3Key); // Scroll to Section 3
-                    //             },
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // Floating action button for creating post
-                    Positioned(
-                      bottom:
-                          80, // Position the create post button slightly above the row
-                      right: 16,
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(CreatePostScreen.route,arguments: {
-   'postcomment': '',
-    'postId': '',
-    'medias': [],
-    'iseditView': false,
-  },);
-                        },
-                        backgroundColor: CraftColors.neutralBlue750,
-                        child: Icon(Icons.add, color: CraftColors.neutral100),
-                      ),
-                    ),
-
-                    // Arrow Button to scroll to top when one of the sections is visible
-                    if (_showArrowButton)
-                      Positioned(
-                        bottom: 150, // Adjust to your liking
-                        right: 16,
-                        child: FloatingActionButton(
-                          onPressed: _scrollToTop,
-                          backgroundColor: CraftColors.neutralBlue750,
-                          child: Icon(Icons.arrow_upward,
-                              color: CraftColors.neutral100),
+            
+                              
+                                 
+                                upcomingCourses("Upcoming Course"),
+                            // // Section 1
+                            // SizedBox(
+                            //   key:
+                            //       _section1Key, // Add key to scroll to this section
+                            //   height: SizeConfig.safeBlockVertical * 100,
+                            //   child: upcomingCourses("Upcoming Courses"),
+                            // ),
+                            // // Section 2
+                            // SizedBox(
+                            //   key:
+                            //       _section2Key, // Add key to scroll to this section
+                            //   height: SizeConfig.safeBlockVertical * 100,
+                            //   child: upcomingCourses("Competitions"),
+                            // ),
+                            // // Section 3
+                            // SizedBox(
+                            //   key:
+                            //       _section3Key, // Add key to scroll to this section
+                            //   height: SizeConfig.safeBlockVertical * 100,
+                            //   child: upcomingCourses("Live & Webinars"),
+                            // ),
+                          ],
                         ),
                       ),
-
-                    if (provider.isContainerVisible)
-                      SlidingMenu(isVisible: provider.isContainerVisible),
-                    if (provider.isCategoryVisible)
-                      SlidingCategory(
-                        isExpanded: provider.isCategoryVisible,
-                        onToggleExpansion: provider.toggleSlidingCategory,
+            
+                      // Floating action row fixed at the bottom
+                      // Align(
+                      //   alignment: Alignment.bottomCenter,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(12.0),
+                      //     child: Container(
+                      //       decoration: BoxDecoration(
+                      //         color: Colors.black.withOpacity(0.6),
+                      //         borderRadius: BorderRadius.circular(12),
+                      //       ),
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //         children: [
+                      //           // "Upcoming Courses" button with color change
+                      //           IconButton(
+                      //             icon: Text(
+                      //               'Upcoming Courses',
+                      //               style:
+                      //                   CraftStyles.tsNeutral100W40010.copyWith(
+                      //                 color: _currentSection == 1
+                      //                     ? Colors.green
+                      //                     : (_currentSection == 0
+                      //                         ? Colors.white
+                      //                         : Colors.white),
+                      //               ),
+                      //             ),
+                      //             onPressed: () {
+                      //               _scrollToSection(
+                      //                   _section1Key); // Scroll to Section 1
+                      //             },
+                      //           ),
+                      //           // "Competitions" button with color change
+                      //           IconButton(
+                      //             icon: Text(
+                      //               'Competitions',
+                      //               style:
+                      //                   CraftStyles.tsNeutral100W40010.copyWith(
+                      //                 color: _currentSection == 2
+                      //                     ? Colors.green
+                      //                     : (_currentSection == 0
+                      //                         ? Colors.white
+                      //                         : Colors.white),
+                      //               ),
+                      //             ),
+                      //             onPressed: () {
+                      //               _scrollToSection(
+                      //                   _section2Key); // Scroll to Section 2
+                      //             },
+                      //           ),
+                      //           // "Live & Webinars" button with color change
+                      //           IconButton(
+                      //             icon: Text(
+                      //               'Live & Webinars',
+                      //               style:
+                      //                   CraftStyles.tsNeutral100W40010.copyWith(
+                      //                 color: _currentSection == 3
+                      //                     ? Colors.green
+                      //                     : (_currentSection == 0
+                      //                         ? Colors.white
+                      //                         : Colors.white),
+                      //               ),
+                      //             ),
+                      //             onPressed: () {
+                      //               _scrollToSection(
+                      //                   _section3Key); // Scroll to Section 3
+                      //             },
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+            
+                      // Floating action button for creating post
+                      Positioned(
+                        bottom:
+                            80, // Position the create post button slightly above the row
+                        right: 16,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(CreatePostScreen.route,arguments: {
+               'postcomment': '',
+                'postId': '',
+                'medias': [],
+                'iseditView': false,
+              },);
+                          },
+                          backgroundColor: CraftColors.neutralBlue750,
+                          child: Icon(Icons.add, color: CraftColors.neutral100),
+                        ),
                       ),
-                  ],
-                );
-              }));
+            
+                      // Arrow Button to scroll to top when one of the sections is visible
+                      if (_showArrowButton)
+                        Positioned(
+                          bottom: 150, // Adjust to your liking
+                          right: 16,
+                          child: FloatingActionButton(
+                            onPressed: _scrollToTop,
+                            backgroundColor: CraftColors.neutralBlue750,
+                            child: Icon(Icons.arrow_upward,
+                                color: CraftColors.neutral100),
+                          ),
+                        ),
+            
+                      if (provider.isContainerVisible)
+                        SlidingMenu(isVisible: provider.isContainerVisible),
+                      if (provider.isCategoryVisible)
+                        SlidingCategory(
+                          isExpanded: provider.isCategoryVisible,
+                          onToggleExpansion: provider.toggleSlidingCategory,
+                        ),
+                    ],
+                  );
+                })),
+          );
         }));
   }
 
@@ -599,12 +823,42 @@ Text(communityprovider.communityList.length.toString()),
                                 ),
                                 SizedBox(
                                     height: SizeConfig.blockSizeVertical * 1),
-                                Text(
-                                 provider.upcomingCourseList[index].instructor,
-                                  style: CraftStyles.tsWhiteNeutral50W60016
-                                      .copyWith(fontSize: 14),
+                                Row(
+                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                       mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                         provider.upcomingCourseList[index].instructor,
+                                          style: CraftStyles.tsWhiteNeutral50W60016
+                                              .copyWith(fontSize: 14),
+                                        ),
+                                         SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 1),
+                                     Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 12.0,
+                                      backgroundImage:
+                                          NetworkImage(provider.upcomingCourseList[index].masterProfilePhoto),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          SizeConfig.blockSizeHorizontal * 2,
+                                    ),
+                                    Text(
+                                      provider.upcomingCourseList[index].masterName,
+                                      style: CraftStyles.tsWhiteNeutral300W500
+                                          .copyWith(fontSize: 14),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
+                                 SizedBox(
                                     height: SizeConfig.blockSizeVertical * 1),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -625,7 +879,15 @@ Text(communityprovider.communityList.length.toString()),
                                       width:
                                           SizeConfig.safeBlockHorizontal * 5,
                                     ),
-                                    Container(
+                                    
+                                  
+                                  ],
+                                ),
+                                SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 1),
+                                      ],
+                                    ),
+                                      Container(
                                       width:
                                           SizeConfig.blockSizeHorizontal * 20,
                                       height:
@@ -652,26 +914,8 @@ Text(communityprovider.communityList.length.toString()),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                    height: SizeConfig.blockSizeVertical * 1),
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 12.0,
-                                      backgroundImage:
-                                          NetworkImage(provider.upcomingCourseList[index].masterProfilePhoto),
-                                    ),
-                                    SizedBox(
-                                      width:
-                                          SizeConfig.blockSizeHorizontal * 2,
-                                    ),
-                                    Text(
-                                      provider.upcomingCourseList[index].masterName,
-                                      style: CraftStyles.tsWhiteNeutral300W500
-                                          .copyWith(fontSize: 14),
-                                    ),
-                                  ],
-                                ),
+                               
+                               
                               ],
                             ),
                           ),
@@ -687,12 +931,11 @@ Text(communityprovider.communityList.length.toString()),
       );
     });
   }
-
 void _showCommentBottomSheet(String postId) {
   showModalBottomSheet(
     backgroundColor: CraftColors.neutral900,
     context: routeGlobalKey.currentContext!,
-    isScrollControlled: true, // Important
+    isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
@@ -703,13 +946,13 @@ void _showCommentBottomSheet(String postId) {
             padding: EdgeInsets.only(
               left: 20,
               right: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom, // Handle keyboard
+              bottom: MediaQuery.of(context).viewInsets.bottom,
               top: 20,
             ),
             child: DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              minChildSize: 0.4,
-              maxChildSize: 0.95,
+              initialChildSize: 0.6, // Start at 40% of screen height
+              minChildSize: 0.3, // Minimum height 30%
+              maxChildSize: 0.6, // Maximum height 60%
               expand: false,
               builder: (context, scrollController) {
                 return Column(
@@ -728,50 +971,27 @@ void _showCommentBottomSheet(String postId) {
                       child: ListView.builder(
                         controller: scrollController,
                         itemCount: communityprovider.commentList.length,
+                        shrinkWrap: true, // Ensure it doesn't take extra space
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              ShowDialogs.showConfirmDialogdelete(
-                                  context,
-                                  "Delete",
-                                  "Are You Sure You Want To Remove Comment ?",
-                                  () {
-                                Navigator.pop(context);
-                                communityprovider.deleteCommentCommunityAPI(
-                                  communityprovider.commentList[index].commentId.toString(),
-                                );
-                                communityprovider.commentController.clear();
-                                final post = communityprovider.communityList
-                                    .firstWhere((post) => post.id.toString() == postId);
-                                if (int.parse(post.commentCount) > 0) {
-                                  post.commentCount =
-                                      (int.parse(post.commentCount) - 1).toString();
-                                }
-                                setState(() {});
-                                Navigator.pop(context);
-                              });
+                          return CommentWidget(
+                            comment: communityprovider.commentList[index],
+                            onLikeTap: (index) {
+                              final post = communityprovider.commentList[index];
+                              int postcount = int.parse(post.commentLikeCount ?? "0");
+                              if (post.hasCommentLiked!) {
+                                post.hasCommentLiked = false;
+                                postcount--;
+                                communityprovider.unlikeCommentCommunityAPI(
+                                    post.commentId.toString());
+                              } else {
+                                post.hasCommentLiked = true;
+                                postcount++;
+                                post.commentLikeCount = postcount.toString();
+                                communityprovider.likeCommentCommunityAPI(
+                                    post.commentId.toString());
+                              }
                             },
-                            child: CommentWidget(
-                              comment: communityprovider.commentList[index],
-                              onLikeTap: (index) {
-                                final post = communityprovider.commentList[index];
-                                int postcount = int.parse(post.commentLikeCount ?? "0");
-                                if (post.hasCommentLiked!) {
-                                  post.hasCommentLiked = false;
-                                  postcount--;
-                                  communityprovider.unlikeCommentCommunityAPI(
-                                      post.commentId.toString());
-                                } else {
-                                  post.hasCommentLiked = true;
-                                  postcount++;
-                                  post.commentLikeCount = postcount.toString();
-                                  communityprovider.likeCommentCommunityAPI(
-                                      post.commentId.toString());
-                                }
-                                setState(() {});
-                              },
-                              index: index,
-                            ),
+                            index: index,
                           );
                         },
                       ),
@@ -802,7 +1022,6 @@ void _showCommentBottomSheet(String postId) {
                                 .firstWhere((post) => post.id.toString() == postId);
                             post.commentCount =
                                 (int.parse(post.commentCount) + 1).toString();
-                            setState(() {});
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -827,5 +1046,145 @@ void _showCommentBottomSheet(String postId) {
     },
   );
 }
+
+// void _showCommentBottomSheet(String postId) {
+//   showModalBottomSheet(
+//     backgroundColor: CraftColors.neutral900,
+//     context: routeGlobalKey.currentContext!,
+//     isScrollControlled: true, // Important
+//     shape: const RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+//     ),
+//     builder: (context) {
+//       return Consumer<CommunityProvider>(
+//         builder: (context, communityprovider, _) {
+//           return Padding(
+//             padding: EdgeInsets.only(
+//               left: 20,
+//               right: 20,
+//               bottom: MediaQuery.of(context).viewInsets.bottom, // Handle keyboard
+//               top: 20,
+//             ),
+//             child: DraggableScrollableSheet(
+//               initialChildSize: 0.8,
+//               minChildSize: 0.4,
+//               maxChildSize: 0.95,
+//               expand: false,
+//               builder: (context, scrollController) {
+//                 return Column(
+//                   children: [
+//                     Container(
+//                       height: 4,
+//                       width: 40,
+//                       margin: EdgeInsets.only(bottom: 12),
+//                       decoration: BoxDecoration(
+//                         color: Colors.grey,
+//                         borderRadius: BorderRadius.circular(12),
+//                       ),
+//                     ),
+//                     Text("Comments", style: CraftStyles.tsWhiteNeutral50W60016),
+//                     Expanded(
+//                       child: ListView.builder(
+//                         controller: scrollController,
+//                         itemCount: communityprovider.commentList.length,
+//                         itemBuilder: (context, index) {
+//                           return GestureDetector(
+//                             onTap: () {
+//                               ShowDialogs.showConfirmDialogdelete(
+//                                   context,
+//                                   "Delete",
+//                                   "Are You Sure You Want To Remove Comment ?",
+//                                   () {
+//                                 Navigator.pop(context);
+//                                 communityprovider.deleteCommentCommunityAPI(
+//                                   communityprovider.commentList[index].commentId.toString(),
+//                                 );
+//                                 communityprovider.commentController.clear();
+//                                 final post = communityprovider.communityList
+//                                     .firstWhere((post) => post.id.toString() == postId);
+//                                 if (int.parse(post.commentCount) > 0) {
+//                                   post.commentCount =
+//                                       (int.parse(post.commentCount) - 1).toString();
+//                                 }
+//                                 setState(() {});
+//                                 Navigator.pop(context);
+//                               });
+//                             },
+//                             child: CommentWidget(
+//                               comment: communityprovider.commentList[index],
+//                               onLikeTap: (index) {
+//                                 final post = communityprovider.commentList[index];
+//                                 int postcount = int.parse(post.commentLikeCount ?? "0");
+//                                 if (post.hasCommentLiked!) {
+//                                   post.hasCommentLiked = false;
+//                                   postcount--;
+//                                   communityprovider.unlikeCommentCommunityAPI(
+//                                       post.commentId.toString());
+//                                 } else {
+//                                   post.hasCommentLiked = true;
+//                                   postcount++;
+//                                   post.commentLikeCount = postcount.toString();
+//                                   communityprovider.likeCommentCommunityAPI(
+//                                       post.commentId.toString());
+//                                 }
+//                                 setState(() {});
+//                               },
+//                               index: index,
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                     ),
+//                     SizedBox(height: 10),
+//                     Row(
+//                       children: [
+//                         Expanded(
+//                           child: TextField(
+//                             controller: communityprovider.commentController,
+//                             decoration: InputDecoration(
+//                               hintText: 'Add a comment...',
+//                               border: OutlineInputBorder(
+//                                 borderRadius: BorderRadius.circular(12),
+//                                 borderSide: BorderSide(color: CraftColors.neutral100),
+//                               ),
+//                               hintStyle: TextStyle(color: CraftColors.neutral100),
+//                             ),
+//                             style: TextStyle(color: CraftColors.neutral100),
+//                           ),
+//                         ),
+//                         GestureDetector(
+//                           onTap: () {
+//                             communityprovider.addCommentCommunityAPI(
+//                                 postId, communityprovider.commentController.text);
+//                             communityprovider.commentController.clear();
+//                             final post = communityprovider.communityList
+//                                 .firstWhere((post) => post.id.toString() == postId);
+//                             post.commentCount =
+//                                 (int.parse(post.commentCount) + 1).toString();
+//                             setState(() {});
+//                           },
+//                           child: Padding(
+//                             padding: const EdgeInsets.all(10.0),
+//                             child: SvgPicture.asset(
+//                               CraftImagePath.publishlogo,
+//                               width: 24,
+//                               height: 24,
+//                               color: CraftColors.neutral100,
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                     SizedBox(height: 15),
+//                   ],
+//                 );
+//               },
+//             ),
+//           );
+//         },
+//       );
+//     },
+//   );
+// }
 
 }

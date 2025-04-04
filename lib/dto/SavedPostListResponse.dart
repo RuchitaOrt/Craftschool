@@ -44,6 +44,7 @@ class Datum {
   String commentCount;
   bool hasLiked;
   bool hasCommented;
+  String userProfilePic;
   bool hasSaved;
   String? timeAgo;
 
@@ -52,6 +53,7 @@ class Datum {
     required this.customerName,
     required this.createdAt,
     required this.post,
+    required this.userProfilePic,
     required this.customerId,
     required this.medias,
     required this.likeCount,
@@ -77,6 +79,7 @@ class Datum {
         hasLiked: json["has_liked"] ?? false,
         hasCommented: json["has_commented"] ?? false,
         hasSaved: json["has_saved"] ?? false,
+         userProfilePic: json["user_profile_pic"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -92,6 +95,7 @@ class Datum {
         "has_liked": hasLiked,
         "has_commented": hasCommented,
         "has_saved": hasSaved,
+        "user_profile_pic": userProfilePic ?? "",
       };
 }
 

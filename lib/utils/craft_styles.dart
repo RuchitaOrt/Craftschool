@@ -73,12 +73,17 @@ class CraftStyles {
   static const TextStyle tssecondary800W500 = TextStyle(
     color: CraftColors.secondary800,
     fontWeight: FontWeight.w500,
-    fontSize: 12.0,
+    fontSize: 10.0,
   );
     static const TextStyle tsdarkBrownW500 = TextStyle(
     color: CraftColors.darkBrown,
     fontWeight: FontWeight.w500,
-    fontSize: 12.0,
+    fontSize: 10.0,
+  );
+   static const TextStyle tspurpleW500 = TextStyle(
+    color: CraftColors.purple,
+    fontWeight: FontWeight.w500,
+    fontSize: 10.0,
   );
   static const TextStyle tsWhiteNeutral100W50014 = TextStyle(
     color: CraftColors.neutral100,
@@ -111,4 +116,31 @@ class CraftStyles {
     fontWeight: FontWeight.w600,
     fontSize: 12.0,
   );
+
+ static Color getTagBackgroundColor(String tag) {
+  switch (tag) {
+    case "New":
+      return CraftColors.secondary100;
+    case "Exclusively":
+      return CraftColors.redlight;
+    case "On Demand":
+      return CraftColors.purplelight;
+    default:
+      return CraftColors.secondary100;
+  }
+}
+
+static TextStyle getTagTextStyle(String tag) {
+  switch (tag) {
+    case "New":
+      return tssecondary800W500;
+      
+    case "Exclusively":
+      return tsdarkBrownW500;
+    case "On Demand":
+      return tspurpleW500;
+    default:
+      return tssecondary800W500;
+  }
+}
 }

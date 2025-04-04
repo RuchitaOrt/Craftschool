@@ -7,6 +7,7 @@ import 'package:craft_school/screens/personal_screen.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/screens/signup_screen.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
+import 'package:craft_school/utils/ShowDialog.dart';
 import 'package:craft_school/utils/craft_colors.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
@@ -149,7 +150,10 @@ class _SettingsState extends State<Settings> {
                 width: SizeConfig.blockSizeHorizontal * 32,
                 child: ElevatedButton(
                   onPressed: () {
-                  
+
+
+
+
                     Navigator.of(
                       routeGlobalKey.currentContext!,
                     ).pushNamed(
@@ -216,7 +220,7 @@ class _SettingsState extends State<Settings> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   textAlign: TextAlign.center,
-                  "Settings",
+                  "My Space",
                   style:
                       CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
                 ),
@@ -564,7 +568,14 @@ class _SettingsState extends State<Settings> {
                   child: GestureDetector(
                     onTap: ()
                     {
-                      personalprovider.logoutAPI("");
+                      ShowDialogs.logoutDialog(onYesPressed: ()
+                      {
+                        
+                         personalprovider.logoutAPI("");
+                      
+                      }
+                      );
+                     
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -586,7 +597,7 @@ class _SettingsState extends State<Settings> {
                               ],
                             ),
                           ),
-                          
+                           
                           
                         ],
                       ),
@@ -594,7 +605,12 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ),
-
+ Center(
+   child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Version: 1.0",style:   CraftStyles.tsWhiteNeutral300W400,),
+                          ),
+ ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 1,
               ),

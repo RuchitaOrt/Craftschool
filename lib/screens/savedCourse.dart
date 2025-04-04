@@ -347,22 +347,28 @@ class _SavedCourseScreenState extends State<SavedCourseScreen> {
                                                                         .blockSizeVertical *
                                                                     28,
                                                               ),
-                                                              // Padding(
-                                                              //   padding: const EdgeInsets.all(8.0),
-                                                              //   child: Container(
-                                                              //         decoration: BoxDecoration(
-                                                              //           color: CraftColors.secondary100,
-                                                              //           borderRadius: BorderRadius.circular(8),
-                                                              //         ),
-                                                              //         child: Padding(
-                                                              //           padding: const EdgeInsets.all(4.0),
-                                                              //           child: Text(
-                                                              //             "New !",
-                                                              //             style: CraftStyles.tssecondary800W500,
-                                                              //           ),
-                                                              //         ),
-                                                              //       ),
-                                                              // ),
+                                                              Padding(
+                                                                padding: const EdgeInsets.all(8.0),
+                                                                child: Container(
+                                                                      decoration: BoxDecoration(
+                                                                        color: CraftStyles.getTagBackgroundColor(provider
+                                                                      .savedcourseList[
+                                                                          index].tagName),
+                                                                        borderRadius: BorderRadius.circular(8),
+                                                                      ),
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.all(4.0),
+                                                                        child: Text(
+                                                                         provider
+                                                                      .savedcourseList[
+                                                                          index].tagName,
+                                                                          style: CraftStyles.getTagTextStyle(provider
+                                                                      .savedcourseList[
+                                                                          index].tagName),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                              ),
                                                             ],
                                                           ),
                                                           SizedBox(width: 10),
