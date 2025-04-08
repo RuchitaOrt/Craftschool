@@ -273,7 +273,11 @@ FormField<List<String>>(
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
-              
+               isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,

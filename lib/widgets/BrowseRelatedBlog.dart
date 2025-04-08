@@ -25,7 +25,7 @@ class BrowseRelatedBlog extends StatelessWidget {
         children: [
           Text(
             title,
-            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
           ),
           SizedBox(height: SizeConfig.blockSizeVertical * 2),
           SizedBox(
@@ -64,14 +64,15 @@ class BrowseRelatedBlog extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             // **Blog Title**
+                            SizedBox(height: 4),
                             Text(
                               imagePaths[index].title,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
-                              style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),
+                              style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
                             ),
 
-                            SizedBox(height: 4),
+                            SizedBox(height: 6),
 
                             // **Category with Avatar**
                             Row(
@@ -86,13 +87,13 @@ class BrowseRelatedBlog extends StatelessWidget {
                                     imagePaths[index].catName,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
+                                    style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 10),
                                   ),
                                 ),
                               ],
                             ),
 
-                            SizedBox(height: 6),
+                            SizedBox(height: 8),
 
                             // **Tags (Displayed Properly in Wrap)**
                             if (imagePaths[index].tags != null && imagePaths[index].tags.isNotEmpty)
@@ -101,7 +102,7 @@ class BrowseRelatedBlog extends StatelessWidget {
                                 runSpacing: 6.0, // Vertical space
                                 children: imagePaths[index].tags.map((tag) {
                                   return Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                                     decoration: BoxDecoration(
                                       color: CraftStyles.getTagBackgroundColor(tag),
                                       borderRadius: BorderRadius.circular(6),

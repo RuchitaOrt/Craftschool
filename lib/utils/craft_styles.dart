@@ -16,7 +16,7 @@ class CraftStyles {
   static const TextStyle tsWhiteNeutral50W700 = TextStyle(
     color: CraftColors.neutral50,
     fontWeight: FontWeight.w700,
-    fontSize: 25.0,
+    fontSize: 16.0,
   );
   static const TextStyle tsWhiteNeutral300W500 = TextStyle(
     color: CraftColors.neutral300,
@@ -63,7 +63,7 @@ class CraftStyles {
   static const TextStyle tsWhiteNeutral50W60016 = TextStyle(
     color: CraftColors.neutral50,
     fontWeight: FontWeight.w600,
-    fontSize: 14.0,
+    fontSize: 12.0,
   );
   static const TextStyle tsWhiteNeutral100W500 = TextStyle(
     color: CraftColors.neutral100,

@@ -86,6 +86,11 @@ class _SettingsState extends State<Settings> {
                   onMenuPressed: () {
                     provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                   },
+                   isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                      onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isContainerVisible,
                 ),
               ),
@@ -222,7 +227,7 @@ class _SettingsState extends State<Settings> {
                   textAlign: TextAlign.center,
                   "My Space",
                   style:
-                      CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
+                      CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
                 ),
               ),
 
@@ -247,7 +252,7 @@ class _SettingsState extends State<Settings> {
                               textAlign: TextAlign.center,
                               "Personal",
                               style: CraftStyles.tsWhiteNeutral50W700
-                                  .copyWith(fontSize: 20),
+                                  .copyWith(fontSize: 16),
                             ),
  GestureDetector(
   onTap: ()
@@ -262,7 +267,7 @@ class _SettingsState extends State<Settings> {
                                 textAlign: TextAlign.center,
                                 "Edit",
                                 style: CraftStyles.tsWhiteNeutral50W700
-                                    .copyWith(fontSize: 16,
+                                    .copyWith(fontSize: 14,
                                     decoration: TextDecoration.underline,
                                     decorationColor: CraftColors.neutral100,
                                     decorationThickness: 0.7),
@@ -306,7 +311,7 @@ class _SettingsState extends State<Settings> {
                               textAlign: TextAlign.center,
                               "Account",
                               style: CraftStyles.tsWhiteNeutral50W700
-                                  .copyWith(fontSize: 20),
+                                  .copyWith(fontSize: 16),
                             ),
                             GestureDetector(
   onTap: ()
@@ -321,7 +326,7 @@ class _SettingsState extends State<Settings> {
                                 textAlign: TextAlign.center,
                                 "Edit",
                                 style: CraftStyles.tsWhiteNeutral50W700
-                                    .copyWith(fontSize: 16,
+                                    .copyWith(fontSize: 14,
                                     decoration: TextDecoration.underline,
                                     decorationColor: CraftColors.neutral100,
                                     decorationThickness: 0.7),
@@ -384,7 +389,7 @@ class _SettingsState extends State<Settings> {
                           textAlign: TextAlign.center,
                           "How to setup CraftSchool on any of these devices.",
                           style: CraftStyles.tsWhiteNeutral50W700
-                              .copyWith(fontSize: 20),
+                              .copyWith(fontSize: 16),
                         ),
                       ),
                          Center(
@@ -443,7 +448,7 @@ class _SettingsState extends State<Settings> {
                                 textAlign: TextAlign.center,
                                 "Membership",
                                 style: CraftStyles.tsWhiteNeutral50W700
-                                    .copyWith(fontSize: 20),
+                                    .copyWith(fontSize: 16),
                               ),
                        personalprovider.data.isEmpty?Container():     personalprovider.data[0].memberShip.isNotEmpty? personalprovider.data[0].memberShip[0].planName!=""?GestureDetector(
                                 onTap: ()
@@ -497,7 +502,7 @@ class _SettingsState extends State<Settings> {
                             textAlign: TextAlign.center,
                          "Payment Method",
                             style: CraftStyles.tsWhiteNeutral50W700
-                                .copyWith(fontSize: 20),
+                                .copyWith(fontSize: 16),
                           ),
                         ),
                         Padding(
@@ -537,7 +542,7 @@ class _SettingsState extends State<Settings> {
                             textAlign: TextAlign.center,
                             "App Language",
                             style: CraftStyles.tsWhiteNeutral50W700
-                                .copyWith(fontSize: 20),
+                                .copyWith(fontSize: 16),
                           ),
                         ),
                         Padding(
@@ -591,7 +596,7 @@ class _SettingsState extends State<Settings> {
                                   textAlign: TextAlign.center,
                                   "Sign Out",
                                   style: CraftStyles.tsWhiteNeutral50W700
-                                      .copyWith(fontSize: 20),
+                                      .copyWith(fontSize: 16),
                                 ),
                                 Icon(Icons.logout,color: CraftColors.neutral100,)
                               ],
@@ -608,7 +613,7 @@ class _SettingsState extends State<Settings> {
  Center(
    child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Version: 1.0",style:   CraftStyles.tsWhiteNeutral300W400,),
+                            child: Text("Version: 1.1",style:   CraftStyles.tsWhiteNeutral300W400,),
                           ),
  ),
               SizedBox(

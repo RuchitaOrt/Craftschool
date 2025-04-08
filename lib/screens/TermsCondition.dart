@@ -40,6 +40,11 @@ class _TermsConditionState extends State<TermsCondition> {
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                 },
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                    onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isContainerVisible,
               ),
             ),

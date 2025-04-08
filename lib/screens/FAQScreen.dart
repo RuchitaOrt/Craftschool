@@ -111,7 +111,11 @@ class _FAQScreenState extends State<FAQScreen> {
                 onMenuPressed: provider.toggleSlidingContainer,
                 onCategoriesPressed: provider.toggleSlidingCategory,
                 isContainerVisible: provider.isContainerVisible,
-               
+                isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,
@@ -128,7 +132,7 @@ class _FAQScreenState extends State<FAQScreen> {
                         child: Text(
                           "FAQ",
                           style: CraftStyles.tsWhiteNeutral50W60016.copyWith(
-                            fontSize: 22,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -149,7 +153,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                     category.categoryName,
                                     style: CraftStyles.tsWhiteNeutral50W60016
                                         .copyWith(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -176,7 +180,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                             tilePadding:
                                                 const EdgeInsets.symmetric(
                                                     horizontal: 16,
-                                                    vertical: 8),
+                                                    vertical: 1),
                                             iconColor: CraftColors.neutral100,
                                             textColor: Colors.white,
                                             collapsedTextColor: Colors.white,
@@ -185,7 +189,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                               style: CraftStyles
                                                   .tsWhiteNeutral50W60016
                                                   .copyWith(
-                                                fontSize: 14,
+                                                fontSize: 13,
                                               ),
                                             ),
                                             // Custom Plus/Minus Icon
@@ -219,7 +223,7 @@ class _FAQScreenState extends State<FAQScreen> {
                                                   style: CraftStyles
                                                       .tsWhiteNeutral50W60016
                                                       .copyWith(
-                                                    fontSize: 14,
+                                                    fontSize: 12,
                                                     color: Colors.white70,
                                                   ),
                                                 ),

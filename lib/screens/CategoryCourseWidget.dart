@@ -94,7 +94,11 @@ Consumer<LandingScreenProvider>(
               onCategoriesPressed: () {
                 provider.toggleSlidingCategory();
               },
-             
+              isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
             ),
           ),
           backgroundColor: CraftColors.black18,
@@ -116,7 +120,7 @@ Consumer<LandingScreenProvider>(
                         children: [
                           Text(
                             CraftStrings.strAllCategory,
-                            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
                           ),
                           SizedBox(height: SizeConfig.blockSizeVertical * 2),
           
@@ -234,11 +238,12 @@ Consumer<LandingScreenProvider>(
                                               children: [
                                                 SizedBox(
                                                   width: SizeConfig.safeBlockHorizontal * 40,
+                                                  height: SizeConfig.blockSizeVertical*5,
                                                   child: Text(
                                                     course.name,
                                                     overflow: TextOverflow.ellipsis,
                                                     maxLines: 2,
-                                                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 13),
+                                                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
                                                   ),
                                                 ),
                                                 SizedBox(height: SizeConfig.blockSizeVertical * 0.5),
@@ -251,7 +256,7 @@ Consumer<LandingScreenProvider>(
                                                     SizedBox(width: SizeConfig.blockSizeHorizontal * 2),
                                                     Text(
                                                       course.instructor,
-                                                      style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
+                                                      style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 10),
                                                     ),
                                                   ],
                                                 ),

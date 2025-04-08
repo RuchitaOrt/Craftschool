@@ -145,62 +145,66 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
   }
 
   Widget _textFieldWidget() {
-    return TextFormField(
-      textCapitalization: widget.textCapitalization,
-      autovalidateMode: widget.autovalidateMode,
-      controller: widget.textEditingController,
-      readOnly: widget.isFieldReadOnly,
-      focusNode: _focusNode,
-      enabled: !widget.isFieldDisabled,
-      keyboardType: widget.textInputType,
-      textInputAction: TextInputAction.done,
-       inputFormatters: widget.inputFormatters ,
-      onEditingComplete: () {
-        FocusScope.of(context).unfocus();
-      },
-      validator: widget.validator,
-      onTap: () async {
-        if (widget.onTapField != null) {
-          String value = await widget.onTapField!();
-          updateTextValue(value);
-        }
-        _focusNode.requestFocus();
-      },
-      onChanged: (value) {
-        setState(() {
-          if (widget.onChange != null) {
-            widget.onChange!(value);
+    return Container(
+      height: widget.textFieldContainerHeight,
+      child: TextFormField(
+        
+        textCapitalization: widget.textCapitalization,
+        autovalidateMode: widget.autovalidateMode,
+        controller: widget.textEditingController,
+        readOnly: widget.isFieldReadOnly,
+        focusNode: _focusNode,
+        enabled: !widget.isFieldDisabled,
+        keyboardType: widget.textInputType,
+        textInputAction: TextInputAction.done,
+         inputFormatters: widget.inputFormatters ,
+        onEditingComplete: () {
+          FocusScope.of(context).unfocus();
+        },
+        validator: widget.validator,
+        onTap: () async {
+          if (widget.onTapField != null) {
+            String value = await widget.onTapField!();
+            updateTextValue(value);
           }
-        });
-      },
-      decoration: InputDecoration(
-        hintText: widget.hintText,
-        hintStyle: CraftStyles.tsWhiteNeutral300W50012,
-        errorStyle: CraftStyles.tsWhiteNeutral300W50012,
-        counterText: "",
-        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-        border: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
-        focusedBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: focusedBorder),
-        enabledBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
-        disabledBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
-        errorBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
-        focusedErrorBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: focusedBorder),
-        filled: true,
-        fillColor: CraftColors.neutralBlue850,
-        prefixIcon: (widget.leadingIcon != null)
-            ? Container(margin: const EdgeInsets.only(right: 10, left: 10), child: widget.leadingIcon)
-            : null,
-        errorMaxLines: 3,
-        prefixIconConstraints: const BoxConstraints(minHeight: 20, minWidth: 20, maxHeight: 40, maxWidth: 40),
-        suffixIcon: (widget.suffixIcon != null)
-            ? Container(margin: const EdgeInsets.only(right: 10, left: 10), child: widget.suffixIcon)
-            : null,
-        suffixIconConstraints: const BoxConstraints(minHeight: 20, minWidth: 20, maxHeight: 40, maxWidth: 40),
+          _focusNode.requestFocus();
+        },
+        onChanged: (value) {
+          setState(() {
+            if (widget.onChange != null) {
+              widget.onChange!(value);
+            }
+          });
+        },
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          hintStyle: CraftStyles.tsWhiteNeutral300W50012,
+          errorStyle: CraftStyles.tsWhiteNeutral300W50012,
+          counterText: "",
+          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          border: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
+          focusedBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: focusedBorder),
+          enabledBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
+          disabledBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
+          errorBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: enableBorder),
+          focusedErrorBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: focusedBorder),
+          filled: true,
+          fillColor: CraftColors.neutralBlue850,
+          prefixIcon: (widget.leadingIcon != null)
+              ? Container(margin: const EdgeInsets.only(right: 10, left: 10), child: widget.leadingIcon)
+              : null,
+          errorMaxLines: 3,
+          prefixIconConstraints: const BoxConstraints(minHeight: 20, minWidth: 20, maxHeight: 40, maxWidth: 40),
+          suffixIcon: (widget.suffixIcon != null)
+              ? Container(margin: const EdgeInsets.only(right: 10, left: 10), child: widget.suffixIcon)
+              : null,
+          suffixIconConstraints: const BoxConstraints(minHeight: 20, minWidth: 20, maxHeight: 40, maxWidth: 40),
+        ),
+        style:CraftStyles.tsWhiteNeutral300W50012,
+        minLines: widget.textFieldLines == 0 ? null : widget.textFieldLines,
+        maxLines: widget.textFieldLines == 0 ? null : widget.textFieldLines,
+        maxLength: widget.maxCharacterLength > 0 ? widget.maxCharacterLength : null,
       ),
-      style:CraftStyles.tsWhiteNeutral300W50012,
-      minLines: widget.textFieldLines == 0 ? null : widget.textFieldLines,
-      maxLines: widget.textFieldLines == 0 ? null : widget.textFieldLines,
-      maxLength: widget.maxCharacterLength > 0 ? widget.maxCharacterLength : null,
     );
   }
 

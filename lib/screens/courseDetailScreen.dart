@@ -55,6 +55,7 @@ print("courseDetail");
             .then((value) {
           final provider = Provider.of<CoursesProvider>(context, listen: false);
           if (!provider.iscourseDetailLoading) {
+            print("courseDetail");
             provider.getCourseDetailAPI(widget.slug).then((onValue)
             {
                 if(GlobalLists.authtoken!="")
@@ -225,7 +226,11 @@ print("courseDetail");
                                                 child: Stack(
                                                   children: [
                                                     // Thumbnail image
-                                                    AnimatedContainer(
+
+                                                     Consumer<VideoThumbnailCache>(
+      builder: (context, thumbnailCacheprovider, child) {
+        return 
+        AnimatedContainer(
                                                       duration: Duration(
                                                           milliseconds: 100),
                                                       width: SizeConfig
@@ -239,7 +244,7 @@ print("courseDetail");
                                                             BorderRadius
                                                                 .circular(8.0),
                                                         image: DecorationImage(
-                                                          image: thumbnailCache
+                                                          image: thumbnailCacheprovider
                                                               .getThumbnailImage(provider
                                                                   .courseDetailList[
                                                                       0]
@@ -249,7 +254,10 @@ print("courseDetail");
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),
-                                                    ),
+                                                    );
+      },
+    ),
+                                                   
 
                                                     // Play button (centered)
                                                     Positioned.fill(
@@ -489,7 +497,7 @@ print("courseDetail");
                     Text(
                       provider.courseDetailList[0].courseData[0].masterName,
                       style: CraftStyles.tsWhiteNeutral50W60016
-                          .copyWith(fontSize: 14),
+                          .copyWith(fontSize: 12),
                     ),
                   ],
                 ),
@@ -513,7 +521,7 @@ print("courseDetail");
                         : Text(
                             "${provider.courseDetailList[0].courseData[0].noOfModules} Modules",
                             style: CraftStyles.tsWhiteNeutral50W60016
-                                .copyWith(fontSize: 14),
+                                .copyWith(fontSize: 12),
                           ),
                   ],
                 ),
@@ -531,7 +539,7 @@ print("courseDetail");
                     Text(
                       provider.courseDetailList[0].courseData[0].duration,
                       style: CraftStyles.tsWhiteNeutral50W60016
-                          .copyWith(fontSize: 14),
+                          .copyWith(fontSize: 12),
                     ),
                   ],
                 ),
@@ -570,7 +578,7 @@ print("courseDetail");
                                   provider.courseDetailList[0].courseData[0]
                                       .topicCovered[index],
                                   style: CraftStyles.tsWhiteNeutral50W60016
-                                      .copyWith(fontSize: 14),
+                                      .copyWith(fontSize: 12),
                                 ),
                               ),
                             ),
@@ -674,11 +682,11 @@ print("courseDetail");
           Text(
             textAlign: TextAlign.center,
             CraftStrings.strCourseCertificateText,
-            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 18),
+            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),
           ),
-          SizedBox(
-            height: SizeConfig.blockSizeVertical * 1,
-          ),
+          // SizedBox(
+          //   height: SizeConfig.blockSizeVertical * 1,
+          // ),
           Center(
             child: SvgPicture.asset(
               CraftImagePath.courseCertificate,
@@ -1055,10 +1063,10 @@ print("courseDetail");
                 SizedBox(
                   height: SizeConfig.blockSizeVertical * 40,
                   child: Container(
-                    margin: EdgeInsets.all(8),
+                    // margin: EdgeInsets.all(8),
                     width: SizeConfig.safeBlockHorizontal * 100,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
+                        // borderRadius: BorderRadius.circular(24),
                         image: DecorationImage(
                             image: NetworkImage(provider.courseDetailList[0]
                                     .courseData[0].courseBannerMobile
@@ -1078,7 +1086,7 @@ print("courseDetail");
                           Text(
                             provider.courseDetailList[0].courseData[0].name,
                             style: CraftStyles.tsWhiteNeutral50W700
-                                .copyWith(fontSize: 16),
+                                .copyWith(fontSize: 14),
                           ),
                           SizedBox(
                             height: SizeConfig.blockSizeVertical * 1,
@@ -1087,8 +1095,8 @@ print("courseDetail");
                             provider.courseDetailList[0].courseData[0]
                                 .shortDescription,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 4,
-                            style: CraftStyles.tsWhiteNeutral200W500,
+                            maxLines: 2,
+                            style: CraftStyles.tsWhiteNeutral200W500.copyWith(fontSize: 12),
                           ),
                           SizedBox(
                             height: SizeConfig.blockSizeVertical * 1,
@@ -1220,7 +1228,7 @@ print("courseDetail");
                                               CraftStrings.strWatchTrailer,
                                               style: CraftStyles
                                                   .tsWhiteNeutral50W60016
-                                                  .copyWith(fontSize: 14),
+                                                  .copyWith(fontSize: 12),
                                             ),
                                           ],
                                         ),
@@ -1322,13 +1330,13 @@ print("courseDetail");
                       Text(
                         CraftStrings.strAboutCourse,
                         style: CraftStyles.tsWhiteNeutral50W700
-                            .copyWith(fontSize: 16),
+                            .copyWith(fontSize: 14),
                       ),
                       Text(
                         provider
                             .courseDetailList[0].courseData[0].contextOfCourse,
                         style: CraftStyles
-                            .tsWhiteNeutral200W500, // Customize your text style
+                            .tsWhiteNeutral200W500.copyWith(fontSize: 12), // Customize your text style
                         maxLines: provider.isExpanded
                             ? null
                             : 3, // Limit text to 3 lines if not expanded
@@ -1621,52 +1629,63 @@ print("courseDetail");
             return Center(child: CircularProgressIndicator());
           }
          
-          return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: CustomAppBar(
-                isCategoryVisible: provider.isCategoryVisible,
-                onMenuPressed: () {
-                  provider
-                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                },
-                onCategoriesPressed: () {
-                  provider.toggleSlidingCategory();
-                },
-                isContainerVisible: provider.isCategoryVisible,
-                
+          return WillPopScope(
+             onWillPop: ()async
+      {
+        provider.onCourseDetailBackPressed();
+        return false;
+      },
+            child: Scaffold(
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: CustomAppBar(
+                  isCategoryVisible: provider.isCategoryVisible,
+                  onMenuPressed: () {
+                    provider
+                        .toggleSlidingContainer(); // Trigger toggle when menu is pressed
+                  },
+                  onCategoriesPressed: () {
+                    provider.toggleSlidingCategory();
+                  },
+                  isContainerVisible: provider.isCategoryVisible,
+                   isSearchClickVisible: ()
+                  {
+                    provider.toggleSearchIconCategory();
+                  },
+                  isSearchValueVisible: provider.isSearchIconVisible,
+                ),
               ),
-            ),
-            backgroundColor: CraftColors.black18,
-            body: ChangeNotifierProvider(
-              create: (_) => CourseDetailProvider(),
-              child: Stack(
-                children: [
-                  ListView(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    children: [
-                      bannerImages(provider),
-                      browseOtherCourse(),
-                   GlobalLists.authtoken!=""?   ratingView():
-                   Container(child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Text(
-                        "Customer Review",
-                        style: CraftStyles.tsWhiteNeutral300W500,
-                      ),
-                   ),),
-                   reviewList()
-                    ],
-                  ),
-                  if (provider.isContainerVisible)
-                    SlidingMenu(isVisible: provider.isContainerVisible),
-                  if (provider.isCategoryVisible)
-                    SlidingCategory(
-                      isExpanded: provider.isCategoryVisible,
-                      onToggleExpansion: provider.toggleSlidingCategory,
+              backgroundColor: CraftColors.black18,
+              body: ChangeNotifierProvider(
+                create: (_) => CourseDetailProvider(),
+                child: Stack(
+                  children: [
+                    ListView(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      children: [
+                        bannerImages(provider),
+                        browseOtherCourse(),
+                     GlobalLists.authtoken!=""?   ratingView():
+                     Container(child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Text(
+                          "Customer Review",
+                          style: CraftStyles.tsWhiteNeutral300W500,
+                        ),
+                     ),),
+                     reviewList()
+                      ],
                     ),
-                ],
+                    if (provider.isContainerVisible)
+                      SlidingMenu(isVisible: provider.isContainerVisible),
+                    if (provider.isCategoryVisible)
+                      SlidingCategory(
+                        isExpanded: provider.isCategoryVisible,
+                        onToggleExpansion: provider.toggleSlidingCategory,
+                      ),
+                  ],
+                ),
               ),
             ),
           );
@@ -1806,20 +1825,22 @@ provider.reviewExpansion();
 Widget reviewList()
 {
  return Consumer<CoursesProvider>(builder: (context, provider, child) {
+
    return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      separatorBuilder: (context, index) => Divider(color: Colors.grey.shade800),
+       separatorBuilder: (context, index) => Divider(color: Colors.grey.shade800),
       itemCount: provider.courseReviewList.length,
       itemBuilder: (context, index) {
         final review = provider.courseReviewList[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 0.0,horizontal: 8),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            
             children: [
               CircleAvatar(
-                radius: 24,
+                radius: 20,
                 backgroundImage: review.userProfilePic.isNotEmpty
                     ? NetworkImage(review.userProfilePic)
                     : AssetImage(CraftImagePath.cinematography) as ImageProvider,
@@ -1828,26 +1849,28 @@ Widget reviewList()
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+               (review.usersName.isNotEmpty)?     Text(
                       review.usersName,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 14),
-                    ),
-                    SizedBox(height: 4),
+                    ):Container(),
+                    (review.usersName.isNotEmpty)?  SizedBox(height: 4):Container(),
                     Text(
                       review.comments,
                       style: TextStyle(color: Colors.white70, fontSize: 13),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 4),
                     RatingBarIndicator(
                       rating: review.rating.toDouble(),
                       itemBuilder: (context, _) => Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
+                      unratedColor: CraftColors.neutral100,
                       itemCount: 5,
                       itemSize: 16.0,
                       direction: Axis.horizontal,

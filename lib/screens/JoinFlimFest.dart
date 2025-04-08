@@ -157,6 +157,11 @@ class JoinFlimFest extends StatelessWidget {
                   provider
                       .toggleSlidingContainer(); // Trigger toggle when menu is pressed
                 },
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },

@@ -216,6 +216,11 @@ class _AccountScreenState extends State<AccountScreen> {
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               
               ),
             ),

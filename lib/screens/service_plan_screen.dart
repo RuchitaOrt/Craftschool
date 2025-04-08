@@ -67,6 +67,11 @@ class _PlanPriceCardScreenState extends State<PlanPriceCardScreen> {
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                 },
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                    onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isContainerVisible,
               ),
             ),
@@ -175,7 +180,7 @@ class _PlanPriceCardScreenState extends State<PlanPriceCardScreen> {
                                                     ['subtext']!,
                                                 style: CraftStyles
                                                     .tsWhiteNeutral300W500
-                                                    .copyWith(),
+                                                    .copyWith(fontSize: 12),
                                               ),
                                             ],
                                           ),
@@ -320,7 +325,7 @@ Widget simpleTransplantPlanWidget(LandingScreenProvider subscribedProvider) {
           Text(
             textAlign: TextAlign.center,
             "Simple, transparent plans",
-            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
+            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 20),
           ),
           SizedBox(
             height: SizeConfig.blockSizeVertical * 2,
@@ -639,7 +644,7 @@ Widget simpleTransplantPlanWidget(LandingScreenProvider subscribedProvider) {
                         Text(
                           CraftStrings.strSubscribeNow,
                           style: CraftStyles.tsWhiteNeutral50W60016
-                              .copyWith(fontSize: 16),
+                              .copyWith(fontSize: 14),
                         ),
                       ],
                     ),

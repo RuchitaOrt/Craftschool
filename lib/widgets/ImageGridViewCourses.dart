@@ -54,7 +54,7 @@ class ImageGridViewCourses extends StatelessWidget {
             ),
           ),
            child: Padding(
-                              padding: const EdgeInsets.only(left: 8, top: 8),
+                              padding: const EdgeInsets.only(left: 4, top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,

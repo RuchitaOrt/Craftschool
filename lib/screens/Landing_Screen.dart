@@ -235,7 +235,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     Text(
                       CraftStrings.strMasterClass,
                       style: CraftStyles.tsWhiteNeutral50W60016
-                          .copyWith(fontSize: 14),
+                          .copyWith(fontSize: 12),
                     ),
                   ],
                 ),
@@ -334,7 +334,7 @@ class _LandingScreenState extends State<LandingScreen> {
       String? courseId,
       String? trailorVideo}) {
     return SizedBox(
-      height: SizeConfig.blockSizeVertical * 50,
+      height: SizeConfig.blockSizeVertical * 53,
       child: Column(
         children: [
           Padding(
@@ -375,7 +375,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       children: [
                         TextSpan(
                           text: subTitle,
-                          style: CraftStyles.tsWhiteNeutral300W500,
+                          style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
                         ),
                         trailorVideo != ""
                             ? TextSpan(
@@ -394,7 +394,7 @@ class _LandingScreenState extends State<LandingScreen> {
           Container(
             margin: EdgeInsets.all(16),
             width: SizeConfig.safeBlockHorizontal * 100,
-            height: SizeConfig.blockSizeVertical * 38,
+            height: SizeConfig.blockSizeVertical * 35,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
                 image: DecorationImage(
@@ -442,7 +442,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     title!,
                     textAlign: TextAlign.center,
                     style: CraftStyles.tsWhiteNeutral50W60016
-                        .copyWith(fontSize: 18),
+                        .copyWith(fontSize: 16),
                   ),
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 1,
@@ -481,12 +481,12 @@ class _LandingScreenState extends State<LandingScreen> {
             ),
             SvgPicture.asset(
               CraftImagePath.starGold,
-                     
+                 width: 100,height: 100,    
             ),
             Text(
               textAlign: TextAlign.center,
               titleText!,
-              style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 18),
+              style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 16),
             ),
             SizedBox(
               height: SizeConfig.blockSizeVertical * 1,
@@ -497,7 +497,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 children: [
                   TextSpan(
                     text: subTitleText,
-                    style: CraftStyles.tsWhiteNeutral300W500,
+                    style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 14),
                   ),
                 ],
               ),
@@ -524,13 +524,13 @@ class _LandingScreenState extends State<LandingScreen> {
                             children: [
                               Image.asset(CraftImagePath.check),
                               SizedBox(
-                                  width: SizeConfig.blockSizeHorizontal * 5),
+                                  width: SizeConfig.blockSizeHorizontal * 1),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: SizeConfig.blockSizeHorizontal * 70,
+                                    width: SizeConfig.blockSizeHorizontal * 80,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: RichText(
@@ -543,7 +543,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                                       .joinCommunityList[index]
                                                   ['title']!,
                                               style: CraftStyles
-                                                  .tsWhiteNeutral300W500,
+                                                  .tsWhiteNeutral300W500.copyWith(fontSize: 12),
                                             ),
                                             TextSpan(
                                               text: provider
@@ -551,7 +551,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                                   ['subtext']!,
                                               style: CraftStyles
                                                   .tsWhiteNeutral300W500
-                                                  .copyWith(),
+                                                  .copyWith(fontSize: 11),
                                             ),
                                           ],
                                         ),
@@ -674,7 +674,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             Text(
                               provider.joinFestivalList[0].shortDesc,
                               style: CraftStyles.tsWhiteNeutral50W60016
-                                  .copyWith(fontSize: 14),
+                                  .copyWith(fontSize: 12),
                             ),
                           ],
                         ),
@@ -788,81 +788,84 @@ class _LandingScreenState extends State<LandingScreen> {
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 1,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 45,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (GlobalLists.authtoken != "") {
-                                  final joinprovider = Provider.of<SignUpProvider>(
-                                      context,
-                                      listen: false);
-                                  joinprovider.joinFlimFestAPI(provider.joinFestivalList[0].id.toString(),GlobalLists.customerName!,GlobalLists.customerPhone!,GlobalLists.customerEmail!);
-                                } else {
-                                  Navigator.of(context)
-                                      .pushNamed(
-                                        JoinFlimFest.route,arguments: provider.joinFestivalList[0].id.toString()
-                                      )
-                                      .then((value) {});
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(
-                                    SizeConfig.blockSizeHorizontal * 45,
-                                    SizeConfig.blockSizeVertical * 5),
-                                backgroundColor: CraftColors.primaryBlue550,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: SizeConfig.blockSizeHorizontal * 43,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (GlobalLists.authtoken != "") {
+                                    final joinprovider = Provider.of<SignUpProvider>(
+                                        context,
+                                        listen: false);
+                                    joinprovider.joinFlimFestAPI(provider.joinFestivalList[0].id.toString(),GlobalLists.customerName!,GlobalLists.customerPhone!,GlobalLists.customerEmail!);
+                                  } else {
+                                    Navigator.of(context)
+                                        .pushNamed(
+                                          JoinFlimFest.route,arguments: provider.joinFestivalList[0].id.toString()
+                                        )
+                                        .then((value) {});
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(
+                                      SizeConfig.blockSizeHorizontal * 45,
+                                      SizeConfig.blockSizeVertical * 5),
+                                  backgroundColor: CraftColors.primaryBlue550,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 5,
                                 ),
-                                elevation: 5,
-                              ),
-                              child: Text(
-                                CraftStrings.strJoinFirmFestival,
-                                style: CraftStyles.tsWhiteNeutral50W60016,
+                                child: Text(
+                                  CraftStrings.strJoinFirmFestival,
+                                  style: CraftStyles.tsWhiteNeutral50W60016,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 2,
-                          ),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 42,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(
-                                    SizeConfig.blockSizeVertical * 42,
-                                    SizeConfig.blockSizeVertical * 5),
-                                backgroundColor:
-                                    CraftColors.transparent.withOpacity(0.1),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  side: BorderSide(
-                                    color: CraftColors
-                                        .neutralBlue750, // Set the border color
-                                    width: 2, // Set the border width
-                                  ),
-                                ),
-                                elevation: 5,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    CraftStrings.strLearnMore,
-                                    style: CraftStyles.tsWhiteNeutral50W60016
-                                        .copyWith(fontSize: 14),
-                                  ),
-                                ],
-                              ),
+                            SizedBox(
+                              width: SizeConfig.blockSizeHorizontal * 2,
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              width: SizeConfig.blockSizeHorizontal * 42,
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(
+                                      SizeConfig.blockSizeVertical * 42,
+                                      SizeConfig.blockSizeVertical * 5),
+                                  backgroundColor:
+                                      CraftColors.transparent.withOpacity(0.1),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: CraftColors
+                                          .neutralBlue750, // Set the border color
+                                      width: 2, // Set the border width
+                                    ),
+                                  ),
+                                  elevation: 5,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      CraftStrings.strLearnMore,
+                                      style: CraftStyles.tsWhiteNeutral50W60016
+                                          .copyWith(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                       //      Marquee(
                       //       baseMilliseconds: 500,
@@ -913,7 +916,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Text(
                     tag!,
                     style: textStyle,
@@ -932,7 +935,7 @@ class _LandingScreenState extends State<LandingScreen> {
               ),
               Text(
                 subTitle!,
-                style: CraftStyles.tsWhiteNeutral200W500,
+                style: CraftStyles.tsWhiteNeutral200W500.copyWith(fontSize: 12),
               ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 1,
@@ -1026,7 +1029,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 Text(
                                   CraftStrings.strWatchTrailer,
                                   style: CraftStyles.tsWhiteNeutral50W60016
-                                      .copyWith(fontSize: 14),
+                                      .copyWith(fontSize: 12),
                                 ),
                               ],
                             ),
@@ -1113,7 +1116,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     Text(
                       "Master’s of the Craft school",
                       style: CraftStyles.tsWhiteNeutral50W700
-                          .copyWith(fontSize: 18),
+                          .copyWith(fontSize: 16),
                     ),
                     SizedBox(
                       height: SizeConfig.blockSizeVertical * 2,
@@ -1258,7 +1261,7 @@ class _LandingScreenState extends State<LandingScreen> {
               Text(
                 textAlign: TextAlign.center,
                 provider.banner3[0].courseTitle,
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
+                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
               ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
@@ -1294,12 +1297,12 @@ class _LandingScreenState extends State<LandingScreen> {
                                         "${index + 1}",
                                         style: CraftStyles
                                             .tsWhiteNeutral50W60016
-                                            .copyWith(fontSize: 18),
+                                            .copyWith(fontSize: 16),
                                       ),
                                       SizedBox(
                                           width:
                                               SizeConfig.blockSizeHorizontal *
-                                                  5),
+                                                  3),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1315,7 +1318,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                                   .title,
                                               style: CraftStyles
                                                   .tsWhiteNeutral50W60016
-                                                  .copyWith(fontSize: 16),
+                                                  .copyWith(fontSize: 14),
                                             ),
                                           ),
                                           SizedBox(
@@ -1333,7 +1336,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                               overflow: TextOverflow.ellipsis,
                                               style: CraftStyles
                                                   .tsWhiteNeutral300W500
-                                                  .copyWith(fontSize: 14),
+                                                  .copyWith(fontSize: 12),
                                             ),
                                           ),
                                           SizedBox(
@@ -1444,7 +1447,7 @@ class _LandingScreenState extends State<LandingScreen> {
               Text(
                 "Start Your Filmmaking Journey Today",
                 textAlign: TextAlign.center,
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
               ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
@@ -1486,7 +1489,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               Text(
                                 provider.flimJourneyList[index]['title']!,
                                 style: CraftStyles.tsWhiteNeutral50W60016
-                                    .copyWith(fontSize: 18),
+                                    .copyWith(fontSize: 16),
                               ),
                               SizedBox(
                                   height: SizeConfig.blockSizeVertical * 1),
@@ -1494,7 +1497,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 provider.flimJourneyList[index]['subtext']!,
                                 textAlign: TextAlign.center,
                                 style: CraftStyles.tsWhiteNeutral300W500
-                                    .copyWith(fontSize: 14),
+                                    .copyWith(fontSize: 12),
                               ),
                             ],
                           ),
@@ -1525,11 +1528,11 @@ class _LandingScreenState extends State<LandingScreen> {
                     Text(
                       "Every skill you need, every course you want",
                       style: CraftStyles.tsWhiteNeutral50W700
-                          .copyWith(fontSize: 18),
+                          .copyWith(fontSize: 16),
                     ),
                     SizedBox(height: SizeConfig.blockSizeVertical * 2),
                     SizedBox(
-                      height: SizeConfig.blockSizeVertical * 35,
+                      height: SizeConfig.blockSizeVertical * 40,
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
@@ -1552,8 +1555,8 @@ class _LandingScreenState extends State<LandingScreen> {
                                     child: Container(
                                       margin: EdgeInsets.all(8),
                                       width:
-                                          SizeConfig.safeBlockHorizontal * 40,
-                                      height: SizeConfig.blockSizeVertical * 22,
+                                          SizeConfig.safeBlockHorizontal * 42,
+                                      height: SizeConfig.blockSizeVertical * 26,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
                                       ),
@@ -1564,17 +1567,17 @@ class _LandingScreenState extends State<LandingScreen> {
                                                 .courseBannerMobile,
                                             width:
                                                 SizeConfig.safeBlockHorizontal *
-                                                    40,
+                                                    42,
                                             height:
                                                 SizeConfig.blockSizeVertical *
-                                                    20,
+                                                    26,
                                             fit: BoxFit.cover,
                                           ),
                                           if (provider.courses[index].tagName !=
                                               null)
                                             Positioned(
-                                              left: 10,
-                                              top: 10,
+                                              left: 8,
+                                              top: 8,
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   color:
@@ -1585,7 +1588,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                                 ),
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
+                                                      const EdgeInsets.all(4.0),
                                                   child: Text(
                                                     provider.courses[index]
                                                         .tagName!,
@@ -1614,7 +1617,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                           maxLines: 2,
                                           style: CraftStyles
                                               .tsWhiteNeutral50W60016
-                                              .copyWith(fontSize: 14),
+                                              .copyWith(fontSize: 12),
                                         ),
                                       ),
                                       SizedBox(
@@ -1638,7 +1641,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                             provider.courses[index].masterName,
                                             style: CraftStyles
                                                 .tsWhiteNeutral300W500
-                                                .copyWith(fontSize: 12),
+                                                .copyWith(fontSize: 11),
                                           ),
                                         ],
                                       ),
@@ -1743,7 +1746,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     Text(
                       "A dose of inspiration, whenever you need it.",
                       style: CraftStyles.tsWhiteNeutral50W700
-                          .copyWith(fontSize: 18),
+                          .copyWith(fontSize: 16),
                     ),
                     SizedBox(height: SizeConfig.blockSizeVertical * 2),
 

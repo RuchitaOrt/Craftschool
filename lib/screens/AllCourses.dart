@@ -26,7 +26,7 @@ class _AllCoursesState extends State<AllCourses> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+print("MYBOttom");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Only call the API if it's not already loading
 final providerSubscription =
@@ -73,7 +73,11 @@ final providerSubscription =
                     provider.toggleSlidingCategory();
                   },
                   isContainerVisible: provider.isCategoryVisible,
-               
+                isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                 ),
               ),
               backgroundColor: CraftColors.black18,

@@ -666,7 +666,7 @@ print("getsavedCommunityAPI");
         },
         (error) {
           // Handle error case
-          
+            print('Error getsavedCommunityAPI: $error');
           isLoading = false;
         },
         jsonval: jsonbody,

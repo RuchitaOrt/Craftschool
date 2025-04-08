@@ -83,7 +83,11 @@ print(provider.membershipList.length);
                   provider.toggleSlidingCategory();
                 },
                 isContainerVisible: provider.isContainerVisible,
-               
+                isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,

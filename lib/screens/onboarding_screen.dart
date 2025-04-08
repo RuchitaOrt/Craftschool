@@ -637,8 +637,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               subtitle: subInfoData[nextButtonClickCount]['subtitle']!,
               image: subInfoData[nextButtonClickCount]['image']!,
               color: CraftColors.neutralBlue800,
-              titleStyle: CraftStyles.tsWhiteNeutral50W70016,
-              subtitleStyle: CraftStyles.tsWhiteNeutral300W500,
+              titleStyle: CraftStyles.tsWhiteNeutral50W70016.copyWith(fontSize: 14),
+              subtitleStyle: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
             ),
           if (nextButtonClickCount == 2)
             buildMostInterestedCard(
@@ -646,16 +646,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 subtitle:
                     "Select the areas of filmmaking you’d like to explore.",
                 color: CraftColors.neutralBlue800,
-                titleStyle: CraftStyles.tsWhiteNeutral50W70016,
-                subtitleStyle: CraftStyles.tsWhiteNeutral300W500,
+                titleStyle: CraftStyles.tsWhiteNeutral50W70016.copyWith(fontSize: 14),
+                subtitleStyle: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
                 index: 2),
           if (nextButtonClickCount == 3)
             buildMostInterestedCard(
                 title: CraftStrings.str03Intro,
                 subtitle: CraftStrings.strAccountDetail,
                 color: CraftColors.neutralBlue800,
-                titleStyle: CraftStyles.tsWhiteNeutral50W70016,
-                subtitleStyle: CraftStyles.tsWhiteNeutral300W500,
+                titleStyle: CraftStyles.tsWhiteNeutral50W70016.copyWith(fontSize: 14),
+                subtitleStyle: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12),
                 index: 3),
           bottomNavigatorWidget(),
         ],

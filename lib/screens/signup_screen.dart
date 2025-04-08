@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:craft_school/common_widget/custom_text_field_widget.dart';
 import 'package:craft_school/main.dart';
+import 'package:craft_school/screens/onboarding_screen.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
@@ -303,54 +304,64 @@ SizedBox(width: SizeConfig.blockSizeVertical*0.5,),
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
-      backgroundColor: CraftColors.black18,
-      body: ChangeNotifierProvider(
-        create: (_) => SignUpProvider(),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            buildMostInterestedCard(
-              title: CraftStrings.str03Intro,
-              subtitle: CraftStrings.strAccountDetail,
-              color: CraftColors.neutralBlue800,
-              titleStyle: CraftStyles.tsWhiteNeutral50W70016,
-              subtitleStyle: CraftStyles.tsWhiteNeutral300W500,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Consumer<SignUpProvider>(
-                builder: (context, signUpProvider, _) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      if (signUpProvider.validateForm()) {
-                        // Proceed with form submission
-                         signUpProvider.createSignup();
-                      } else {
-                        // Form is invalid, show error messages
-                      }
-                     
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(SizeConfig.blockSizeVertical * 100,
-                          SizeConfig.blockSizeVertical * 5),
-                      backgroundColor: CraftColors.primaryBlue550,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 5,
-                    ),
-                    child: Text(
-                      CraftStrings.strSignUp,
-                      style: CraftStyles.tsWhiteNeutral50W60016,
-                    ),
-                  );
-                },
+    return WillPopScope(
+      onWillPop:  ()async
+      {
+                   Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => OnboardingScreen()));
+    return true;
+            
+            
+      },
+      child: Scaffold(
+        backgroundColor: CraftColors.black18,
+        body: ChangeNotifierProvider(
+          create: (_) => SignUpProvider(),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              buildMostInterestedCard(
+                title: CraftStrings.str03Intro,
+                subtitle: CraftStrings.strAccountDetail,
+                color: CraftColors.neutralBlue800,
+                titleStyle: CraftStyles.tsWhiteNeutral50W70016,
+                subtitleStyle: CraftStyles.tsWhiteNeutral300W500,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Consumer<SignUpProvider>(
+                  builder: (context, signUpProvider, _) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        if (signUpProvider.validateForm()) {
+                          // Proceed with form submission
+                           signUpProvider.createSignup();
+                        } else {
+                          // Form is invalid, show error messages
+                        }
+                       
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(SizeConfig.blockSizeVertical * 100,
+                            SizeConfig.blockSizeVertical * 5),
+                        backgroundColor: CraftColors.primaryBlue550,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 5,
+                      ),
+                      child: Text(
+                        CraftStrings.strSignUp,
+                        style: CraftStyles.tsWhiteNeutral50W60016,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

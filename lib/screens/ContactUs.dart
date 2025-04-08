@@ -171,7 +171,11 @@ class ContactUs extends StatelessWidget {
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
-             
+              isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,

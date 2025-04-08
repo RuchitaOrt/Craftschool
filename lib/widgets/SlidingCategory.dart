@@ -83,7 +83,7 @@ class _SlidingCategoryState extends State<SlidingCategory> {
                                 leading: SvgPicture.network(category.icon,width: 16,height: 16,),
                                 title: Text(
                                   category.categoryName,
-                                  style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),
+                                  style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
                                 ),
                                 trailing: Icon(
                                   expandedCategory == category.categoryName
@@ -151,7 +151,7 @@ class _SlidingCategoryState extends State<SlidingCategory> {
                                                       maxLines: 2,
                                                       overflow: TextOverflow.ellipsis,
                                                       style: CraftStyles.tsWhiteNeutral50W700.copyWith(
-                                                        fontSize: 14,
+                                                        fontSize: 10,
                                                       ),
                                                     ),
                                                   ),
@@ -162,7 +162,8 @@ class _SlidingCategoryState extends State<SlidingCategory> {
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       style: CraftStyles.tsWhiteNeutral50W700.copyWith(
-                                                        fontSize: 10,
+                                                        fontSize: 9,
+                                                        color: CraftColors.neutral400
                                                       ),
                                                     ),
                                                   ),

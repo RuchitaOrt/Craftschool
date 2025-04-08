@@ -67,7 +67,11 @@ class _MasterScreenDetailState extends State<MasterScreenDetail> {
                 isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                }, isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
                 },
+                isSearchValueVisible: provider.isSearchIconVisible,
                    onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
               ),
             ),
@@ -150,11 +154,11 @@ class _MasterScreenDetailState extends State<MasterScreenDetail> {
                                                                                       ),
                                                                                        SizedBox(height: SizeConfig.blockSizeVertical * 1),
                                                                                  SizedBox(
-                width: SizeConfig.blockSizeHorizontal * 35,
+                width: SizeConfig.blockSizeHorizontal * 45,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(SizeConfig.blockSizeHorizontal * 35,
+                    minimumSize: Size(SizeConfig.blockSizeHorizontal * 45,
                         SizeConfig.blockSizeVertical * 4),
                     backgroundColor: CraftColors.primaryBlue500,
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -261,10 +265,10 @@ Widget award(MasterAllProvider provider)
             children: [
               Text(
                 "${provider.masterCourses[0].masterName} Courses",
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
               ),
               SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
+                height: SizeConfig.blockSizeVertical * 1,
               ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 30,
@@ -321,7 +325,7 @@ Widget award(MasterAllProvider provider)
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                     style: CraftStyles.tsWhiteNeutral50W60016
-                                        .copyWith(fontSize: 14),
+                                        .copyWith(fontSize: 12),
                                   ),
                                 ),
                                

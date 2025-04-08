@@ -18,6 +18,7 @@ import 'package:craft_school/screens/DeviceLimitReachedScreen.dart';
 import 'package:craft_school/screens/Landing_Screen.dart';
 import 'package:craft_school/screens/RayzorPayHelper.dart';
 import 'package:craft_school/screens/SearchScreen.dart';
+import 'package:craft_school/screens/myCourse.dart';
 import 'package:craft_school/screens/signIn_screen.dart';
 import 'package:craft_school/utils/APIManager.dart';
 import 'package:craft_school/utils/GlobalLists.dart';
@@ -417,19 +418,28 @@ void toggleSearch() {
   bool _isSearchIconVisible = false;
 
   bool get isSearchIconVisible => _isSearchIconVisible;
+set isSearchIconVisible(bool value) {
+  _isSearchIconVisible = value;
+}
 
   // Method to toggle the visibility of the sliding container
   void toggleSearchIconCategory() {
+    print("toggleSearchIconCategory1");
     _isSearchIconVisible = !_isSearchIconVisible;
+    isSearchIconVisible=_isSearchIconVisible;
+    notifyListeners();
     if(_isSearchIconVisible)
     {
+    
  Navigator.push(
                   routeGlobalKey.currentContext!,
-                  MaterialPageRoute(builder: (context) => const SearchScreen()), // Open Search Screen
+                  MaterialPageRoute(builder: (context) =>  SearchScreen()), // Open Search Screen
                 );
     }else{
-      Navigator.pop(routeGlobalKey.currentContext!)
-;    }
+Navigator.push(
+                  routeGlobalKey.currentContext!,
+                  MaterialPageRoute(builder: (context) =>  LandingScreen()), // Open Search Screen
+                );   }
        
     notifyListeners(); // Notify listeners that the state has changed
   }
@@ -803,7 +813,8 @@ notifyListeners();
             GlobalLists.courseStatus =
                 _subscriptionList[0].courseStatus.toString();
 GlobalLists.planStatus=_subscriptionList[0].planInfo.isEmpty?"0":"1";
-GlobalLists.communityPlan=_subscriptionList[0].planInfo.isEmpty?"No":_subscriptionList[0].planInfo[0].communityAccess;
+GlobalLists.communityPlan=_subscriptionList[0].planInfo.isEmpty?
+"No":_subscriptionList[0].planInfo[0].communityAccess;
             print("#ruchita provider ${GlobalLists.clearCookies}");
             if (_subscriptionList[0].clearCookies == 1) {
               await SPManager().setAuthToken("");
@@ -1146,6 +1157,10 @@ void unSaveCustomerCategoryCourse(int categoryIndex,int index) {
     Navigator.of(routeGlobalKey.currentContext!).pushNamed(LandingScreen.route);
     return true;
   }
+  Future<bool> onCourseDetailBackPressed() async {
+    Navigator.of(routeGlobalKey.currentContext!).pushNamed(MyCourseScreen.route);
+    return true;
+  }
 
 
 //search
@@ -1176,6 +1191,7 @@ void unSaveCustomerCategoryCourse(int categoryIndex,int index) {
   }
   Future<void> getSearchList(String courseSlug) async {
     _isSearchLoading = true;
+    searchList=[];
     notifyListeners();
 
     var status1 = await ConnectionDetector.checkInternetConnection();

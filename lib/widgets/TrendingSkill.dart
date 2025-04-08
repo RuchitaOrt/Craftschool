@@ -29,7 +29,7 @@ class TrendingSkill extends StatelessWidget {
         children: [
           Text(
             title,
-            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+            style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
           ),
           SizedBox(
             height: SizeConfig.blockSizeVertical * 2,

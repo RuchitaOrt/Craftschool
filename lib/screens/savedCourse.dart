@@ -213,6 +213,11 @@ class _SavedCourseScreenState extends State<SavedCourseScreen> {
                   provider.toggleSlidingCategory();
                 },
                 isContainerVisible: provider.isContainerVisible,
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,
@@ -239,7 +244,7 @@ class _SavedCourseScreenState extends State<SavedCourseScreen> {
                               child: Text(
                                 CraftStrings.strSavedCourses,
                                 style: CraftStyles.tsWhiteNeutral50W700
-                                    .copyWith(fontSize: 18),
+                                    .copyWith(fontSize: 16),
                               ),
                             ),
                             SizedBox(
@@ -443,34 +448,50 @@ class _SavedCourseScreenState extends State<SavedCourseScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  GestureDetector(
-                                                      onTap: () {
-                                                        provider.unSavedCourseAPI(
-                                                            provider
-                                                                .savedcourseList[
-                                                                    index]
-                                                                .courseId);
-                                                        if (!provider
-                                                            .isSavedLoading) {
-                                                          provider
-                                                              .getSavedCourseAPI(
-                                                                  "");
-                                                        }
-                                                      },
-                                                      child: Align(
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Icon(
-                                                            Icons.close,
-                                                            color: CraftColors
-                                                                .neutral100,
-                                                          ),
-                                                        ),
-                                                      ))
+                                                  Positioned(
+      top: 10,
+      right: 10,
+      child: GestureDetector(
+        onTap: () {
+          provider.unSavedCourseAPI(provider.savedcourseList[index].courseId);
+          if (!provider.isSavedLoading) {
+            provider.getSavedCourseAPI("");
+          }
+        },
+        child: Icon(
+          Icons.close,
+          color: CraftColors.neutral100,
+        ),
+      ),
+    ),
+                                                  // GestureDetector(
+                                                  //     onTap: () {
+                                                  //       provider.unSavedCourseAPI(
+                                                  //           provider
+                                                  //               .savedcourseList[
+                                                  //                   index]
+                                                  //               .courseId);
+                                                  //       if (!provider
+                                                  //           .isSavedLoading) {
+                                                  //         provider
+                                                  //             .getSavedCourseAPI(
+                                                  //                 "");
+                                                  //       }
+                                                  //     },
+                                                  //     child: Align(
+                                                  //       alignment:
+                                                  //           Alignment.topRight,
+                                                  //       child: Padding(
+                                                  //         padding:
+                                                  //             const EdgeInsets
+                                                  //                 .all(8.0),
+                                                  //         child: Icon(
+                                                  //           Icons.close,
+                                                  //           color: CraftColors
+                                                  //               .neutral100,
+                                                  //         ),
+                                                  //       ),
+                                                  //     ))
                                                 ],
                                               ),
                                             );

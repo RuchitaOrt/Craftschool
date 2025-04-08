@@ -177,7 +177,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   onMenuPressed: provider.toggleSlidingContainer,
                   onCategoriesPressed: provider.toggleSlidingCategory,
                   isContainerVisible: provider.isCategoryVisible,
-                 
+                  isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                 ),
               ),
               backgroundColor: CraftColors.black18,

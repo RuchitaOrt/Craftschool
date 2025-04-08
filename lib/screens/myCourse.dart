@@ -11,7 +11,9 @@ import 'package:craft_school/utils/GlobalLists.dart';
 import 'package:craft_school/utils/craft_images.dart';
 import 'package:craft_school/utils/craft_strings.dart';
 import 'package:craft_school/utils/craft_styles.dart';
+import 'package:craft_school/widgets/BottomAppBarNavigationScreen.dart';
 import 'package:craft_school/widgets/BrowseTrendingCourse.dart';
+import 'package:craft_school/widgets/FloatingActionButton.dart';
 import 'package:craft_school/widgets/ProgressBar.dart';
 import 'package:craft_school/widgets/SlidingCategory.dart';
 import 'package:craft_school/widgets/SlidingMenu.dart';
@@ -100,7 +102,7 @@ class _VideoListScreenState extends State<MyCourseScreen> {
   @override
   void initState() {
     super.initState();
-
+print("MYBOttom my");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final providerSubscription =
           Provider.of<LandingScreenProvider>(context, listen: false);
@@ -226,20 +228,20 @@ class _VideoListScreenState extends State<MyCourseScreen> {
     );
   }
 
-  Future<void> _initializeController(String videoUrl) async {
-    _controller = VideoPlayerController.network(videoUrl)
-      ..setLooping(true)
-      ..initialize().then((_) {
-        setState(() {
-          _videoDuration = _controller.value.duration.inSeconds.toDouble();
-          _currentPosition = videoProgressMap[videoUrl] ?? 0.0;
-          _controller.seekTo(Duration(seconds: _currentPosition.toInt()));
-        });
-      });
+  // Future<void> _initializeController(String videoUrl) async {
+  //   _controller = VideoPlayerController.network(videoUrl)
+  //     ..setLooping(true)
+  //     ..initialize().then((_) {
+  //       setState(() {
+  //         _videoDuration = _controller.value.duration.inSeconds.toDouble();
+  //         _currentPosition = videoProgressMap[videoUrl] ?? 0.0;
+  //         _controller.seekTo(Duration(seconds: _currentPosition.toInt()));
+  //       });
+  //     });
 
-    _controller.addListener(_videoPlayerListener);
-    return _controller.initialize();
-  }
+  //   _controller.addListener(_videoPlayerListener);
+  //   return _controller.initialize();
+  // }
 
   Widget browseOtherCourse() {
     return Consumer<MasterAllProvider>(
@@ -322,23 +324,40 @@ class _VideoListScreenState extends State<MyCourseScreen> {
     return ChangeNotifierProvider(
         create: (_) => LandingScreenProvider(),
         child: Consumer<LandingScreenProvider>(builder: (context, provider, _) {
+          print("toggleSearchIconCategory mycourse");
+          print(provider.isSearchIconVisible);
           return Scaffold(
             appBar: _isFullscreen
                 ? null
                 : PreferredSize(
                     preferredSize: const Size.fromHeight(kToolbarHeight),
                     child: CustomAppBar(
-                      isCategoryVisible: provider.isCategoryVisible,
-                      onMenuPressed: () {
-                        provider
-                            .toggleSlidingContainer(); // Trigger toggle when menu is pressed
-                      },
-                      onCategoriesPressed: () {
-                        provider.toggleSlidingCategory();
-                      },
-                      isContainerVisible: provider.isContainerVisible,
+                       isContainerVisible: provider.isContainerVisible,
+                isCategoryVisible: provider.isCategoryVisible,
+                isSearchClickVisible: ()
+                {
+                 print("toggleSearchIconCategory");
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
+                onMenuPressed: () {
+                  provider
+                      .toggleSlidingContainer(); // Trigger toggle when menu is pressed
+                },
+                onCategoriesPressed: () {
+                  provider.toggleSlidingCategory();
+                },
+               
                     ),
                   ),
+                   bottomNavigationBar: BottomAppBarWidget(
+              index: 0,
+            ),
+            floatingActionButton: FloatingActionButtonWidget(
+              isOnLandingScreen: false,
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
             backgroundColor: CraftColors.black18,
             body: WillPopScope(
               onWillPop: _onBackPressed, // Handle the back press
@@ -452,7 +471,7 @@ class _VideoListScreenState extends State<MyCourseScreen> {
                                                 CraftStrings.strMyCourses,
                                                 style: CraftStyles
                                                     .tsWhiteNeutral50W700
-                                                    .copyWith(fontSize: 18),
+                                                    .copyWith(fontSize: 16),
                                               ),
                                             ),
                                                Padding(
@@ -545,7 +564,7 @@ class _VideoListScreenState extends State<MyCourseScreen> {
       child: Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15, right: 15),
+                    padding: const EdgeInsets.only(top: 10, right: 10),
                     child: SvgPicture.asset(
                       CraftImagePath.save,
                       width: 22, // Play button size
@@ -566,11 +585,11 @@ class _VideoListScreenState extends State<MyCourseScreen> {
       child: Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15, right: 15),
+                    padding: const EdgeInsets.only(top: 10, right: 10),
                     child: SvgPicture.asset(
                       CraftImagePath.saved,
-                      width: 30, // Play button size
-                      height: 30, // Adjust size as needed
+                      width: 22, // Play button size
+                      height: 22, // Adjust size as needed
                     ),
                   ),
                 ),

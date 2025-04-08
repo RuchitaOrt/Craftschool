@@ -19,6 +19,7 @@ import 'package:craft_school/widgets/SlidingMenu.dart';
 import 'package:craft_school/widgets/TrendingSkill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 
 class BlogsScreen extends StatefulWidget {
@@ -94,7 +95,11 @@ class _BlogsScreenState extends State<BlogsScreen> {
                 onCategoriesPressed: () {
                   provider.toggleSlidingCategory();
                 },
-               
+                isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
               backgroundColor: CraftColors.black18,
@@ -158,7 +163,7 @@ class _BlogsScreenState extends State<BlogsScreen> {
               children: [
                 Text(
                   "Blogs",
-                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -178,7 +183,7 @@ GestureDetector(
             ),
           ),
          
-          SizedBox(height: SizeConfig.blockSizeVertical * 1),
+  
           SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child:provider.blogList.isEmpty?
@@ -189,14 +194,14 @@ GestureDetector(
 
 
                 return Container(
-                  margin: EdgeInsets.all(8),
-                  width: SizeConfig.safeBlockHorizontal * 90,
+                  margin: EdgeInsets.all(4),
+                  width: SizeConfig.safeBlockHorizontal * 100,
                   decoration: BoxDecoration(
                     color: CraftColors.neutralBlue800,
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -212,7 +217,7 @@ GestureDetector(
                                 width:
                                 //  isExpanded
                                     // ? 
-                                    SizeConfig.safeBlockHorizontal * 80,
+                                    SizeConfig.safeBlockHorizontal *88,
                                     // : SizeConfig.blockSizeHorizontal * 29,
                                 height: 
                                 // isExpanded
@@ -228,52 +233,51 @@ GestureDetector(
                                 ),
                               ),
                             ),
-                            SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
+                           
                          
                           ],
                         ),
                       
                           SizedBox(height: SizeConfig.blockSizeVertical * 2),
-                          (blog.tags.isNotEmpty)?  Container(
-                            decoration: BoxDecoration(
-                              color: CraftStyles.getTagBackgroundColor("New"),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: 
-                             
-                              Wrap(
-                                spacing: 6.0, // Horizontal space
-                                runSpacing: 6.0, // Vertical space
-                                children: blog.tags.map((tag) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: CraftStyles.getTagBackgroundColor(tag),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      tag,
-                                      style: CraftStyles.getTagTextStyle(tag),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
+                          (blog.tags.isNotEmpty)?  Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: 
+                           
+                            Wrap(
+                              spacing: 6.0, // Horizontal space
+                              runSpacing: 6.0, // Vertical space
+                              children: blog.tags.map((tag) {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: CraftStyles.getTagBackgroundColor(tag),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    tag,
+                                    style: CraftStyles.getTagTextStyle(tag),
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ):Container(),
                           SizedBox(height: SizeConfig.blockSizeVertical * 1),
                           Text(
                             blog.title,
-                            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 16),
+                            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),
                           ),
                           SizedBox(height: SizeConfig.blockSizeVertical * 1),
-                          Text(
-                           blog.description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 14),
-                          ),
+                           HtmlWidget(
+                         blog.description,
+                         
+                          textStyle: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 12)
+                        ),
+                          // Text(
+                          //  blog.description,
+                          //   maxLines: 2,
+                          //   overflow: TextOverflow.ellipsis,
+                          //   style: CraftStyles.tsWhiteNeutral300W500.copyWith(fontSize: 14),
+                          // ),
                           Text(
                             blog.readTime,
                             maxLines: 2,
@@ -309,7 +313,7 @@ GestureDetector(
                                 children: [
                                   Text(
                                     CraftStrings.strReadMore,
-                                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 17),
+                                    style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),
                                   ),
                                 ],
                               ),
@@ -361,18 +365,18 @@ GestureDetector(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Trending Masters",
-                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
                 ),
               ],
             ),
           ),
-          SizedBox(height: SizeConfig.blockSizeVertical * 1),
+          
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -421,7 +425,7 @@ GestureDetector(
                         runSpacing: 6.0, // Vertical space
                         children: provider.trendingMasterData[index].tags.map((tag) {
                           return Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                             decoration: BoxDecoration(
                               color: CraftStyles.getTagBackgroundColor(tag),
                               borderRadius: BorderRadius.circular(6),

@@ -47,7 +47,7 @@ class _PostScreenState extends State<PostScreen> {
   void initState() {
     super.initState();
 
-    
+    print("MYBOttom Post");
     _scrollController.addListener(() {
       _checkSectionVisibility();
     });
@@ -206,17 +206,17 @@ class _PostScreenState extends State<PostScreen> {
                 ],
               ),
             ),
-            Container(
-              color: CraftColors.neutralBlue850,
+             Container(
+              color: CraftColors.neutralBlue800,
               margin: EdgeInsets.all(16),
               width: SizeConfig.safeBlockHorizontal * 100,
-              height: SizeConfig.blockSizeVertical * 30,
+              height: SizeConfig.blockSizeVertical * 40,
               child: SlantedImageReel(),
-             
+           
             ),
             SvgPicture.asset(
               CraftImagePath.starGold,
-                     
+                 width: 100,height: 100,    
             ),
             Text(
               textAlign: TextAlign.center,
@@ -259,13 +259,13 @@ class _PostScreenState extends State<PostScreen> {
                             children: [
                               Image.asset(CraftImagePath.check),
                               SizedBox(
-                                  width: SizeConfig.blockSizeHorizontal * 5),
+                                  width: SizeConfig.blockSizeHorizontal * 1),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: SizeConfig.blockSizeHorizontal * 70,
+                                    width: SizeConfig.blockSizeHorizontal * 80,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: RichText(
@@ -374,6 +374,11 @@ class _PostScreenState extends State<PostScreen> {
                       provider
                           .toggleSlidingContainer(); // Trigger toggle when menu is pressed
                     },
+                     isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                     onCategoriesPressed: () {
                       provider.toggleSlidingCategory();
                     },
@@ -414,7 +419,7 @@ class _PostScreenState extends State<PostScreen> {
                                                                    height: 30, // Adjust size as needed
                                                                  ),
                                                                  SizedBox(width: SizeConfig.blockSizeHorizontal*2,),
-                                                                  GestureDetector(
+                                                              GlobalLists.authtoken!=""?    GestureDetector(
                                                                     onTap: ()
                                                                     {
                                                                        Navigator.of(context)
@@ -428,7 +433,7 @@ class _PostScreenState extends State<PostScreen> {
                                                                                             width: 30, // Play button size
                                                                                             height: 30, // Adjust size as needed
                                                                                           ),
-                                                                  ),
+                                                                  ):Container(),
                                          ],
                                        ),
                                      
@@ -442,7 +447,18 @@ class _PostScreenState extends State<PostScreen> {
                                 ],
                               ),
                             ),
-                        GlobalLists.authtoken!=""?Container(): GlobalLists.communityPlan == "Yes"?Container():     joinCommunity(
+                        GlobalLists.authtoken!=""?
+                         GlobalLists.communityPlan == "Yes"?Container():     joinCommunity(
+                              tag: "",
+                              title: "Join the CraftSchool \nCommunity",
+                              subTitle:
+                                  "Connect with filmmakers and industry \nexperts, wherever you are.",
+                              textStyle: CraftStyles.tsdarkBrownW500,
+                              textBackground: CraftColors.lightOrange,
+                              image: CraftImagePath.bannerImage2,
+                              titleText: "Exclusive Community",
+                              subTitleText:
+                                  "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"): joinCommunity(
                               tag: "",
                               title: "Join the CraftSchool \nCommunity",
                               subTitle:
@@ -453,106 +469,109 @@ class _PostScreenState extends State<PostScreen> {
                               titleText: "Exclusive Community",
                               subTitleText:
                                   "Unlock the ultimate experience with our \nExclusive Community! With a CraftSchool \nsubscription or course purchase, you’ll gain \naccess to:"),
-            Text(communityprovider.communityList.length.toString()),
+           
                             // List of posts
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              itemCount: communityprovider.communityList.length,
-                              itemBuilder: (context, index) {
-                                
-                                return PostWidget(
-                                  post: communityprovider.communityList[index],
-                                  index: index,
-                                  onCommentPostTap: (index) {
-                                    communityprovider.commentList.clear();
-                                    communityprovider.commentsCommunityAPI(
-                                        communityprovider.communityList[index].id
-                                            .toString());
-                                    _showCommentBottomSheet(communityprovider
-                                        .communityList[index].id
-                                        .toString());
-                                  },
-                                  onReportPostTap: (index) {
-                                    {
-                                      // Handle report submission logic
-                                      String reason =
-                                          communityprovider.reportController.text;
-                                      if (reason.isNotEmpty) {
-                                        // Call the report API or handle reporting here
-                                        print("Reporting Post: $reason");
-                                        Navigator.pop(
-                                            context); // Close the report sheet after submission
-                                        communityprovider.reportCommunityAPI(
-                                            communityprovider
-                                                .communityList[index].id
-                                                .toString(),
-                                            reason);
+                            Container(
+                              height: SizeConfig.blockSizeVertical*100,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemCount: communityprovider.communityList.length,
+                                itemBuilder: (context, index) {
+                                  
+                                  return PostWidget(
+                                    post: communityprovider.communityList[index],
+                                    index: index,
+                                    onCommentPostTap: (index) {
+                                      communityprovider.commentList.clear();
+                                      communityprovider.commentsCommunityAPI(
+                                          communityprovider.communityList[index].id
+                                              .toString());
+                                      _showCommentBottomSheet(communityprovider
+                                          .communityList[index].id
+                                          .toString());
+                                    },
+                                    onReportPostTap: (index) {
+                                      {
+                                        // Handle report submission logic
+                                        String reason =
+                                            communityprovider.reportController.text;
+                                        if (reason.isNotEmpty) {
+                                          // Call the report API or handle reporting here
+                                          print("Reporting Post: $reason");
+                                          Navigator.pop(
+                                              context); // Close the report sheet after submission
+                                          communityprovider.reportCommunityAPI(
+                                              communityprovider
+                                                  .communityList[index].id
+                                                  .toString(),
+                                              reason);
+                                        } else {
+                                          // Show some error if reason is empty
+                                          print(
+                                              "Please provide a reason for reporting.");
+                                        }
+                                      }
+                                    },
+                                    onDeletePostTap: (index) {
+                                      communityprovider.deleteCommunityAPI(
+                                          communityprovider.communityList[index].id
+                                              .toString());
+                                    },
+                                    onLikeTap: (index) {
+                                      print("like");
+                                      final post =
+                                          communityprovider.communityList[index];
+                                      int postcount = int.parse(post.likeCount);
+                                      // Check if the post is already liked
+                                      if (post.hasLiked) {
+                                        // If the post is liked, dislike the post
+                                        post.hasLiked = false;
+                                        postcount--; // Decrease the like count
+                                        if (postcount >= 0) {
+                                          post.likeCount = postcount.toString();
+                                        }
+                                          
+                                        communityprovider.dislikeCommunityAPI(
+                                            post.id.toString()); // Call dislike API
                                       } else {
-                                        // Show some error if reason is empty
-                                        print(
-                                            "Please provide a reason for reporting.");
-                                      }
-                                    }
-                                  },
-                                  onDeletePostTap: (index) {
-                                    communityprovider.deleteCommunityAPI(
-                                        communityprovider.communityList[index].id
-                                            .toString());
-                                  },
-                                  onLikeTap: (index) {
-                                    print("like");
-                                    final post =
-                                        communityprovider.communityList[index];
-                                    int postcount = int.parse(post.likeCount);
-                                    // Check if the post is already liked
-                                    if (post.hasLiked) {
-                                      // If the post is liked, dislike the post
-                                      post.hasLiked = false;
-                                      postcount--; // Decrease the like count
-                                      if (postcount >= 0) {
+                                        // If the post is not liked, like the post
+                                        post.hasLiked = true;
+                                        postcount++; // Increase the like count
                                         post.likeCount = postcount.toString();
+                                        communityprovider.likeCommunityAPI(
+                                            post.id.toString()); // Call like API
                                       }
-            
-                                      communityprovider.dislikeCommunityAPI(
-                                          post.id.toString()); // Call dislike API
-                                    } else {
-                                      // If the post is not liked, like the post
-                                      post.hasLiked = true;
-                                      postcount++; // Increase the like count
-                                      post.likeCount = postcount.toString();
-                                      communityprovider.likeCommunityAPI(
-                                          post.id.toString()); // Call like API
-                                    }
-            
-                                    // Call setState to update the UI immediately
-                                    setState(() {});
-                                  },
-                                  onSaveButtonOnTap: (index) {
-                                    print("saved");
-                                    final post =
-                                        communityprovider.communityList[index];
-            
-                                    if (post.hasSaved) {
-                                      // If the post is liked, dislike the post
-                                      post.hasSaved = false;
-            
-                                      communityprovider.unsavedCommunityAPI(
-                                          post.id.toString()); // Call dislike API
-                                    } else {
-                                      // If the post is not liked, like the post
-                                      post.hasSaved = true;
-            
-                                      communityprovider.savedCommunityAPI(
-                                          post.id.toString()); // Call like API
-                                    }
-                                    // Call setState to update the UI immediately
-                                    setState(() {});
-                                  },
-                                  reportController:
-                                      communityprovider.reportController,
-                                );
-                              },
+                                          
+                                      // Call setState to update the UI immediately
+                                      setState(() {});
+                                    },
+                                    onSaveButtonOnTap: (index) {
+                                      print("saved");
+                                      final post =
+                                          communityprovider.communityList[index];
+                                          
+                                      if (post.hasSaved) {
+                                        // If the post is liked, dislike the post
+                                        post.hasSaved = false;
+                                          
+                                        communityprovider.unsavedCommunityAPI(
+                                            post.id.toString()); // Call dislike API
+                                      } else {
+                                        // If the post is not liked, like the post
+                                        post.hasSaved = true;
+                                          
+                                        communityprovider.savedCommunityAPI(
+                                            post.id.toString()); // Call like API
+                                      }
+                                      // Call setState to update the UI immediately
+                                      setState(() {});
+                                    },
+                                    reportController:
+                                        communityprovider.reportController,
+                                  );
+                                },
+                              ),
                             ),
             
                           (communityprovider.communityList.length >= communityprovider.totalLength)?Container():
@@ -685,7 +704,7 @@ class _PostScreenState extends State<PostScreen> {
                       // Floating action button for creating post
                       Positioned(
                         bottom:
-                            80, // Position the create post button slightly above the row
+                            20, // Position the create post button slightly above the row
                         right: 16,
                         child: FloatingActionButton(
                           onPressed: () {

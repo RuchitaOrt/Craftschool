@@ -85,7 +85,11 @@ class _MasterScreenState extends State<MasterScreen> {
                 isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
+                }, isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
                 },
+                isSearchValueVisible: provider.isSearchIconVisible,
                    onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
               ),
             ),

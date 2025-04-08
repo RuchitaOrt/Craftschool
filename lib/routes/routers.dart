@@ -25,6 +25,7 @@ import 'package:craft_school/screens/MasterScreen.dart';
 import 'package:craft_school/screens/MasterScreenDetail.dart';
 import 'package:craft_school/screens/PostScreen.dart';
 import 'package:craft_school/screens/SavedPostScreen.dart';
+import 'package:craft_school/screens/SearchScreen.dart';
 import 'package:craft_school/screens/TermsCondition.dart';
 import 'package:craft_school/screens/Testimonial.dart';
 import 'package:craft_school/screens/VideoScreen.dart';
@@ -102,6 +103,10 @@ class Routers {
         case CreatePasswordScreen.route:
         return MaterialPageRoute(
           builder: (_) =>  CreatePasswordScreen(),
+        );
+          case SearchScreen.route:
+        return MaterialPageRoute(
+          builder: (_) =>  SearchScreen(),
         );
          case LandingScreen.route:
           final args = settings.arguments as bool?;

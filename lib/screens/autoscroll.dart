@@ -20,7 +20,7 @@ class _SlantedImageReelState extends State<SlantedImageReel> {
   ];
 
   final int rows = 3;
-  final double imageSize = 100.0;
+  final double imageSize = 80.0;
   final double rowSpacing = 20.0;
   final double slantAngle = -0.10;
 

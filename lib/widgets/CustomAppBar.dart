@@ -15,8 +15,8 @@ import 'package:provider/provider.dart';
 class CustomAppBar extends StatefulWidget {
   final VoidCallback onMenuPressed;
   final bool isContainerVisible;
-  final VoidCallback? isSearchClickVisible;
-  final bool? isSearchValueVisible;
+  final VoidCallback isSearchClickVisible;
+  final bool isSearchValueVisible;
   final bool isCategoryVisible;
   final VoidCallback onCategoriesPressed;
 
@@ -26,8 +26,8 @@ class CustomAppBar extends StatefulWidget {
     required this.isContainerVisible,
     required this.onCategoriesPressed,
     required this.isCategoryVisible,
-    this.isSearchClickVisible,
-    this.isSearchValueVisible,
+    required this.isSearchClickVisible,
+   required  this.isSearchValueVisible,
   });
 
   @override
@@ -65,16 +65,23 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LandingScreenProvider>(context);
+  print("toggleSearchIconCategory appbar");
+  print(provider.isSearchIconVisible);
+  print("toggleSearchIconCategory appbar");
+  print(provider.isSearchIconVisible);
     return AppBar(
       backgroundColor: CraftColors.neutralBlue800,
       elevation: 0,
       automaticallyImplyLeading: false,
-      flexibleSpace: widget.isSearchValueVisible!
-          ? Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: _buildSearchBar(),
-            )
-          : Padding(
+      flexibleSpace:
+      //  provider.isSearchIconVisible
+          // ? Padding(
+          //   padding: const EdgeInsets.only(top: 5),
+          //   child: _buildSearchBar(),
+          // )
+          // :
+           Padding(
               padding: EdgeInsets.only(top: Platform.isAndroid ? 45 : 60, left: 8),
               child: Row(
                 children: [
@@ -89,7 +96,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       children: [
                         Text(
                           "Categories",
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                         IconButton(
                           icon: widget.isCategoryVisible
@@ -100,12 +107,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ],
                     ),
                   ),
-                  SizedBox(width: SizeConfig.blockSizeVertical * 0.1),
+                  SizedBox(width: SizeConfig.safeBlockHorizontal * 0.1),
                   IconButton(
-                    icon: const Icon(Icons.search, color: Colors.white),
+                    icon: const Icon(Icons.search,size: 25,),
                     onPressed: widget.isSearchClickVisible,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: SizeConfig.blockSizeHorizontal * 0.1),
                   IconButton(
                     icon: widget.isContainerVisible ? Icon(Icons.close) : Icon(Icons.menu),
                     onPressed: widget.onMenuPressed,
@@ -120,7 +127,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 10),
           child: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: widget.isSearchClickVisible,
@@ -128,6 +135,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
         Expanded(
           child: CustomTextFieldWidget(
+            textFieldContainerHeight: 40,
             title: "",
             hintText: CraftStrings.strSearch,
             textEditingController: searchController,

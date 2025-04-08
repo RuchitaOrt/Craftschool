@@ -39,7 +39,7 @@ class BrowseTrendingCourse extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 18),
+                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
               ),
          
          
@@ -81,9 +81,7 @@ class BrowseTrendingCourse extends StatelessWidget {
    )
             ],
           ),
-          SizedBox(
-            height: SizeConfig.blockSizeVertical * 2,
-          ),
+         
           SizedBox(
             height: SizeConfig.blockSizeVertical * 35,
             child: ListView.builder(
@@ -117,7 +115,7 @@ class BrowseTrendingCourse extends StatelessWidget {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 8, top: 8),
+                              padding: const EdgeInsets.only(left: 4, top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,

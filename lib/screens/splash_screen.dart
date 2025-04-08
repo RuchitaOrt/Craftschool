@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:craft_school/main.dart';
+import 'package:craft_school/screens/BottomNavScreen.dart';
 import 'package:craft_school/screens/HomeScreen.dart';
 import 'package:craft_school/screens/Landing_Screen.dart';
 import 'package:craft_school/screens/courseDetailScreen.dart';
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
       //  Timer(
       //     Duration(seconds: 5),
       //     () => Navigator.pushReplacement(context,
-      //         MaterialPageRoute(builder: (context) => MainScreen(
+      //         MaterialPageRoute(builder: (context) => BottomNavScreen(
       //           // isSignUp: false,
       //           ))));
     } else {

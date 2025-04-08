@@ -178,7 +178,8 @@ class CoursesProvider with ChangeNotifier {
             // Append the new blogs to the list
             _courseDetailList = resp.data;
             iscourseDetailLoading = false;
-
+            print("_courseDetailList");
+print(_courseDetailList.length);
             notifyListeners();
           }
         },

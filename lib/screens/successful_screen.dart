@@ -42,6 +42,11 @@ class SuccessfulScreen extends StatelessWidget {
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
                 },
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                    onCategoriesPressed: () {  provider.toggleSlidingCategory();}, isContainerVisible: provider.isCategoryVisible,
               ),
             ),

@@ -54,6 +54,11 @@ class _TestimonialScreenState extends State<Testimonial> {
      appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: CustomAppBar(
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                 isCategoryVisible: provider.isCategoryVisible,
                 onMenuPressed: () {
                   provider.toggleSlidingContainer();  // Trigger toggle when menu is pressed
@@ -96,192 +101,201 @@ class _TestimonialScreenState extends State<Testimonial> {
       {
         return Center(child: CircularProgressIndicator());
       }
-      return Container(
-        margin: EdgeInsets.all(8),
-        width: SizeConfig.safeBlockHorizontal * 85,
-        decoration: BoxDecoration(
-          color: CraftColors.neutralBlue850,
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              // Title
-              Text(
-                textAlign: TextAlign.center,
-                "What our learners say about us",
-                style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 25),
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 1,
-              ),
-              // Subtitle
-              Text(
-                textAlign: TextAlign.center,
-                "Real stories from students who’ve leveled up their filmmaking journey.",
-                style: CraftStyles.tsWhiteNeutral300W500,
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-              // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
-              Container(
-                height: SizeConfig.blockSizeVertical * 60,
-                //removed fleible from here
-                child: CustomScrollView(
-                  slivers: [
-                    SliverMasonryGrid(
-  crossAxisSpacing: 8.0,
-  mainAxisSpacing: 8.0,
-  gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2, // Number of columns
-  ),
-  delegate: SliverChildBuilderDelegate(
-    (BuildContext context, int index) {
-      return Card(
-        elevation: 1.0,
-        color: CraftColors.neutralBlue800,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: SizeConfig.blockSizeVertical * 1),
-              RatingBar.builder(
-                tapOnlyMode: false,
-                updateOnDrag: false,
-                ignoreGestures: true,
-                initialRating: double.parse(
-                    provider.testimonialData[index].rating.toString()),
-                minRating: 0,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemSize: 25,
-                itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
-                onRatingUpdate: (rating) {},
-              ),
-              SizedBox(height: SizeConfig.blockSizeVertical * 1),
-              Text(
-                provider.testimonialData[index].description ?? "",
-                style: CraftStyles.tsNeutral500W500.copyWith(fontSize: 18),
-              ),
-              SizedBox(height: SizeConfig.blockSizeVertical * 1),
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 15.0,
-                    backgroundImage: NetworkImage(provider.testimonialData[index].photo!),
-                  ),
-                  SizedBox(width: SizeConfig.blockSizeHorizontal * 2),
-                  Text(
-                    provider.testimonialData[index].name ?? "",
-                    style: CraftStyles.tsNeutral500W500,
-                  ),
-                ],
-              ),
-            ],
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Container(
+          margin: EdgeInsets.all(8),
+          width: SizeConfig.safeBlockHorizontal * 85,
+          decoration: BoxDecoration(
+            color: CraftColors.neutralBlue850,
+            borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
-        ),
-      );
-    },
-    childCount: provider.testimonialData.length,
-  ),
-)
-
-                    // SliverStaggeredGrid.countBuilder(
-                    //   crossAxisCount: 2, // Number of columns
-                    //   itemCount: provider.testimonialData.length,
-                    //   staggeredTileBuilder: (int index) {
-                    //     return StaggeredTile.fit(1); // Adjust this if needed
-                    //   },
-                    //   crossAxisSpacing: 8.0,
-                    //   mainAxisSpacing: 8.0,
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     return Card(
-                    //       elevation: 1.0,
-                    //       color: CraftColors.neutralBlue800,
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(16.0),
-                    //       ),
-                    //       child: Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Column(
-                    //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //           children: [
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical * 1,
-                    //             ),
-                    //             RatingBar.builder(
-                    //               tapOnlyMode: false,
-                    //               updateOnDrag: false,
-                    //               ignoreGestures: true,
-                    //               initialRating: double.parse(
-                    //                   provider.testimonialData[index].rating.toString()
-                    //                       ), // set initial rating
-                    //               minRating:0, // minimum rating
-                    //               direction: Axis
-                    //                   .horizontal, // horizontal or vertical
-                    //               allowHalfRating:
-                    //                   true, // allow half star ratings
-                    //               itemCount: 5, // number of stars
-                    //               itemSize: 25, // size of each star
-                    //               itemPadding: EdgeInsets.symmetric(
-                    //                   horizontal: 1.0), // space between stars
-                    //               itemBuilder: (context, _) => Icon(
-                    //                 Icons.star,
-                    //                 color: Colors.amber,
-                    //               ),
-                    //               onRatingUpdate: (rating) {},
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical * 1,
-                    //             ),
-                    //             Text(
-                    //               provider.testimonialData[index].description ??
-                    //               "",
-                    //               style: CraftStyles.tsNeutral500W500
-                    //                   .copyWith(fontSize: 18),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical * 1,
-                    //             ),
-                    //             Row(
-                    //               children: [
-                    //                 CircleAvatar(
-                    //                   radius:
-                    //                       15.0, // Circle radius (size of the circle)
-                    //                   backgroundImage: NetworkImage(provider.testimonialData[index].photo!), // Image from local assets
-                    //                 ),
-                    //                 SizedBox(
-                    //                   width:
-                    //                       SizeConfig.blockSizeHorizontal * 2,
-                    //                 ),
-                    //                 Text(
-                    //                   provider.testimonialData[index].name ??
-                    //                       "",
-                    //                   style: CraftStyles.tsNeutral500W500,
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                // Title
+                Text(
+                  textAlign: TextAlign.center,
+                  "What our learners say about us",
+                  style: CraftStyles.tsWhiteNeutral50W700.copyWith(fontSize: 16),
+                ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 1,
+                ),
+                // Subtitle
+                Text(
+                  textAlign: TextAlign.center,
+                  "Real stories from students who’ve leveled up their filmmaking journey.",
+                  style: CraftStyles.tsWhiteNeutral300W500,
+                ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 2,
+                ),
+                // Wrap the CustomScrollView inside Expanded to avoid unbounded height error
+                Container(
+                  height: SizeConfig.blockSizeVertical * 80,
+                  //removed fleible from here
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverMasonryGrid(
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+          gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Number of columns
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+        return Card(
+          elevation: 1.0,
+          color: CraftColors.neutralBlue800,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                RatingBar.builder(
+                  tapOnlyMode: false,
+                  unratedColor: CraftColors.neutral100,
+                  updateOnDrag: false,
+                  ignoreGestures: true,
+                  initialRating: double.parse(
+                      provider.testimonialData[index].rating.toString()),
+                  minRating: 0,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 20,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                  itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                  onRatingUpdate: (rating) {},
+                ),
+                SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                Text(
+                  provider.testimonialData[index].description ?? "",
+                  style: CraftStyles.tsNeutral500W500.copyWith(fontSize: 12),
+                ),
+                SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 15.0,
+                      backgroundImage: NetworkImage(provider.testimonialData[index].photo!),
+                    ),
+                    SizedBox(width: SizeConfig.blockSizeHorizontal * 2),
+                    Container(
+                      width: SizeConfig.safeBlockHorizontal * 25 ,
+                      child: Text(
+                        provider.testimonialData[index].name ?? "",
+                        maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                        style: CraftStyles.tsNeutral500W500.copyWith(fontSize: 10),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: SizeConfig.blockSizeVertical * 2,
-              ),
-            ],
+              ],
+            ),
+          ),
+        );
+            },
+            childCount: provider.testimonialData.length,
+          ),
+        )
+        
+                      // SliverStaggeredGrid.countBuilder(
+                      //   crossAxisCount: 2, // Number of columns
+                      //   itemCount: provider.testimonialData.length,
+                      //   staggeredTileBuilder: (int index) {
+                      //     return StaggeredTile.fit(1); // Adjust this if needed
+                      //   },
+                      //   crossAxisSpacing: 8.0,
+                      //   mainAxisSpacing: 8.0,
+                      //   itemBuilder: (BuildContext context, int index) {
+                      //     return Card(
+                      //       elevation: 1.0,
+                      //       color: CraftColors.neutralBlue800,
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(16.0),
+                      //       ),
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             SizedBox(
+                      //               height: SizeConfig.blockSizeVertical * 1,
+                      //             ),
+                      //             RatingBar.builder(
+                      //               tapOnlyMode: false,
+                      //               updateOnDrag: false,
+                      //               ignoreGestures: true,
+                      //               initialRating: double.parse(
+                      //                   provider.testimonialData[index].rating.toString()
+                      //                       ), // set initial rating
+                      //               minRating:0, // minimum rating
+                      //               direction: Axis
+                      //                   .horizontal, // horizontal or vertical
+                      //               allowHalfRating:
+                      //                   true, // allow half star ratings
+                      //               itemCount: 5, // number of stars
+                      //               itemSize: 25, // size of each star
+                      //               itemPadding: EdgeInsets.symmetric(
+                      //                   horizontal: 1.0), // space between stars
+                      //               itemBuilder: (context, _) => Icon(
+                      //                 Icons.star,
+                      //                 color: Colors.amber,
+                      //               ),
+                      //               onRatingUpdate: (rating) {},
+                      //             ),
+                      //             SizedBox(
+                      //               height: SizeConfig.blockSizeVertical * 1,
+                      //             ),
+                      //             Text(
+                      //               provider.testimonialData[index].description ??
+                      //               "",
+                      //               style: CraftStyles.tsNeutral500W500
+                      //                   .copyWith(fontSize: 18),
+                      //             ),
+                      //             SizedBox(
+                      //               height: SizeConfig.blockSizeVertical * 1,
+                      //             ),
+                      //             Row(
+                      //               children: [
+                      //                 CircleAvatar(
+                      //                   radius:
+                      //                       15.0, // Circle radius (size of the circle)
+                      //                   backgroundImage: NetworkImage(provider.testimonialData[index].photo!), // Image from local assets
+                      //                 ),
+                      //                 SizedBox(
+                      //                   width:
+                      //                       SizeConfig.blockSizeHorizontal * 2,
+                      //                 ),
+                      //                 Text(
+                      //                   provider.testimonialData[index].name ??
+                      //                       "",
+                      //                   style: CraftStyles.tsNeutral500W500,
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 2,
+                ),
+              ],
+            ),
           ),
         ),
       );

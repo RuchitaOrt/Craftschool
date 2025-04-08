@@ -94,7 +94,7 @@ class SlidingMenu extends StatelessWidget {
           leading: Icon(icon, color: Colors.white),
           title: Text(
             title,
-            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 14),
+            style: CraftStyles.tsWhiteNeutral50W60016.copyWith(fontSize: 12),
           ),
           onTap: () => Navigator.of(context).pushNamed(route),
         ),

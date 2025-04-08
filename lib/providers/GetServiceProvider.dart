@@ -57,8 +57,9 @@ List<Datum> _serviceData = [];
         API.getCraftschoolServices,
         (response) async {
           GetServicesResponse resp = response;
-
+print("GetServicesResponse");
           if (resp.status == true) {
+            print(resp.data);
            serviceData=resp.data;
             isLoading = false;
             notifyListeners();

@@ -65,6 +65,11 @@ final providerSubscription =
                   onCategoriesPressed: () {
                     provider.toggleSlidingCategory();
                   },
+                   isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
                 ),
               ),
               backgroundColor: CraftColors.black18,

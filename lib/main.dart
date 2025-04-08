@@ -172,6 +172,7 @@ import 'package:craft_school/providers/personal_account_provider.dart';
 import 'package:craft_school/providers/sign_up_provider.dart';
 import 'package:craft_school/routes/routers.dart';
 import 'package:craft_school/screens/splash_screen.dart';
+import 'package:craft_school/widgets/VideoThumbnail.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -245,7 +246,9 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider<GetServiceProvider>(
           create: (context) => GetServiceProvider(),
         ),
-        
+              ChangeNotifierProvider<VideoThumbnailCache>(
+          create: (context) => VideoThumbnailCache(),
+        ),
       ],
       child: MaterialApp(
         title: 'Craft School',

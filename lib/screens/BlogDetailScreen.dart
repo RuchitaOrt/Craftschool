@@ -76,12 +76,16 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                   provider.toggleSlidingCategory();
                 },
                 isContainerVisible: provider.isCategoryVisible,
-                
+                 isSearchClickVisible: ()
+                {
+                  provider.toggleSearchIconCategory();
+                },
+                isSearchValueVisible: provider.isSearchIconVisible,
               ),
             ),
             backgroundColor: CraftColors.black18,
             bottomNavigationBar: BottomAppBarWidget(
-              index: 2,
+              index: -1,
             ),
             floatingActionButton: FloatingActionButtonWidget(isOnLandingScreen: false,),
             floatingActionButtonLocation:
@@ -202,11 +206,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         physics: ScrollPhysics(),
         children: [
           Container(
-            margin: EdgeInsets.all(8),
+            // margin: EdgeInsets.all(8),
             width: SizeConfig.safeBlockHorizontal * 80,
             height: SizeConfig.blockSizeVertical * 40,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
+                // borderRadius: BorderRadius.circular(24),
                 image: DecorationImage(
                     image: NetworkImage(
                       image!,
@@ -223,7 +227,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                   tag != ""
                       ? 
                       GridView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(4),
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(), // so it doesn't scroll inside scrollable parent
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -275,9 +279,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                     title!,
                     style: CraftStyles.tsWhiteNeutral50W700,
                   ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 1,
-                  ),
+                  // SizedBox(
+                  //   height: SizeConfig.blockSizeVertical * 1,
+                  // ),
                   Text(
                     subTitle!,
                     style: CraftStyles.tsWhiteNeutral200W500,
@@ -293,7 +297,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
             padding: const EdgeInsets.all(8.0),
             child: HtmlWidget(
               description!,
-              textStyle: CraftStyles.tsWhiteNeutral200W500,
+              textStyle: CraftStyles.tsWhiteNeutral200W500.copyWith(fontSize: 12),
             ),
           )
         ],
